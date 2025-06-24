@@ -7,6 +7,8 @@
     ./nix-index.nix
     ./programs.nix
     ./sops.nix
+
+    ../services/core
   ];
 
   nixpkgs.config.allowUnfree = true;
