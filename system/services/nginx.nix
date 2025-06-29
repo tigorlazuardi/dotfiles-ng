@@ -12,14 +12,15 @@ let
     mkDefault
     mkIf
     ;
-  domain = "tigor.web.id";
 in
 {
+  imports = [
+    ./acme.nix
+  ];
   services.nginx = {
     enable = true;
     additionalModules = with pkgs.nginxModules; [
       fancyindex
-      echo
     ];
     recommendedTlsSettings = true;
     recommendedGzipSettings = true;
@@ -29,25 +30,17 @@ in
     recommendedBrotliSettings = true;
     virtualHosts = mapAttrs (
       _: vhost:
-      vhost
-      //
-        # Allow websockets in all locations by default, just like caddy.
-        {
-          locations = mapAttrs (
-            _: loc:
-            loc
-            // {
-              proxyWebsockets = mkDefault true;
-            }
-          ) vhost.locations;
-        }
-      //
-        # Automatically points the certificate to use when forceSSL is set to true.
-        #
-        # Use one certificate for all virtual hosts to reduce ACME requests when renewing.
-        (optionalAttrs (vhost.forceSSL) {
-          useACMEHost = mkDefault "tigor.web.id";
-        })
+      # Allow websockets in all locations by default, just like caddy.
+      # {
+      #   locations = mapAttrs (_: _: { proxyWebsockets = mkDefault true; }) vhost.locations;
+      # }
+      # //
+      # Automatically points what certificate to use when forceSSL is set to true.
+      # Use one certificate (via Common Name) for all virtual hosts to reduce
+      # ACME requests when renewing.
+      (optionalAttrs (vhost.forceSSL) {
+        useACMEHost = mkDefault config.security.acme.domains.main;
+      })
     ) cfg.virtualHosts;
 
     appendHttpConfig =
@@ -125,14 +118,6 @@ in
     After = lib.mkForce [ "network.target" ];
     Wants = lib.mkForce [ ];
   };
-
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "tigor.hutasuhut@gmail.com";
-  };
-
-  # Renew the certificate every 2 weeks on the 1st and 15th of the month at 4 AM.
-  systemd.timers."acme-${domain}".timerConfig.OnCalendar = lib.mkForce "*-*-1,15 04:00:00";
 
   ############# Telemetry configs ###################
   environment.etc."alloy/config.alloy".text =
