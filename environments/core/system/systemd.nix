@@ -7,8 +7,11 @@
 let
   inherit (lib)
     mkOption
-    mkIf
     types
+    nameValuePair
+    listToAttrs
+    attrNames
+    optional
     ;
   waitportDrv = pkgs.writeShellScriptBin "waitport" ''
     host=$1
@@ -45,11 +48,6 @@ let
           default = "/run/socket-activation.${config.name}.sock";
           description = "The socket address for the socket activation service. Simple string so other services can use this config option directly, e.g. nginx reverse proxy";
         };
-        stopWhenUnneeded = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Stop the service when the connection is idle for a certain time";
-        };
         idleTimeout = mkOption {
           type = types.str;
           default = "5m";
@@ -71,7 +69,7 @@ let
     }
   );
   socketActivatedServices = lib.filterAttrs (_: conf: conf.enable) config.systemd.socketActivations;
-  names = lib.attrsets.mapAttrsToList (name: _: name) socketActivatedServices;
+  names = attrNames socketActivatedServices;
 in
 {
   options.systemd.socketActivations = mkOption {
@@ -80,62 +78,52 @@ in
   };
   config = {
     systemd.services =
-      builtins.listToAttrs (
+      listToAttrs (
         map (
           name:
           let
             cfg = config.systemd.socketActivations."${name}";
           in
-          {
-            inherit name;
-            value = {
-              unitConfig.StopWhenUnneeded = mkIf cfg.stopWhenUnneeded true;
-              serviceConfig.ExecStartPost = mkIf cfg.wait.enable [
-                cfg.wait.command
-              ];
-              wantedBy = lib.mkForce [ ]; # enfore the service can only be activated by socket activation.
-            };
+          nameValuePair name {
+            # bidnsTo ensures the service is stopped when the socket proxyd (the preoxy service) exits.
+            bindsTo = [ "${name}-proxy.service" ];
+            serviceConfig.ExecStartPost = optional cfg.wait.enable cfg.wait.command;
+            wantedBy = lib.mkForce [ ]; # enfore the service can only be activated by socket activation.
           }
         ) names
       )
-      // builtins.listToAttrs (
+      // listToAttrs (
         map (
           name:
           let
             cfg = config.systemd.socketActivations."${name}";
             proxy = "${name}-proxy";
           in
-          {
-            name = proxy;
-            value = {
-              unitConfig = {
-                Requires = [
-                  "${name}.service"
-                  "${proxy}.socket"
-                ];
-                After = [
-                  "${name}.service"
-                  "${proxy}.socket"
-                ];
-              };
-              serviceConfig.ExecStart = ''${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=${cfg.idleTimeout} ${cfg.host}:${toString cfg.port}'';
+          nameValuePair proxy {
+            unitConfig = {
+              Requires = [
+                "${name}.service"
+                "${proxy}.socket"
+              ];
+              After = [
+                "${name}.service"
+                "${proxy}.socket"
+              ];
             };
+            serviceConfig.ExecStart = ''${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=${cfg.idleTimeout} ${cfg.host}:${toString cfg.port}'';
           }
         ) names
       );
-    systemd.sockets = builtins.listToAttrs (
+    systemd.sockets = listToAttrs (
       map (
         name:
         let
           cfg = config.systemd.socketActivations."${name}";
           proxy = "${name}-proxy";
         in
-        {
-          name = proxy;
-          value = {
-            listenStreams = [ cfg.socketAddress ];
-            wantedBy = [ "sockets.target" ];
-          };
+        nameValuePair proxy {
+          listenStreams = [ cfg.socketAddress ];
+          wantedBy = [ "sockets.target" ];
         }
       ) names
     );
