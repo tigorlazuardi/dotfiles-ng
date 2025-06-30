@@ -10,6 +10,7 @@
     ./nix_config.nix
     ./nix_index.nix
     ./programs.nix
+    ./podman.nix
     ./systemd.nix
   ];
   time.timeZone = lib.mkDefault "Asia/Jakarta";

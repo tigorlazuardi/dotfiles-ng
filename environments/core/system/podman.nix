@@ -1,0 +1,97 @@
+{ config, lib, ... }:
+{
+  imports = [
+    # dependency for socket.socketActivations option.
+    ./systemd.nix
+  ];
+  options.virtualisation.oci-containers.containers =
+    let
+      inherit (lib) mkOption types mkEnableOption;
+    in
+    mkOption {
+      type = types.attrsOf types.submodule {
+        options = {
+          ip = mkOption {
+            type = types.nullOr types.str;
+            description = "constant IP address for the container, if null the container will have a dynamic ip address assigned by the podman runtime";
+          };
+          httpPort = mkOption {
+            type = types.nullOr types.ints.u16;
+            description = ''
+              port that accepts http protocol that will be exposed to nginx.
+              If not null, an nginx entry with [hostname].podman domain without ssl will be created,
+              and a loopback entry to /etc/hosts will be added so it can be accessed from the browser via the domain name.
+            '';
+          };
+          socketActivation = {
+            enable = mkEnableOption "socket activation for this container. Requires ip and httpPort to be set, othwerwise an error will be thrown.";
+            idleTimeout = mkOption {
+              type = types.str;
+              default = "5m";
+            };
+          };
+        };
+      };
+    };
+  config =
+    let
+      inherit (lib)
+        mapAttrs
+        mapAttrs'
+        mkDefault
+        filterAttrs
+        optional
+        nameValuePair
+        assertMsg
+        mkIf
+        ;
+      cfg = config.virtualisation.oci-containers.containers;
+      proxyReadyHttpContainers = filterAttrs (
+        _: c: c.ip != null && c.httpPort != null && !c.socketActivation.enable
+      ) cfg;
+      socketActivatedContainers = filterAttrs (_: c: c.socketActivation.enable) cfg;
+    in
+    {
+      virtualisation.oci-containers.containers = mapAttrs (name: value: {
+        hostname = mkDefault name;
+        networks = mkDefault [ "podman" ];
+        extraOptions = optional (value.ip != null) "--ip=${value.ip}";
+      }) cfg;
+      systemd.socketActivations = mapAttrs' (
+        name: value:
+        nameValuePair "podman-${name}" {
+          host = mkIf (assertMsg (value.ip != null)
+            "podman-${name}.ip must not be null to fulfill the conditions to have socketActivation enabled"
+          ) value.ip;
+          port = mkIf (assertMsg (value.httpPort != null)
+            "podman-${name}.httpPort must not be null to fulfill the conditions to have socketActivation enabled"
+          ) value.httpPort;
+          idleTimeout = value.socketActivation.idleTimeout;
+        }
+      ) socketActivatedContainers;
+      services.nginx.virtualHosts =
+        mapAttrs' (
+          name: value:
+          nameValuePair "${name}.podman" {
+            locations."/" = {
+              proxyPass = "http://${value.ip}:${toString value.httpPort}";
+              proxyWebsockets = true;
+            };
+          }
+        ) proxyReadyHttpContainers
+        // mapAttrs' (
+          name: value:
+          nameValuePair "${name}.podman" (
+            let
+              socketCfg = config.systemd.socketActivations."podman-${name}";
+            in
+            {
+              locations."/" = {
+                proxyPass = "http://unix:${socketCfg.socketAddress}";
+                proxyWebsockets = true;
+              };
+            }
+          )
+        ) socketActivatedContainers;
+    };
+}
