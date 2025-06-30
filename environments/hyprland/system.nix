@@ -37,11 +37,6 @@ in
   environment.etc."/xdg/menus/applications.menu".source =
     "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
 
-  fonts.packages = with pkgs; [
-    meslo-lgs-nf
-    font-awesome
-    roboto
-  ];
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;

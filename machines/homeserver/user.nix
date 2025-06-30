@@ -11,19 +11,8 @@ in
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
   ];
-  # Interfactive users will not have "wheel" group by default.
-  #
-  # Some programs (like nh) rejects running as root, but they asks for sudo
-  # password very late in the process. In case of flake update, it can take
-  # over an hour before it asks for supo password, so the easiest way is to
-  # run as a user that is in "wheel" group, since they will not be asked
-  # for sudo password.
-  #
-  # But putting a normal user in "wheel" group is dangerous since they have
-  # sudo access, so we just have to create a system user in the wheel group,
-  # and run all sudo commands as that user instead of root.
-  security.sudo.wheelNeedsPassword = false;
   sops = {
     age.keyFile = "/home/homeserver/.config/sops/age/keys.txt";
     defaultSopsFormat = "yaml";

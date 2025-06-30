@@ -5,6 +5,7 @@
 {
   imports = [
     ./editor.nix
+    ./fonts.nix
     ./locale.nix
     ./nix_config.nix
     ./nix_index.nix

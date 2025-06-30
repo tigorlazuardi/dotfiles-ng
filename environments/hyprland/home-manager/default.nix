@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    ./ghostty.nix
   ];
   options.wayland.windowManager.hyprland =
     let

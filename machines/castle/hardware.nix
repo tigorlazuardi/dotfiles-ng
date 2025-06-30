@@ -1,82 +1,25 @@
 {
   config,
   lib,
-  pkgs,
-  inputs,
+  modulesPath,
   ...
 }:
 {
   # Import configurations from nix-community recommended settings.
-  imports =
-    let
-      hardware = inputs.nixos-hardware.nixosModules;
-    in
-    [
-      hardware.common-cpu-amd
-      hardware.common-gpu-amd
-      hardware.common-pc
-      hardware.common-pc-ssd
-    ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   boot.initrd.availableKernelModules = [
     "nvme"
     "xhci_pci"
     "ahci"
     "usbhid"
-    "usb_storage"
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-amd" ];
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      amdvlk
-    ];
-  };
-
-  hardware.amdgpu.opencl.enable = true;
-
-  system.fsPackages = [
-    pkgs.bindfs
-    pkgs.cifs-utils
-  ];
-
-  fileSystems."/nas" = {
-    device = "//192.168.100.5/nas";
-    fsType = "cifs";
-    options = [
-      "_netdev"
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.idle-timeout=60"
-      "x-systemd.device-timeout=5s"
-      "x-systemd.mount-timeout=5s"
-      "uid=${toString config.profile.user.uid}"
-      "gid=${toString config.profile.user.gid}"
-      "credentials=${config.sops.secrets."smb/secrets".path}"
-    ];
-  };
-
-  fileSystems."/wolf" = {
-    device = "//192.168.100.5/wolf";
-    fsType = "cifs";
-    options = [
-      "_netdev"
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.idle-timeout=60"
-      "x-systemd.device-timeout=5s"
-      "x-systemd.mount-timeout=5s"
-      "uid=${toString config.profile.user.uid}"
-      "gid=${toString config.profile.user.gid}"
-      "credentials=${config.sops.secrets."smb/secrets".path}"
-    ];
-  };
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/6a987bc7-1f00-4494-bcef-b0f8afc62b7b";
