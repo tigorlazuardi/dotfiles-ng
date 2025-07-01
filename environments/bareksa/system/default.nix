@@ -1,1 +1,5 @@
-{ }
+{
+  imports = [
+    ./db-gate.nix
+  ];
+}

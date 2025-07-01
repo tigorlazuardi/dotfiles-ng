@@ -55,16 +55,19 @@
       virtualisation.oci-containers.containers = mapAttrs (name: value: {
         hostname = mkDefault name;
         networks = mkDefault [ "podman" ];
+        labels = mkDefault {
+          "io.containers.autoupdate" = "registry";
+        };
         extraOptions = optional (value.ip != null) "--ip=${value.ip}";
       }) cfg;
       systemd.socketActivations = mapAttrs' (
         name: value:
         nameValuePair "podman-${name}" {
           host = mkIf (assertMsg (value.ip != null)
-            "podman-${name}.ip must not be null to fulfill the conditions to have socketActivation enabled"
+            "virtualisation.oci-containers.containers.${name}.ip must not be null to fulfill the conditions to have socketActivation enabled"
           ) value.ip;
           port = mkIf (assertMsg (value.httpPort != null)
-            "podman-${name}.httpPort must not be null to fulfill the conditions to have socketActivation enabled"
+            "virtualisation.oci-containers.containers.${name}.httpPort must not be null to fulfill the conditions to have socketActivation enabled"
           ) value.httpPort;
           idleTimeout = value.socketActivation.idleTimeout;
         }
