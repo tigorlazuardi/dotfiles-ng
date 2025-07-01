@@ -1,17 +1,18 @@
-let
-  data = "/var/lib/bareksa-db-gate";
-in
+{ config, ... }:
 {
+  sops.secrets."bareksa/db-gate/env".sopsFile = ../../../secrets/bareksa.yaml;
   virtualisation.oci-containers.containers.bareksa-db-gate = {
     image = "docker.io/dbgate/dbgate:latest";
     volumes = [
-      "${data}:/root/.dbgate"
+      "/var/lib/bareksa-db-gate:/root/.dbgate"
     ];
     ip = "10.88.200.1";
     httpPort = 3000;
-    labels = {
-      "io.containers.autoupdate" = "registry";
-    };
+    environmentFiles = [
+      config.sops.secrets."bareksa/db-gate/env".path
+    ];
     socketActivation.enable = true;
   };
+  # Ensure /var/lib/bareksa-db-gate exists
+  systemd.services.podman-bareksa-db-gate.serviceConfig.StateDirectory = "bareksa-db-gate";
 }
