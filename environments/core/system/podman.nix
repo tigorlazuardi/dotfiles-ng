@@ -46,9 +46,6 @@
         mkIf
         ;
       cfg = config.virtualisation.oci-containers.containers;
-      proxyReadyHttpContainers = filterAttrs (
-        _: c: c.ip != null && c.httpPort != null && !c.socketActivation.enable
-      ) cfg;
       socketActivatedContainers = filterAttrs (_: c: c.socketActivation.enable) cfg;
     in
     {
@@ -62,7 +59,7 @@
       }) cfg;
       systemd.socketActivations = mapAttrs' (
         name: value:
-        nameValuePair "podman-${name}" {
+        (nameValuePair "podman-${name}" {
           host = mkIf (assertMsg (value.ip != null)
             "virtualisation.oci-containers.containers.${name}.ip must not be null to fulfill the conditions to have socketActivation enabled"
           ) value.ip;
@@ -70,31 +67,7 @@
             "virtualisation.oci-containers.containers.${name}.httpPort must not be null to fulfill the conditions to have socketActivation enabled"
           ) value.httpPort;
           idleTimeout = value.socketActivation.idleTimeout;
-        }
+        })
       ) socketActivatedContainers;
-      services.nginx.virtualHosts =
-        mapAttrs' (
-          name: value:
-          nameValuePair "${name}.podman" {
-            locations."/" = {
-              proxyPass = "http://${value.ip}:${toString value.httpPort}";
-              proxyWebsockets = true;
-            };
-          }
-        ) proxyReadyHttpContainers
-        // mapAttrs' (
-          name: value:
-          nameValuePair "${name}.podman" (
-            let
-              socketCfg = config.systemd.socketActivations."podman-${name}";
-            in
-            {
-              locations."/" = {
-                proxyPass = "http://unix:${socketCfg.address}";
-                proxyWebsockets = true;
-              };
-            }
-          )
-        ) socketActivatedContainers;
     };
 }
