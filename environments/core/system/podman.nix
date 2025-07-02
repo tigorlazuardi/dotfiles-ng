@@ -90,7 +90,7 @@
             in
             {
               locations."/" = {
-                proxyPass = "http://unix:${socketCfg.socketAddress}";
+                proxyPass = "http://unix:${socketCfg.address}";
                 proxyWebsockets = true;
               };
             }

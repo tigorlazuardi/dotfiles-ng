@@ -43,7 +43,7 @@ let
         };
         host = mkOption { type = types.str; };
         port = mkOption { type = types.ints.u16; };
-        socketAddress = mkOption {
+        address = mkOption {
           type = types.str;
           default = "/run/socket-activation.${config.name}.sock";
           description = "The socket address for the socket activation service. Simple string so other services can use this config option directly, e.g. nginx reverse proxy";
@@ -51,7 +51,7 @@ let
         idleTimeout = mkOption {
           type = types.str;
           default = "5m";
-          description = "The time after which the service is stopped when no connections are made. This is only effective if `stopWhenUnneeded` is enabled.";
+          description = "The time after which the service is stopped when no connections are made.";
         };
         wait = {
           enable = mkOption {
