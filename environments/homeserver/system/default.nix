@@ -7,5 +7,6 @@
     ./forgejo.nix
     ./pocket_id.nix
     ./tiny_auth.nix
+    ./homepage-dashboard.nix
   ];
 }
