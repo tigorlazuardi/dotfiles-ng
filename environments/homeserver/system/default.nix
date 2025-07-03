@@ -14,6 +14,7 @@
     ./samba.nix
     ./stirling-pdf.nix
     ./suwayomi.nix
+    ./syncthing.nix
     ./tiny_auth.nix
   ];
 }
