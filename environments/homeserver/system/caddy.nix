@@ -51,9 +51,9 @@ in
           '';
       })
     ) socketActivatedContainers;
-  services.homepage-dashboard.groups.Infrastructure.services.Caddy = {
+  services.homepage-dashboard.groups.Networking.services.Caddy = {
     sortIndex = 50;
-    config = {
+    settings = {
       description = "Reverse Proxy used to route the services";
       icon = "caddy.svg";
       widget = {

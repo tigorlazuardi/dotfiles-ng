@@ -104,8 +104,8 @@
         reverse_proxy ${config.services.adguardhome.settings.http.address}
       '';
   };
-  services.homepage-dashboard.groups.Infrastructure.services."AdGuard Home".settings = {
-    description = "DNS server with ad blocking capabilities.";
+  services.homepage-dashboard.groups.Networking.services."AdGuard Home".settings = {
+    description = "DNS server for local domains with ad blocking capabilities.";
     href = "https://adguard.tigor.web.id";
     icon = "adguard.svg";
     widget = {

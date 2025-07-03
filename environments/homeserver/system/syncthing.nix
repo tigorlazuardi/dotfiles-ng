@@ -43,8 +43,8 @@ in
       reverse_proxy unix/${config.services.anubis.instances.syncthing.settings.BIND}
     '';
   services.homepage-dashboard.groups.Utilities.services.Syncthing.settings = {
-    description = "Continuous file synchronization program";
-    href = "${domain}";
+    description = "Peer-to-Peer file synchronization between devices";
+    href = "https://${domain}";
     icon = "syncthing.svg";
   };
 }

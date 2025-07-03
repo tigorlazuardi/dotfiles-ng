@@ -102,6 +102,8 @@ in
       services.homepage-dashboard =
         let
           allGroups = attrValues config.services.homepage-dashboard.groups;
+          # Fitler groups that are enabled and have at least one service
+          # under the group
           enabledGroups = filter (
             group:
             group.enable
@@ -124,6 +126,10 @@ in
             Security = {
               columns = 2;
               sortIndex = 100;
+            };
+            Networking = {
+              columns = 3;
+              sortIndex = 250;
             };
             "Media Collectors" = {
               columns = 4;
