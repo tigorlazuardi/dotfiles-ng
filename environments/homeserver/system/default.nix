@@ -11,6 +11,7 @@
     ./jellyfin.nix
     ./jellyseerr.nix
     ./pocket_id.nix
+    ./samba.nix
     ./tiny_auth.nix
   ];
 }
