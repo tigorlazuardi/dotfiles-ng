@@ -71,7 +71,7 @@ in
                               type = types.int;
                               default = 1000;
                             };
-                            config = mkOption {
+                            settings = mkOption {
                               type = yamlType;
                             };
                           };
@@ -161,7 +161,7 @@ in
                 let
                   entries = enabledGroups.${groupName}.services;
                   sortedEntries = sort (l: r: l.sortIndex < r.sortIndex) entries;
-                  final = map (entry: entry.config) sortedEntries;
+                  final = map (entry: entry.settings) sortedEntries;
                 in
                 {
                   ${groupName} = final;

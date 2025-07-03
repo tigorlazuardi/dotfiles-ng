@@ -25,7 +25,7 @@ in
       import tinyauth_main
       reverse_proxy unix/${config.systemd.socketActivations.stirling-pdf.address}
     '';
-  services.homepage-dashboard.groups.Utilities.services."Stirling PDF".config = {
+  services.homepage-dashboard.groups.Utilities.services."Stirling PDF".settings = {
     description = "One stop shop for working with PDF files.";
     href = "https://${domain}";
     icon = "stirling-pdf.svg";

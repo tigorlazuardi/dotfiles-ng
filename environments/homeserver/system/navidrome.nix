@@ -43,7 +43,7 @@ in
       reverse_proxy /api* unix/${address}
       reverse_proxy unix/${BIND}
     '';
-  services.homepage-dashboard.groups.Media.services.Navidrome.config = {
+  services.homepage-dashboard.groups.Media.services.Navidrome.settings = {
     description = "Self-hosted music server and streaming service";
     href = "https://${domain}";
     icon = "navidrome.svg";

@@ -93,9 +93,26 @@
       };
     };
   };
-  services.caddy.virtualHosts."adguard.tigor.web.id".extraConfig = # caddy
-    ''
-      import tinyauth_main
-      reverse_proxy ${config.services.adguardhome.settings.http.address}
-    '';
+  services.caddy.virtualHosts = {
+    "adguard.tigor.web.id".extraConfig = # caddy
+      ''
+        import tinyauth_main
+        reverse_proxy ${config.services.adguardhome.settings.http.address}
+      '';
+    "http://adguard.local".extraConfig = # caddy
+      ''
+        reverse_proxy ${config.services.adguardhome.settings.http.address}
+      '';
+  };
+  services.homepage-dashboard.groups.Infrastructure.services."AdGuard Home".settings = {
+    description = "DNS server with ad blocking capabilities.";
+    href = "https://adguard.tigor.web.id";
+    icon = "adguard.svg";
+    widget = {
+      type = "adguard";
+      url = "http://adguard.local";
+      username = "";
+      password = "";
+    };
+  };
 }

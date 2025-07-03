@@ -36,7 +36,7 @@ in
   };
   services.homepage-dashboard.groups."Git and Personal Projects".services.Forgejo = {
     sortIndex = 50;
-    config = {
+    settings = {
       description = "Git hosting and management platform for personal projects";
       href = "https://${domain}";
       icon = "forgejo.svg";

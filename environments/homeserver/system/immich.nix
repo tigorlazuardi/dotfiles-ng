@@ -38,7 +38,7 @@ in
       '';
     };
 
-  services.homepage-dashboard.groups.Media.services.Immich.config = {
+  services.homepage-dashboard.groups.Media.services.Immich.settings = {
     description = "Family Photos and Videos Server";
     href = "https://${domain}";
     icon = "immich.svg";
