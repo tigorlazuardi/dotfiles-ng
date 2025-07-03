@@ -19,11 +19,27 @@ in
     };
   };
   services.anubis.instances.forgejo.settings.TARGET = "unix:///run/forgejo/forgejo.sock";
-  services.caddy.virtualHosts."${domain}".extraConfig =
-    # caddy
-    ''
-      reverse_proxy /api/* unix//run/forgejo/forgejo.sock
-      # All other requests must pass through Anubis.
-      reverse_proxy unix/${config.services.anubis.instances.forgejo.settings.BIND}
-    '';
+  services.caddy.virtualHosts = {
+    "${domain}".extraConfig =
+      # caddy
+      ''
+        @not_login {
+          not Cookie gitea_incredible
+        }
+        redir @not_login /tigor
+        reverse_proxy unix/${config.services.anubis.instances.forgejo.settings.BIND}
+      '';
+    "http://git.local".extraConfig = # caddy
+      ''
+        reverse_proxy unix/${config.services.anubis.instances.forgejo.settings.BIND}
+      '';
+  };
+  services.homepage-dashboard.groups."Git and Personal Projects".services = [
+    {
+      name = "Forgejo";
+      description = "Git hosting and management platform for personal projects";
+      href = "https://${domain}";
+      icon = "forgejo.svg";
+    }
+  ];
 }
