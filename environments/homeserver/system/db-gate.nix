@@ -37,6 +37,7 @@
                 # So it does not care about the portential secrets in the connection url.
                 url = mkOption {
                   type = types.str;
+                  description = "Connection URL for DB-Gate. It should be in the format supported by DB-Gate, e.g. 'mssql://user:password@host:port/database'. If sqlite, it should be a path to the database file.";
                 };
                 socketMount = mkOption {
                   type = types.nullOr types.str;
@@ -74,7 +75,7 @@
             ]
             ++ (
               let
-                connectionsWithSocketMount = filterAttrs (_: value: value.socketMount != null) connections;
+                connectionsWithSocketMount = filterAttrs (_: value: value.socketMount != null) enabledConnections;
                 volumes = mapAttrs' (
                   _: value: "${value.socketMount}:${value.socketMount}"
                 ) connectionsWithSocketMount;
@@ -88,6 +89,14 @@
             idleTimeout = "30s";
           };
           environment =
+            let
+              sqliteConns = filterAttrs (
+                _: value: value.engine == "sqlite@dbgate-plugin-sqlite"
+              ) enabledConnections;
+              nonSqliteConns = filterAttrs (
+                _: value: value.engine != "sqlite@dbgate-plugin-sqlite"
+              ) enabledConnections;
+            in
             {
               CONNECTIONS =
                 let
@@ -96,9 +105,10 @@
                 in
                 conns;
             }
-            // mapAttrs' (name: value: nameValuePair "LABEL_${name}" value.label) connections
-            // mapAttrs' (name: value: nameValuePair "ENGINE_${name}" value.engine) connections
-            // mapAttrs' (name: value: nameValuePair "URL_${name}" value.url) connections;
+            // mapAttrs' (name: value: nameValuePair "LABEL_${name}" value.label) enabledConnections
+            // mapAttrs' (name: value: nameValuePair "ENGINE_${name}" value.engine) enabledConnections
+            // mapAttrs' (name: value: nameValuePair "URL_${name}" value.url) nonSqliteConns
+            // mapAttrs' (name: value: nameValuePair "FILE_${name}" value.url) sqliteConns;
         };
       systemd.services.podman-db-gate.serviceConfig.StateDirectory = "db-gate";
       services.caddy.virtualHosts =
