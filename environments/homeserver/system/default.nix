@@ -3,10 +3,14 @@
     ./adguard_home.nix
     ./anubis.nix
     ./caddy.nix
+    ./db-gate.nix
     ./flaresolverr.nix
     ./forgejo.nix
+    ./homepage-dashboard.nix
+    ./immich.nix
+    ./jellyfin.nix
+    ./jellyseerr.nix
     ./pocket_id.nix
     ./tiny_auth.nix
-    ./homepage-dashboard.nix
   ];
 }
