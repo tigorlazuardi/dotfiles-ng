@@ -26,7 +26,7 @@ in
         @metrics {
           path /metrics
         }
-        response @metrics 403
+        respond @metrics 403
         reverse_proxy 0.0.0.0:8096
       '';
     "http://jellyfin.local".extraConfig = ''
