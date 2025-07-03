@@ -45,4 +45,15 @@ in
           '';
       })
     ) socketActivatedContainers;
+  services.homepage-dashboard.groups.Infrastructure.services.Caddy = {
+    sortIndex = 50;
+    config = {
+      description = "Reverse Proxy used to route the services";
+      icon = "caddy.svg";
+      widget = {
+        type = "caddy";
+        url = "http://127.0.0.1:2019";
+      };
+    };
+  };
 }

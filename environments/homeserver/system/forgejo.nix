@@ -34,12 +34,17 @@ in
         reverse_proxy unix/${config.services.anubis.instances.forgejo.settings.BIND}
       '';
   };
-  services.homepage-dashboard.groups."Git and Personal Projects".services = [
-    {
-      name = "Forgejo";
+  services.homepage-dashboard.groups."Git and Personal Projects".services.Forgejo = {
+    sortIndex = 50;
+    config = {
       description = "Git hosting and management platform for personal projects";
       href = "https://${domain}";
       icon = "forgejo.svg";
-    }
-  ];
+      widget = {
+        type = "gitea";
+        url = "http://git.local";
+        key = "{{HOMEPAGE_VAR_FORGEJO_TOKEN}}";
+      };
+    };
+  };
 }

@@ -33,14 +33,14 @@ in
       reverse_proxy 0.0.0.0:8096
     '';
   };
-  services.homepage-dashboard.groups.Media.services = lib.mkBefore [
-    {
-      name = "Jellyfin";
+  services.homepage-dashboard.groups.Media.services.Jellyfin = {
+    sortIndex = 50;
+    config = {
       href = "https://jellyfin.tigor.web.id";
       description = "Media Server for streaming personal media collection";
       icon = "jellyfin.svg";
-    }
-  ];
+    };
+  };
 
   environment.etc."alloy/config.alloy".text =
     lib.mkIf config.services.alloy.enable

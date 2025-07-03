@@ -19,5 +19,13 @@
       ''
         reverse_proxy unix/${config.services.anubis.instances.jellyseerr.settings.BIND}
       '';
+    services.homepage-dashboard.groups."Media Collectors".services.Jellyseerr = {
+      sortIndex = 500;
+      config = {
+        href = "https://jellyseerr.tigor.web.id";
+        description = "Media Request Management for Jellyfin";
+        icon = "jellyseerr.svg";
+      };
+    };
   };
 }

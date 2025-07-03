@@ -20,13 +20,17 @@ in
               { name, ... }:
               {
                 options = {
+                  enable = mkOption {
+                    type = types.bool;
+                    default = true;
+                  };
                   name = mkOption {
                     type = types.str;
                     default = name;
                   };
                   sortIndex = mkOption {
                     type = types.int;
-                    default = 0;
+                    default = 1000;
                   };
                   iconsOnly = mkEnableOption "enable icons-only display for the group";
                   style = mkOption {
@@ -50,9 +54,31 @@ in
                     description = "Icon for the group. If null, no icon will be displayed.";
                   };
                   services = mkOption {
-                    type = types.listOf yamlType;
-                    default = [ ];
-                    description = "Service definitions. Ordering of the entries should use lib.mkorder";
+                    type = types.attrsOf (
+                      types.submodule (
+                        { name, ... }:
+                        {
+                          options = {
+                            enable = mkOption {
+                              type = types.bool;
+                              default = true;
+                            };
+                            name = mkOption {
+                              type = types.str;
+                              default = name;
+                            };
+                            sortIndex = mkOption {
+                              type = types.int;
+                              default = 1000;
+                            };
+                            config = mkOption {
+                              type = yamlType;
+                            };
+                          };
+                        }
+                      )
+                    );
+                    default = { };
                   };
                 };
               }
@@ -68,8 +94,7 @@ in
         sort
         attrNames
         filter
-        length
-        mapAttrsToList
+        filterAttrs
         ;
     in
     {
@@ -77,7 +102,16 @@ in
       services.homepage-dashboard =
         let
           allGroups = attrValues config.services.homepage-dashboard.groups;
-          enabledGroups = filter (group: length group.services > 0) allGroups;
+          enabledGroups = filter (
+            group:
+            group.enable
+            && (
+              let
+                enabledServices = filterAttrs (_: conf: conf.enable) group.services;
+              in
+              enabledServices != { }
+            )
+          ) allGroups;
         in
         {
           enable = true;
@@ -85,11 +119,19 @@ in
           groups = {
             "Git and Personal Projects" = {
               columns = 2;
-              sortIndex = -1000; # Force top of the page.
+              sortIndex = 50; # Force top of the page.
             };
             Security = {
               columns = 2;
-              sortIndex = -500;
+              sortIndex = 100;
+            };
+            "Media Collectors" = {
+              columns = 4;
+              sortIndex = 950;
+            };
+            Media = {
+              columns = 4;
+              sortIndex = 900;
             };
           };
           settings = {
@@ -98,9 +140,7 @@ in
             startUrl = "https://tigor.web.id";
             layout =
               let
-                sortedGroups = sort (
-                  l: r: if l.sortIndex == r.sortIndex then l.name < r.name else l.sortIndex < r.sortIndex
-                ) enabledGroups;
+                sortedGroups = sort (l: r: l.sortIndex < r.sortIndex) enabledGroups;
                 layout = map (group: {
                   inherit (group)
                     iconsOnly
@@ -115,25 +155,16 @@ in
           };
           services =
             let
-              # [ { group = <group>; service = <service> } ... ]
-              serviceAndGroups = mapAttrsToList (
-                name: conf:
-                let
-                  srvs = map (service: {
-                    group = name;
-                    inherit service;
-                  }) conf.services;
-                in
-                srvs
-              ) enabledGroups;
-              groupNames = attrNames allGroups;
+              groupNames = attrNames enabledGroups;
               services = map (
-                group:
+                groupName:
                 let
-                  matchingEntries = filter (entry: entry.group == group) serviceAndGroups;
+                  entries = enabledGroups.${groupName}.services;
+                  sortedEntries = sort (l: r: l.sortIndex < r.sortIndex) entries;
+                  final = map (entry: entry.config) sortedEntries;
                 in
                 {
-                  ${group} = matchingEntries;
+                  ${groupName} = final;
                 }
               ) groupNames;
             in

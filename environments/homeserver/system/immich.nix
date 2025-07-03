@@ -22,15 +22,32 @@ in
       inherit (config.systemd.socketActivations.immich-server) address;
     in
     "unix://${address}";
-  services.caddy.virtualHosts."${domain}".extraConfig = # caddy
+  services.caddy.virtualHosts =
     let
       inherit (config.services.anubis.instances.immich.settings) BIND;
       inherit (config.systemd.socketActivations.immich-server) address;
     in
-    ''
-      reverse_proxy /api* unix/${address}
-      reverse_proxy unix/${BIND}
-    '';
+    {
+      "${domain}".extraConfig = # caddy
+        ''
+          reverse_proxy /api* unix/${address}
+          reverse_proxy unix/${BIND}
+        '';
+      "http://immich.local".extraConfig = ''
+        reverse_proxy unix/${address}
+      '';
+    };
 
+  services.homepage-dashboard.groups.Media.services.Immich.config = {
+    description = "Family Photos and Videos Server";
+    href = "https://${domain}";
+    icon = "immich.svg";
+    widget = {
+      type = "immich";
+      url = "http://immich.local";
+      key = "{{HOMEPAGE_VAR_IMMICH_API_KEY}}";
+      version = 2;
+    };
+  };
   # TODO: Add Pocket ID OAuth integration.
 }
