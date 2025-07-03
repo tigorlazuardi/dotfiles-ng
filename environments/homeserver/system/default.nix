@@ -12,6 +12,7 @@
     ./jellyseerr.nix
     ./pocket_id.nix
     ./samba.nix
+    ./stirling-pdf.nix
     ./tiny_auth.nix
   ];
 }
