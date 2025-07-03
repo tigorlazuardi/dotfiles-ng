@@ -22,7 +22,13 @@ in
       '';
   };
   services.caddy.virtualHosts =
-    mapAttrs' (
+    {
+      # Discard all unknown domain requests without a response to discourage
+      # bots from probing the server.
+      "http://".extraConfig = "abort";
+      "https://".extraConfig = "abort";
+    }
+    // mapAttrs' (
       name: value:
       (nameValuePair "http://${name}.podman" {
         extraConfig =

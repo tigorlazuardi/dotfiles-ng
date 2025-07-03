@@ -39,14 +39,23 @@
         [
           "192.168.100.5 vpn.tigor.web.id"
         ]
-        ++ lib.attrsets.mapAttrsToList (
-          name: _:
+        ++ (
           let
-            inherit (lib) removePrefix;
-            cleanedName = removePrefix "https://" (removePrefix "http://" name);
+            inherit (lib) attrNames filter removePrefix;
+            allNames = attrNames config.services.caddy.virtualHosts;
+            names = filter (
+              name: name != ":80" && name != ":443" && name != "http://" && name != "https://"
+            ) allNames;
+            entries = map (
+              name:
+              let
+                cleaned = removePrefix "https://" (removePrefix "http://" name);
+              in
+              "192.168.100.5 ${cleaned}"
+            ) names;
           in
-          "192.168.100.5 ${cleanedName}"
-        ) config.services.caddy.virtualHosts;
+          entries
+        );
       filters = [
         {
           enabled = true;
