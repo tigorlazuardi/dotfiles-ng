@@ -13,6 +13,7 @@
     ./pocket_id.nix
     ./samba.nix
     ./stirling-pdf.nix
+    ./suwayomi.nix
     ./tiny_auth.nix
   ];
 }
