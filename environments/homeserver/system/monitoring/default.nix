@@ -4,5 +4,6 @@
     ./grafana.nix
     ./loki.nix
     ./mimir.nix
+    ./tempo.nix
   ];
 }
