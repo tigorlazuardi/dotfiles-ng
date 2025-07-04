@@ -27,7 +27,7 @@
             enable = mkEnableOption "socket activation for this container. Requires ip and httpPort to be set, othwerwise an error will be thrown.";
             idleTimeout = mkOption {
               type = types.str;
-              default = "5m";
+              default = "30s";
             };
           };
         };

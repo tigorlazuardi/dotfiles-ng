@@ -50,7 +50,7 @@ let
         };
         idleTimeout = mkOption {
           type = types.str;
-          default = "5m";
+          default = "30s";
           description = "The time after which the service is stopped when no connections are made.";
         };
         wait = {
