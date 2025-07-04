@@ -22,6 +22,6 @@
   services.caddy.virtualHosts."http://flaresolverr.local".extraConfig =
     # caddy
     ''
-      reverse_prxy unix/${config.systemd.socketActivations.flaresolverr.address}
+      reverse_proxy unix/${config.systemd.socketActivations.flaresolverr.address}
     '';
 }
