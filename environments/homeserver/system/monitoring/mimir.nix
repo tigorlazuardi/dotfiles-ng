@@ -1,6 +1,7 @@
 { config, ... }:
 let
   baseDir = "/var/lib/private/mimir";
+  inherit (config.services.mimir.configuration.server) http_listen_address http_listen_port;
 in
 {
   services.mimir = {
@@ -62,24 +63,46 @@ in
     };
   };
 
-  services.grafana.provision.datasources.settings.datasources =
-    let
-      inherit (config.services.mimir.configuration.server) http_listen_address http_listen_port;
-    in
-    [
-      {
-        name = "Mimir";
-        type = "prometheus";
-        uid = "mimir";
-        access = "proxy";
-        url = "http://${http_listen_address}:${toString http_listen_port}/prometheus";
-        basicAuth = false;
-        jsonData = {
-          httpMethod = "POST";
-          prometheusType = "Mimir";
-          timeout = 30;
-        };
+  services.grafana.provision.datasources.settings.datasources = [
+    {
+      name = "Mimir";
+      type = "prometheus";
+      uid = "mimir";
+      access = "proxy";
+      url = "http://${http_listen_address}:${toString http_listen_port}/prometheus";
+      basicAuth = false;
+      jsonData = {
+        httpMethod = "POST";
+        prometheusType = "Mimir";
+        timeout = 30;
+      };
+    }
+  ];
+  environment.etc."alloy/config.alloy".text =
+    # hocon
+    ''
+      prometheus.remote_write "mimir" {
+          endpoint {
+              url = "http://${http_listen_address}:${toString http_listen_port}/api/v1/push"
+          }
       }
-    ];
 
+      prometheus.exporter.unix "system" {}
+
+      prometheus.scrape "system" {
+          targets     = prometheus.exporter.unix.system.targets
+          forward_to  = [prometheus.remote_write.mimir.receiver]
+      }
+
+      prometheus.exporter.self "alloy" {}
+
+      prometheus.scrape "alloy" {
+          targets     = prometheus.exporter.self.alloy.targets
+          forward_to  = [prometheus.remote_write.mimir.receiver]
+      }
+    '';
+  services.homepage-dashboard.groups.Monitoring.services.Mimir.settings = {
+    description = "Metrics storage and querier";
+    href = "https://grafana.com/oss/mimir";
+  };
 }

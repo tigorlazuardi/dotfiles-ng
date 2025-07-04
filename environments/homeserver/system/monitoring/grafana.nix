@@ -69,7 +69,7 @@ in
   services.homepage-dashboard.groups.Monitoring.services.Grafana.settings = {
     href = "https://${domain}";
     icon = "grafana.svg";
-    description = "Visualization for the collected metrics, logs, and traces";
+    description = "Front End for the collected metrics, logs, and traces";
     widget = {
       type = "grafana";
       url = "http://grafana.local";

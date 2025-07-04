@@ -161,4 +161,10 @@ in
           }
       }
     '';
+
+  services.homepage-dashboard.groups.Monitoring.services.Loki.settings = {
+    description = "Log storage and querier";
+    icon = "loki.svg";
+    href = "https://grafana.com/oss/loki";
+  };
 }
