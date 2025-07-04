@@ -13,6 +13,7 @@
     ./jdownloader.nix
     ./jellyfin.nix
     ./jellyseerr.nix
+    ./memos.nix
     ./pocket_id.nix
     ./samba.nix
     ./stirling-pdf.nix
