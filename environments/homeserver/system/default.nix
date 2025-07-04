@@ -10,6 +10,7 @@
     ./forgejo.nix
     ./homepage-dashboard.nix
     ./immich.nix
+    ./jdownloader.nix
     ./jellyfin.nix
     ./jellyseerr.nix
     ./pocket_id.nix
