@@ -1,5 +1,7 @@
 {
   imports = [
+    ./monitoring
+
     ./adguard_home.nix
     ./anubis.nix
     ./caddy.nix
