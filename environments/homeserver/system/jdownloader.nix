@@ -3,7 +3,7 @@
   ...
 }:
 let
-  volume = "/nas/podman/jdownloader/downloads";
+  volume = "/nas/jdownloader";
   domain = "jdownloader.tigor.web.id";
 in
 {
@@ -26,13 +26,14 @@ in
       hostname = "jdownloader";
       ip = "10.88.2.1";
       httpPort = 5800;
+      user = "${toString uid}:${toString gid}";
       socketAcivation = {
         enable = true;
         idleTimeout = "1h";
       };
       volumes = [
-        "${volume}/config:/config:rw"
-        "${volume}/downloads:/output:rw"
+        "/var/lib/jdownloader:/config:rw"
+        "${volume}:/output:rw"
       ];
       environment = {
         USER_ID = toString uid;
@@ -40,13 +41,15 @@ in
         UMASK = "0002";
         TZ = "Asia/Jakarta";
         KEEP_APP_RUNNING = "1";
+        WEB_FILE_MANAGER = "1";
       };
     };
+  systemd.services.podman-jdownloader.serviceConfig.StateDirectory = "jdownloader";
   system.activationScripts.jdownloader = # sh
     ''
-      mkdir -p ${volume}/{config,downloads}
-      chown jdownloader:jdownloader ${volume}/{config,downloads}
-      chmod -r 775 ${volume}/{config,downloads}
+      mkdir -p ${volume}
+      chown jdownloader:jdownloader ${volume}
+      chmod -R ${volume}
     '';
   services.caddy.virtualHosts."${domain}".extraConfig = # caddy
     ''
