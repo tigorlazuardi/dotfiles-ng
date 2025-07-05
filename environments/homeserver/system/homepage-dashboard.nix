@@ -14,6 +14,15 @@ in
     in
     {
       services.homepage-dashboard = {
+        extraIcons = mkOption {
+          type = types.attrsOf types.path;
+          default = { };
+          description = ''
+            Extra icons to included in the dashboard.
+
+            The keys are the icon names to be referenced in the dashboard configuration,
+            and the values are the paths to the icon files.'';
+        };
         groups = mkOption {
           type = types.attrsOf (
             types.submodule (
@@ -117,7 +126,12 @@ in
         in
         {
           enable = true;
-          package = pkgs.homepage-dashboard.overrideAttrs { enableLocalIcons = true; };
+          package = pkgs.homepage-dashboard.overrideAttrs {
+            enableLocalIcons = true;
+            postInstall = lib.concatMapAttrsStringSep "\n" (
+              name: value: "cp ${value} $out/share/homepage/public/icons/${name}"
+            ) config.services.homepage-dashboard.extraIcons;
+          };
           groups = {
             "Git and Personal Projects" = {
               columns = 2;

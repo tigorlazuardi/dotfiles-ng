@@ -24,8 +24,15 @@ in
     ''
   );
 
-  services.homepage-dashboard.groups.Networking.services.Anubis.settings = {
-    description = "Anti Bot and Scraper Traffic to avoid triggering unwanted on-demand socket activations of apps";
-    href = "https://anubis.techaro.lol";
+  services.homepage-dashboard = {
+    extraIcons."anubis.webp" = pkgs.fetchurl {
+      url = "https://anubis.techaro.lol/img/happy.webp";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+    groups.Networking.services.Anubis.settings = {
+      description = "Anti Bot and Scraper Traffic to avoid triggering unwanted on-demand socket activations of apps";
+      href = "https://anubis.techaro.lol";
+      icon = "anubis.webp";
+    };
   };
 }
