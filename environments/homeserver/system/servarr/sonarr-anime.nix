@@ -1,12 +1,12 @@
 { config, pkgs, ... }:
 let
-  domain = "sonarr.tigor.web.id";
+  domain = "sonarr-anime.tigor.web.id";
   settings = {
     BindAddress = "*";
     Port = 8989;
     EnableSsl = "False";
     LaunchBrowser = "False";
-    ApiKey = config.sops.placeholder."servarr/api_keys/sonarr";
+    ApiKey = config.sops.placeholder."servarr/api_keys/sonarr-anime";
     AuthenticationMethod = "External"; # We let tineyauth handle authentication.
     AuthenticationRequired = "Disabled";
     Branch = "main";
@@ -18,22 +18,24 @@ let
     UpdateMechanism = "Docker";
   };
   root = "/nas/mediaserver/servarr";
-  configVolume = "${root}/sonarr";
+  configVolume = "${root}/sonarr-anime";
   mediaVolume = "${root}/data";
   inherit (config.users.users.servarr) uid;
   inherit (config.users.groups.servarr) gid;
 in
 {
   sops = {
-    secrets."servarr/api_keys/sonarr".sopsFile = ../../../../secrets/secrets.yaml;
-    templates."servarr/sonarr/config.xml".file = (pkgs.formats.xml { }).generate "config.xml" settings;
+    secrets."servarr/api_keys/sonarr-anime".sopsFile = ../../../../secrets/secrets.yaml;
+    templates."servarr/sonarr-anime/config.xml".file =
+      (pkgs.formats.xml { }).generate "config.xml"
+        settings;
   };
-  virtualisation.oci-containers.containers.sonarr = {
+  virtualisation.oci-containers.containers.sonarr-anime = {
     image = "lscr.io/linuxserver/sonarr:latest";
-    ip = "10.88.3.1";
+    ip = "10.88.3.2";
     httpPort = settings.Port;
     volumes = [
-      "${config.sops.templates."servarr/sonarr/config.xml".path}:/config/config.xml"
+      "${config.sops.templates."servarr/sonarr-anime/config.xml".path}:/config/config.xml"
       "${configVolume}:/config"
       "${mediaVolume}:/data"
     ];
@@ -57,20 +59,20 @@ in
           import tinyauth_main
           reverse_proxy ${ip}:${toString httpPort}
         '';
-      "http://sonarr.local".extraConfig = # caddy
+      "http://sonarr-anime.local".extraConfig = # caddy
         ''
           reverse_proxy ${ip}:${toString httpPort}
         '';
     };
-  services.homepage-dashboard.groups."Media Collectors".services.Sonarr.settings = {
-    description = "Info fetcher and grabber of TV Shows";
+  services.homepage-dashboard.groups."Media Collectors".services."Sonarr Anime".settings = {
+    description = "Info fetcher and grabber for Anime";
     href = "https://${domain}";
     icon = "sonarr.svg";
     user = "${toString uid}:${toString gid}";
     widget = {
       type = "sonarr";
-      url = "http://sonarr.local";
-      key = "{{HOMEPAGE_VAR_SONARR_API_KEY}}";
+      url = "http://sonarr-anime.local";
+      key = "{{HOMEPAGE_VAR_SONARR_ANIME_API_KEY}}";
     };
   };
 }

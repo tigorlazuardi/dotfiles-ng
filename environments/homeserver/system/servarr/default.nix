@@ -1,6 +1,7 @@
 {
   imports = [
     ./radarr.nix
+    ./sonarr-anime.nix
     ./sonarr.nix
   ];
   users = {

@@ -46,7 +46,7 @@ in
   };
   system.activationScripts.radarr = ''
     mkdir -p ${configVolume} ${mediaVolume}
-    chown ${uid}:${gid} ${mediaVolume} ${configVolume}
+    chrown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
   '';
   services.caddy.virtualHosts =
     let
@@ -58,5 +58,19 @@ in
           import tinyauth_main
           reverse_proxy ${ip}:${toString httpPort}
         '';
+      "http://radarr.local".extraConfig = # caddy
+        ''
+          reverse_proxy ${ip}:${toString httpPort}
+        '';
     };
+  services.homepage-dashboard.groups."Media Collectors".services.Radarr.settings = {
+    description = "Movie fetcher and downloader";
+    icon = "radarr.svg";
+    href = "http://${domain}";
+    widget = {
+      type = "radarr";
+      url = "http://radarr.local";
+      key = "{{HOMEPAGE_VAR_RADARR_API_KEY}}";
+    };
+  };
 }
