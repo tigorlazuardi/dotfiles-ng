@@ -1,17 +1,42 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   root = "/nas/mediaserver/servarr";
   configVolume = "${root}/prowlarr";
   inherit (config.users.users.servarr) uid;
   inherit (config.users.groups.servarr) gid;
   domain = "prowlarr.tigor.web.id";
+  settings = {
+    BindAddress = "*";
+    Port = 9696;
+    EnableSsl = "False";
+    LaunchBrowser = "False";
+    ApiKey = config.sops.placeholder."servarr/api_keys/prowlarr";
+    AuthenticationMethod = "External"; # We let tineyauth handle authentication.
+    AuthenticationRequired = "Disabled";
+    Branch = "master";
+    LogLevel = "info";
+    SslCertPath = "";
+    SslCertPassword = "";
+    UrlBase = "";
+    InstanceName = "Prowlarr";
+    UpdateMechanism = "Docker";
+  };
 in
 {
+  sops = {
+    secrets."servarr/api_keys/prowlarr".sopsFile = ../../../../secrets/secrets.yaml;
+    templates."servarr/prowlarr/config.xml".file =
+      (pkgs.formats.xml { }).generate "config.xml"
+        settings;
+  };
   virtualisation.oci-containers.containers.prowlarr = {
     image = "lscr.io/linuxserver/prowlarr:latest";
     ip = "10.88.3.4";
-    httpPort = 9696;
-    volumes = [ "${configVolume}:/config" ];
+    httpPort = settings.Port;
+    volumes = [
+      "${config.sops.templates."servarr/prowlarr/config.xml".path}:/config/config.xml"
+      "${configVolume}:/config"
+    ];
     environment = {
       PUID = toString uid;
       PGID = toString gid;
