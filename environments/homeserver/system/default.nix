@@ -1,6 +1,7 @@
 {
   imports = [
     ./monitoring
+    ./servarr
 
     ./adguard_home.nix
     ./anubis.nix
