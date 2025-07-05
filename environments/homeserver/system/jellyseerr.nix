@@ -23,7 +23,7 @@
       sortIndex = 500;
       config = {
         href = "https://jellyseerr.tigor.web.id";
-        description = "Media Request Management for Jellyfin";
+        description = "Media Request Management for Servarr stack with Netflix like UI";
         icon = "jellyseerr.svg";
       };
     };
