@@ -41,6 +41,11 @@ in
       mkdir -p ${volume}/{config,downloads,progress,watch}
       chown -R ${toString uid}:${toString gid} ${volume}
     '';
+  systemd.services."podman-qbittorrent".serviceConfig = {
+    CPUWeight = 10;
+    CPUQuota = "10%";
+    IOWeight = 50;
+  };
   services.caddy.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.qbittorrent) ip httpPort;
