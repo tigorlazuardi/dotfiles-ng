@@ -3,6 +3,7 @@
     ./radarr.nix
     ./sonarr-anime.nix
     ./sonarr.nix
+    ./prowlarr.nix
   ];
   users = {
     users.servarr = {
