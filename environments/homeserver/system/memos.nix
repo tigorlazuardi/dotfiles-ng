@@ -20,7 +20,7 @@ in
     {
       image = "docker.io/neosmemo/memos:stable";
       user = "${toString uid}:${toString gid}";
-      ip = "10.88.3.1";
+      ip = "10.88.5.1";
       httpPort = 5230;
       volumes = [
         "/var/lib/memos:/var/opt/memos"
