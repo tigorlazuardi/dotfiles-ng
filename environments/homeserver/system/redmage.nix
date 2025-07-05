@@ -31,4 +31,9 @@ in
       icon = "reddit.svg";
     };
   };
+  services.db-gate.connections.redmage = {
+    label = "Redmage Database";
+    engine = "sqlite@dbgate-plugin-sqlite";
+    url = "${mount}/db/data.db";
+  };
 }

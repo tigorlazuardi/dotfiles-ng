@@ -9,7 +9,7 @@
         connections = mkOption {
           type = types.attrsOf (
             types.submodule (
-              { name, ... }:
+              { config, name, ... }:
               {
                 enable = mkOption {
                   type = types.bool;
@@ -39,9 +39,17 @@
                   type = types.str;
                   description = "Connection URL for DB-Gate. It should be in the format supported by DB-Gate, e.g. 'mssql://user:password@host:port/database'. If sqlite, it should be a path to the database file.";
                 };
-                socketMount = mkOption {
+                mount = mkOption {
                   type = types.nullOr types.str;
-                  description = "Path to a socket to mount into the container. If null, no socket will be mounted.";
+                  default =
+                    # we have to take account for db-shm and db-wal files for sqlite, so mount the directory instead.
+                    if config.engine == "sqlite@dbgate-plugin-sqlite" then (builtins.dirOf config.url) else null;
+                  description = ''
+                    Path to mount a file or directory into the container.
+
+                    If null, no file / directory will be mounted.
+
+                    Used for mounting socket connections or a database file'';
                 };
               }
             )
@@ -58,6 +66,8 @@
         nameValuePair
         filterAttrs
         mkIf
+        optional
+        mapAttrsToList
         ;
       enabledConnections = filterAttrs (_: value: value.enable) config.services.db-gate.connections;
       hasConnections = (enabledConnections != { });
@@ -75,12 +85,20 @@
             ]
             ++ (
               let
-                connectionsWithSocketMount = filterAttrs (_: value: value.socketMount != null) enabledConnections;
-                volumes = mapAttrs' (
-                  _: value: "${value.socketMount}:${value.socketMount}"
-                ) connectionsWithSocketMount;
+                connectionsWithSocketMount = filterAttrs (_: value: value.mount != null) enabledConnections;
+                volumes = mapAttrs' (_: value: "${value.mount}:${value.mount}") connectionsWithSocketMount;
               in
               volumes
+            )
+            ++ optional (config.services.postgresql.enable) "/run/postgresql:/var/run/postgresql"
+            ++ (
+              let
+                enabledRedisServers = filterAttrs (_: value: value.enable) config.services.redis.servers;
+                redisSocks = mapAttrsToList (
+                  _: value: "${value.unixSocket}:${value.unixSocket}"
+                ) enabledRedisServers;
+              in
+              redisSocks
             );
           ip = "10.88.1.1";
           httpPort = 3000;

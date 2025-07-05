@@ -86,4 +86,9 @@ in
     href = "https://ytptube.tigor.web.id";
     icon = "metube.svg";
   };
+  services.db-gate.connections.ytptube = {
+    label = "YTPTube";
+    engine = "sqlite@dbgate-plugin-sqlite";
+    url = "/var/lib/ytptube/ytptube.db";
+  };
 }
