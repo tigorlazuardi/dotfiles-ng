@@ -26,7 +26,10 @@ in
 {
   sops = {
     secrets."servarr/api_keys/radarr".sopsFile = ../../../../secrets/servarr.yaml;
-    templates."servarr/radarr/config.xml".file = (pkgs.formatx.xml { }).generate "config.xml" settings;
+    templates."servarr/radarr/config.xml" = {
+      owner = config.users.users.servarr.name;
+      file = (pkgs.formatx.xml { }).generate "config.xml" settings;
+    };
   };
   virtualisation.oci-containers.containers.radarr = {
     image = "lscr.io/linuxserver/radarr:latest";

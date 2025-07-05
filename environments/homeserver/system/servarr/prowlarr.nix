@@ -25,9 +25,10 @@ in
 {
   sops = {
     secrets."servarr/api_keys/prowlarr".sopsFile = ../../../../secrets/secrets.yaml;
-    templates."servarr/prowlarr/config.xml".file =
-      (pkgs.formats.xml { }).generate "config.xml"
-        settings;
+    templates."servarr/prowlarr/config.xml" = {
+      owner = config.users.users.servarr.name;
+      file = (pkgs.formats.xml { }).generate "config.xml" settings;
+    };
   };
   virtualisation.oci-containers.containers.prowlarr = {
     image = "lscr.io/linuxserver/prowlarr:latest";

@@ -26,7 +26,10 @@ in
 {
   sops = {
     secrets."servarr/api_keys/sonarr".sopsFile = ../../../../secrets/secrets.yaml;
-    templates."servarr/sonarr/config.xml".file = (pkgs.formats.xml { }).generate "config.xml" settings;
+    templates."servarr/sonarr/config.xml" = {
+      owner = config.users.users.servarr.name;
+      file = (pkgs.formats.xml { }).generate "config.xml" settings;
+    };
   };
   virtualisation.oci-containers.containers.sonarr = {
     image = "lscr.io/linuxserver/sonarr:latest";
