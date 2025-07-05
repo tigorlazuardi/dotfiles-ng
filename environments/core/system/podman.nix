@@ -50,6 +50,7 @@
     in
     {
       virtualisation.oci-containers.containers = mapAttrs (name: value: {
+        autoStart = mkDefault (!value.socketActivation.enable);
         hostname = mkDefault name;
         networks = mkDefault [ "podman" ];
         labels = mkDefault {
