@@ -18,6 +18,7 @@
     ./qbittorrent.nix
     ./redmage.nix
     ./samba.nix
+    ./soulseek.nix
     ./stirling-pdf.nix
     ./suwayomi.nix
     ./syncthing.nix
