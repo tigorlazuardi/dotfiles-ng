@@ -24,5 +24,6 @@
     ./syncthing.nix
     ./tiny_auth.nix
     ./wireguard.nix
+    ./ytptube.nix
   ];
 }
