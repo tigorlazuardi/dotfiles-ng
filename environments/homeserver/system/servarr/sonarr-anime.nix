@@ -14,7 +14,7 @@ let
     SslCertPath = "";
     SslCertPassword = "";
     UrlBase = "";
-    InstanceName = "Sonarr";
+    InstanceName = "Sonarr Anime";
     UpdateMechanism = "Docker";
   };
   root = "/nas/mediaserver/servarr";
