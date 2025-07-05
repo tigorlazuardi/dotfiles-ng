@@ -5,6 +5,7 @@
     ./radarr.nix
     ./sonarr-anime.nix
     ./sonarr.nix
+    ./recyclarr.nix
   ];
   users = {
     users.servarr = {
