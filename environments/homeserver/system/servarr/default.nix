@@ -2,10 +2,11 @@
   imports = [
     ./bazarr.nix
     ./prowlarr.nix
+    ./qbittorrent.nix
     ./radarr.nix
+    ./recyclarr.nix
     ./sonarr-anime.nix
     ./sonarr.nix
-    ./recyclarr.nix
   ];
   users = {
     users.servarr = {
