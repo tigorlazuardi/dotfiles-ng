@@ -15,6 +15,7 @@
     ./jellyseerr.nix
     ./memos.nix
     ./pocket_id.nix
+    ./qbittorrent.nix
     ./samba.nix
     ./stirling-pdf.nix
     ./suwayomi.nix
