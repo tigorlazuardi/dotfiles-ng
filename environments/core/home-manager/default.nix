@@ -1,6 +1,9 @@
 { user, osConfig, ... }:
 {
   imports = [
+    # currently all devices will use nixvim as editor in terminal.
+    ../../nixvim/home-manager
+
     ./bluetooth.nix
     ./direnv.nix
     ./fish.nix
