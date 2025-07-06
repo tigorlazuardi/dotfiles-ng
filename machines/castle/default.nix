@@ -1,9 +1,9 @@
-{ inputs, ... }:
 {
   imports = [
+    ../../environments/core/system
+
     ./hardware.nix
     ./system.nix
-    ./user.nix
   ];
 
   networking.hostName = "castle";

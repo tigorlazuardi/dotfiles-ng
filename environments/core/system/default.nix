@@ -6,12 +6,16 @@
   imports = [
     ./editor.nix
     ./fonts.nix
+    ./home-manager.nix
     ./locale.nix
+    ./nh.nix
     ./nix_config.nix
     ./nix_index.nix
-    ./programs.nix
     ./podman.nix
+    ./programs.nix
+    ./sops.nix
     ./systemd.nix
+    ./user.nix
   ];
   time.timeZone = lib.mkDefault "Asia/Jakarta";
   documentation.enable = true;
