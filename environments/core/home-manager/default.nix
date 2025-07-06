@@ -3,6 +3,8 @@
   imports = [
     ./bluetooth.nix
     ./direnv.nix
+    ./fish.nix
+    ./git.nix
     ./ideavimrc.nix
     ./nix_index.nix
     ./podman.nix
