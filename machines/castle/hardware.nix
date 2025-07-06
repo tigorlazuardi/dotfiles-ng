@@ -17,31 +17,25 @@
     "usbhid"
     "sd_mod"
   ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/6a987bc7-1f00-4494-bcef-b0f8afc62b7b";
-    fsType = "ext4";
-  };
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/790c72a1-72e6-41af-9c60-154e408e0228";
+      fsType = "ext4";
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/812C-A3A9";
-    fsType = "vfat";
-  };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/02D8-CBB2";
+      fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
+    };
 
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/0add1f95-4cd5-4d44-876e-c1b381b7d133";
-    fsType = "ext4";
-  };
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/33f3a006-9ccc-4cde-81f3-0dc0ba73e9ea"; }
+    ];
 
-  fileSystems."/workstation" = {
-    device = "/dev/disk/by-uuid/7a3a7a8a-91d5-43fb-a80b-376bacdb54ec";
-    fsType = "ext4";
-  };
-
-  swapDevices = [ { device = "/dev/disk/by-uuid/15139a5f-a695-47a1-bd59-7e530989860c"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

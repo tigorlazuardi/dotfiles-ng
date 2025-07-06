@@ -19,18 +19,18 @@ let
         }
         {
           name = "Bareksa Aiven";
-          bootstrapServers = "@PRODUCTION_SERVERS@";
-          # bootstrapServers = config.sops.placeholder."bareksa/aiven/kafka/host";
+          #bootstrapServers = "@PRODUCTION_SERVERS@";
+          bootstrapServers = config.sops.placeholder."bareksa/aiven/kafka/host";
           readOnly = true;
           properties = {
             security.protocol = "SSL";
             ssl.truststore.location = "/aiven.keystore.jks";
-            # ssl.truststore.password = config.sops.placeholder."bareksa/aiven/kafka/truststore/password";
-            ssl.truststore.password = "@TRUSTSTORE_PASSWORD@";
+            ssl.truststore.password = config.sops.placeholder."bareksa/aiven/kafka/truststore/password";
+            #ssl.truststore.password = "@TRUSTSTORE_PASSWORD@";
             ssl.keystore.type = "PKCS12";
             ssl.keystore.location = "/aiven.bareksa.p12";
-            # ssl.keystore.password = config.sops.placeholder."bareksa/aiven/kafka/truststore/password";
-            ssl.keystore.password = "@KEYSTORE_PASSWORD@";
+            ssl.keystore.password = config.sops.placeholder."bareksa/aiven/kafka/truststore/password";
+            #ssl.keystore.password = "@KEYSTORE_PASSWORD@";
           };
         }
       ];
@@ -55,39 +55,17 @@ in
       sopsFile = ../../../secrets/bareksa.yaml;
     };
   };
+  sops.templates."bareksa/kafka-ui/config.yaml".file = yaml.generate "config.yaml" settings;
   virtualisation.oci-containers.containers.bareksa-kafka-ui = {
     image = "docker.io/provectuslabs/kafka-ui:latest";
     ip = "10.88.200.2";
     httpPort = 8080;
     volumes = [
-      "/var/lib/bareksa-kafka-ui/config.yaml:/config.yaml"
+      "${config.sops.templates."bareksa/kafka-ui/config.yaml".path}:/config.yaml"
       "${config.sops.secrets."aiven.bareksa.p12".path}:/aiven.bareksa.p12"
       "${config.sops.secrets."aiven.keystore.jks".path}:/aiven.keystore.jks"
     ];
     socketActivation.enable = true;
-  };
-  systemd.services.podman-bareksa-kafka-ui = {
-    serviceConfig = {
-      LoadCredentials = [
-        "truststore-password:${config.sops.secrets."bareksa/aiven/kafka/truststore/password".path}"
-        "production-servers:${config.sops.secrets."bareksa/aiven/kafka/host".path}"
-      ];
-      ExecStartPre = lib.singleton (
-        let
-          replace-secret = lib.meta.getExe pkgs.replace-secret;
-        in
-        lib.meta.getExe (
-          pkgs.writeShellScriptBin "podman-bareksa-kafka-ui-pre" ''
-            config_file="/var/lib/bareksa-kafka-ui/config.yaml"
-            cp ${yaml.generate "config.yaml" settings} $config_file
-            ${replace-secret} '@PRODUCTION_SERVERS@' ''${CREDENTIALS_DIRECTORY}/productions-servers $config_file
-            ${replace-secret} '@TRUSTSTORE_PASSWORD@' ''${CREDENTIALS_DIRECTORY}/truststore-password $config_file
-            ${replace-secret} '@KEYSTORE_PASSWORD@' ''${CREDENTIALS_DIRECTORY}/truststore-password $config_file
-          ''
-        )
-      );
-      StateDirectory = "bareksa-kafka-ui";
-    };
   };
   services.caddy.virtualHosts."http://kafka.bareksa.local".extraConfig =
     # caddy

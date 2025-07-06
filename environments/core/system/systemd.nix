@@ -122,7 +122,7 @@ in
           proxy = "${name}-proxy";
         in
         nameValuePair proxy {
-          listenStreams = [ cfg.socketAddress ];
+          listenStreams = [ cfg.address ];
           wantedBy = [ "sockets.target" ];
         }
       ) names

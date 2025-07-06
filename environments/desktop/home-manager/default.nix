@@ -5,5 +5,6 @@
     ./mpv.nix
     ./neovide.nix
     ./syncthing.nix
+    ./chromium.nix
   ];
 }

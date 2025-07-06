@@ -6,10 +6,10 @@
   ];
   options.virtualisation.oci-containers.containers =
     let
-      inherit (lib) mkOption types mkEnableOption;
+      inherit (lib) mkOption types mkEnableOption mkDefault optional;
     in
     mkOption {
-      type = types.attrsOf types.submodule {
+      type = types.attrsOf (types.submodule({config, name, ...}:{
         options = {
           ip = mkOption {
             type = types.nullOr types.str;
@@ -31,7 +31,16 @@
             };
           };
         };
-      };
+        config = {
+          hostname = mkDefault name;
+          networks = mkDefault ["podman"];
+          autoStart = mkDefault (!config.socketActivation.enable);
+          labels = mkDefault {
+            "io.container.autoupdate" = "registry";
+          };
+          extraOptions = optional (config.ip != null) "--ip=${config.ip}";
+        };
+      }));
     };
   config =
     let
@@ -49,15 +58,6 @@
       socketActivatedContainers = filterAttrs (_: c: c.socketActivation.enable) cfg;
     in
     {
-      virtualisation.oci-containers.containers = mapAttrs (name: value: {
-        autoStart = mkDefault (!value.socketActivation.enable);
-        hostname = mkDefault name;
-        networks = mkDefault [ "podman" ];
-        labels = mkDefault {
-          "io.containers.autoupdate" = "registry";
-        };
-        extraOptions = optional (value.ip != null) "--ip=${value.ip}";
-      }) cfg;
       systemd.socketActivations = mapAttrs' (
         name: value:
         (nameValuePair "podman-${name}" {

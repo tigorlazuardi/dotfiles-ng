@@ -9,7 +9,7 @@
   sops.secrets =
     let
       opts = {
-        file = ../../../secrets/users.yaml;
+        sopsFile = ../../../secrets/users.yaml;
         neededForUsers = true;
       };
     in
@@ -32,7 +32,7 @@
       isNormalUser = true;
       description = user.description;
       hashedPasswordFile = config.sops.secrets."users/${user.name}/password".path;
-      shell = lib.mkDefault pkgs.fish;
+      shell = pkgs.fish;
     };
   };
   programs.fish.enable = config.users.users.${user.name}.shell == pkgs.fish;

@@ -1,6 +1,6 @@
 { osConfig, lib, ... }:
 {
-  config = lib.mkIf osConfig.hardward.bluetooth.enable {
-    programs.mpris-proxy.enable = true;
+  config = lib.mkIf osConfig.hardware.bluetooth.enable {
+    services.mpris-proxy.enable = true;
   };
 }
