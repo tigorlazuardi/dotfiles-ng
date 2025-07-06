@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  user,
   ...
 }:
 {
@@ -27,6 +28,10 @@
     brscan4.enable = true; # Brother Scanner
     extraBackends = with pkgs; [ sane-airscan ];
   };
+  users.users.${user.name}.extraGroups = [
+    "scanner" # For sane scanner access
+    "lp" # For printer access
+  ];
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
