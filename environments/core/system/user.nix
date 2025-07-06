@@ -37,4 +37,13 @@
   };
   programs.fish.enable = config.users.users.${user.name}.shell == pkgs.fish;
   nix.settings.trusted-users = [ user.name ];
+
+  # Alternative to systemd sysusers for creating users.
+  #
+  # This has strong benefits of non-destructive user / group management
+  # and no reusing of UIDs/GIDs.
+  #
+  # So there will be no security issues arise if a user is removed
+  # and a new user is created with the same uid/gid.
+  services.userborn.enable = true;
 }
