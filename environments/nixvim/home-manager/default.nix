@@ -7,6 +7,7 @@
     ./keymaps.nix
     ./neovide.nix
     ./opts.nix
+    ./plugins
   ];
   programs.nixvim = {
     enable = true;

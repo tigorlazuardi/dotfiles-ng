@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  secretFile = ../../../secrets/ai.yaml;
+  secretFile = ../../../../../secrets/ai.yaml;
 in
 {
   sops.secrets."ai/gemini/api_key".sopsFile = secretFile;

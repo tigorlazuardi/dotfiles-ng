@@ -33,6 +33,7 @@
       description = user.description;
       hashedPasswordFile = config.sops.secrets."users/${user.name}/password".path;
       shell = pkgs.fish;
+      extraGroups = ["wheel"];
     };
   };
   programs.fish.enable = config.users.users.${user.name}.shell == pkgs.fish;

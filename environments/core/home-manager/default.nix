@@ -12,6 +12,7 @@
     ./nix_index.nix
     ./podman.nix
     ./sops.nix
+    ./zoxide.nix
   ];
 
   home = {

@@ -1,7 +1,9 @@
 { pkgs, ... }:
 {
+  home.packages = with pkgs; [grc];
   # Add color to commands
   programs.carapace.enable = true;
+  programs.fzf.enable = true;
   programs.fish = {
     enable = true;
     functions = {
