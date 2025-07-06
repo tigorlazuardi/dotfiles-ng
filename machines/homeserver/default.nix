@@ -2,10 +2,17 @@
 {
   imports = [
     ../../environments/core/system
+    ../../environments/homeserver/system
 
     ./hardware.nix
     ./system.nix
   ];
+  home-manager.users.${user.name} = {
+    imports = [
+      ../../environments/core/home-manager
+      ../../environments/homeserver/home-manager
+    ];
+  };
   networking.hostName = "homeserver";
   system.stateVersion = "24.05";
 
