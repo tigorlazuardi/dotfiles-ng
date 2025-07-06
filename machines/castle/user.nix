@@ -1,17 +1,22 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  user,
+  pkgs,
+  ...
+}:
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
-  sops.age.keyFile = "/home/tigor/.config/sops/age/keys.txt";
+  sops.age.keyFile = "/home/${user.name}/.config/sops/age/keys.txt";
   sops.defaultSopsFormat = "yaml";
-  programs.nh.flake = "/home/tigor/dotfiles";
+  programs.nh.flake = "/home/${user.name}/dotfiles";
 
   home-manager.extraSpecialArgs = { inherit inputs; };
   home-manager.useGlobalPkgs = true;
-  users.users.tigor = {
+  users.users.${user.name} = {
     isNormalUser = true;
-    description = "Tigor Hutasuhut";
+    description = user.description;
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -25,5 +30,5 @@
 
   programs.fish.enable = true;
 
-  nix.settings.trusted-users = [ "tigor" ];
+  nix.settings.trusted-users = [ user.name ];
 }

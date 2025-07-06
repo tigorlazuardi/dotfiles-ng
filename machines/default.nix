@@ -1,17 +1,29 @@
 { nixpkgs, ... }@inputs:
 let
   mkNixosConfiguration =
-    machine:
+    { module, user }:
     nixpkgs.lib.nixosSystem {
       modules = [
-        machine
+        module
       ];
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs user; };
     };
 in
 {
   nixosConfigurations = {
-    castle = mkNixosConfiguration ./castle;
-    homeserver = mkNixosConfiguration ./homeserver;
+    castle = mkNixosConfiguration {
+      module = ./castle;
+      user = {
+        name = "tigor";
+        description = "Tigor Hutasuhut";
+      };
+    };
+    homeserver = mkNixosConfiguration {
+      module = ./homeserver;
+      user = {
+        name = "homeserver";
+        description = "Homeserver";
+      };
+    };
   };
 }

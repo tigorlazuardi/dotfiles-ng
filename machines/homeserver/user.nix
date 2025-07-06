@@ -1,20 +1,18 @@
 {
   config,
   inputs,
+  user,
   pkgs,
   lib,
   ...
 }:
-let
-  name = "homeserver";
-in
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
   ];
   sops = {
-    age.keyFile = "/home/homeserver/.config/sops/age/keys.txt";
+    age.keyFile = "/home/${user.name}/.config/sops/age/keys.txt";
     defaultSopsFormat = "yaml";
   };
   sops.secrets =
@@ -26,8 +24,7 @@ in
     in
     {
       "users/root/password" = opts;
-      "users/nh/password" = opts;
-      "users/homeserver/password" = opts;
+      "users/${user.name}/password" = opts;
     };
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
@@ -44,15 +41,10 @@ in
       # https://discourse.nixos.org/t/multiple-options-for-root-password-when-building-custom-iso/47022
       initialHashedPassword = lib.mkForce null;
     };
-    nh = {
-      isSystemUser = true;
-      hashedPasswordFile = config.sops.secrets."users/nh/password".path;
-      extraGroups = [ "wheel" ];
-    };
-    ${name} = {
+    ${user.name} = {
       isNormalUser = true;
-      description = "Homeserver";
-      hashedPasswordFile = config.sops.secrets."users/homeserver/password".path;
+      description = user.description;
+      hashedPasswordFile = config.sops.secrets."users/${user.name}/password".path;
       shell = pkgs.fish;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB1X6NS0rzXAt31RTKBQKH0Evo8NH7qJPyNEAefzc1Yw tigor@castle"
@@ -64,6 +56,6 @@ in
   };
 
   programs.fish.enable = true;
-  nix.settings.trusted-users = [ name ];
-  programs.nh.flake = "/home/homeserver/dotfiles";
+  nix.settings.trusted-users = [ user.name ];
+  programs.nh.flake = "/home/${user.name}/dotfiles";
 }
