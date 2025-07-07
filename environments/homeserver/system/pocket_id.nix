@@ -4,6 +4,7 @@
     users.pocket-id = {
       isSystemUser = true;
       uid = 900;
+      group = "pocket-id";
     };
     groups.pocket-id.gid = 900;
   };
