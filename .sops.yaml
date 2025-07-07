@@ -1,5 +1,5 @@
 creation_rules:
-  - path_regex: '[^/]+\.(yaml|json|env|ini|jks|pem|cert|crt|p12|bin)$'
+  - path_regex: '[^/]+\.(yaml|json|env|ini|jks|pem|cert|crt|p12|bin|env)$'
     key_groups:
       - age:
           - age1hzdt5vm2002e47n7jghxahvjrffz3kkt552u6khud54r65jf0qgshqw9eg
