@@ -22,6 +22,7 @@
     ./noice.nix
     ./persistence.nix
     ./protobuf.nix
+    ./rose-pine.nix
     ./snacks.nix
     ./telescope.nix
     ./tiny-inline-diagnostics.nix
