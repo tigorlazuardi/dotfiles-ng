@@ -8,6 +8,7 @@
     ./fonts.nix
     ./home-manager.nix
     ./locale.nix
+    ./network_manager.nix
     ./nh.nix
     ./nix_config.nix
     ./nix_index.nix
