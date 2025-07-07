@@ -1,13 +1,13 @@
 { config, pkgs, ... }:
 {
-  sops.secrets."bareksa/conn.ovpn" = {
-    sopsFile = ../../../secrets/bareksa/openvpn.yaml;
-    key = "bareksa.ovpn";
+  sops.secrets."bareksa.ovpn" = {
+    sopsFile = ../../../secrets/bareksa/openvpn.bin;
+    format = "binary";
   };
 
   home.packages = [
     (pkgs.writeShellScriptBin "vpn-bareksa" ''
-      sudo ${pkgs.openvpn}/bin/openvpn --config ${config.sops.secrets."bareksa/conn.ovpn".path}
+      sudo ${pkgs.openvpn}/bin/openvpn --config ${config.sops.secrets."bareksa.ovpn".path}
     '')
   ];
 }
