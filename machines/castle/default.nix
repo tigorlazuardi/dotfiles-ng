@@ -6,6 +6,7 @@
 
     # We will use KDE Plasma 6 as the desktop environment
     ../../environments/kde/system
+    ../../environments/game/system
 
     ./hardware.nix
     ./system.nix
