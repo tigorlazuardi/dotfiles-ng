@@ -1,5 +1,6 @@
 {
   config,
+  user,
   ...
 }:
 let
@@ -13,6 +14,9 @@ in
       uid = 901;
       group = "jdownloader";
     };
+    users.${user.name}.extraGroups = [
+      "jdownloader"
+    ];
     groups.jdownloader.gid = 901;
   };
 

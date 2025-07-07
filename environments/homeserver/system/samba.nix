@@ -1,3 +1,4 @@
+{ user, ... }:
 {
   services.samba = {
     enable = true;
@@ -5,6 +6,7 @@
     settings = {
       global = {
         workgroup = "WORKGROUP";
+        "guest account" = user.name;
       };
       nas = {
         path = "/nas";

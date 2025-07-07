@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 let
   volume = "/nas/torrents";
   inherit (config.users.groups.qbittorrent) gid;
@@ -14,6 +19,7 @@ in
     groups.qbittorrent.gid = 902;
     # Allows jellyfin to access qbittorrent files.
     users.jellyfin.extraGroups = [ "qbittorrent" ];
+    users.${user.name}.extraGroups = [ "qbittorrent" ];
   };
   virtualisation.oci-containers.containers.qbittorrent = {
     image = "docker.io/linuxserver/qbittorrent:latest";

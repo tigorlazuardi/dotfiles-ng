@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 let
   volume = "/wolf/mediaserver/ytptube";
   settings = {
@@ -47,6 +52,7 @@ in
       group = "ytptube";
     };
     users.jellyfin.extraGroups = [ "ytptube" ];
+    users.${user.name}.extraGroups = [ "ytptube" ];
     groups.ytptube.gid = 905;
   };
   virtualisation.oci-containers.containers.ytptube = {

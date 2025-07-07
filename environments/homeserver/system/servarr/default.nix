@@ -1,3 +1,4 @@
+{ user, ... }:
 {
   imports = [
     ./bazarr.nix
@@ -16,6 +17,7 @@
       description = "system user for servarr stack";
     };
     users.jellyfin.extraGroups = [ "servarr" ];
+    users.${user.name}.extraGroups = [ "servarr" ];
     groups.servarr.gid = 910;
   };
 }

@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 let
   volume = "/nas/podman/soulseek";
   volumeMusic = "/nas/Syncthing/Sync/Music";
@@ -13,6 +18,7 @@ in
       group = "soulseek";
     };
     users.syncthing.extraGroups = [ "soulseek" ];
+    users.${user.name}.extraGroups = [ "soulseek" ];
     groups.soulseek.gid = 904;
   };
   virtualisation.oci-containers.containers.soulseek = {
