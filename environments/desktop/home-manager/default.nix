@@ -1,10 +1,11 @@
 {
   imports = [
+    ./chromium.nix
     ./discord.nix
     ./jellyfin.nix
     ./mpv.nix
     ./neovide.nix
     ./syncthing.nix
-    ./chromium.nix
+    ./vivaldi.nix
   ];
 }
