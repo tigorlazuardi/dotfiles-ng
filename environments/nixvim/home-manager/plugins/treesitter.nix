@@ -25,6 +25,17 @@
     }
   ];
   programs.nixvim.extraConfigLua = ''
+    vim.filetype.add {
+      extension = {
+        env = "env",
+      },
+      pattern = {
+        [".*/secrets/.*.yaml"] = "secrets.yaml",
+        ["/tmp/%d+/.*.yaml"] = "secrets.yaml",
+      },
+    }
+    vim.treesitter.language.register("env", "sh")
+    vim.treesitter.language.register("secrets.yaml", "yaml")
     require("lz.n").load {
       {
         "ultimate-autopair.nvim",

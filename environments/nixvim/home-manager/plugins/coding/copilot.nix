@@ -1,5 +1,9 @@
-{ ... }:
+{ config, ... }:
 {
+  sops.secrets."copilot" = {
+    sopsFile = ../../../../../secrets/copilot.yaml;
+    path = "${config.home.homeDirectory}/.config/github-copilot/hosts.json";
+  };
   programs.nixvim = {
     plugins = {
       # Copilot only initialized upon InsertEnter,
@@ -33,7 +37,11 @@
             hide_during_completion = false;
             keymap.accept = "<a-l>";
           };
-          filetypes."*" = true;
+          filetypes = {
+            env = false;
+            "secrets.yaml" = false;
+            "*" = true;
+          };
         };
         luaConfig.post = ''
           vim.keymap.set("i", "<c-e>", function()
