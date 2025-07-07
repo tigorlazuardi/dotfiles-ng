@@ -24,4 +24,5 @@
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
   ];
+  programs.kdeconnect.enable = true; # KDE Connect integration
 }
