@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  osConfig,
   ...
 }:
 {
@@ -18,7 +19,7 @@
         normal = [ "JetBrainsMono Nerd Font" ];
         size = 11.0;
       };
-      fork = false;
+      fork = osConfig.services.desktopManager.plasma6.enable;
       frame = if config.wayland.windowManager.hyprland.enable then "none" else "full";
       idle = true;
       maximied = false;
