@@ -8,7 +8,7 @@
       local function paste()
         return {
           vim.fn.split(vim.fn.getreg("", 1), "\n"),
-          vim.fn.getregtype("", 1),
+          vim.fn.getregtype "",
         }
       end
 
