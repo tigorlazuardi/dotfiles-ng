@@ -17,6 +17,12 @@
     ]);
   # Use the latest kernel packages
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi = {
+      canTouchEfiVariables = true;
+    };
+  };
 
   networking.defaultGateway = "192.168.100.1";
   networking.interfaces.enp3s0 = {
