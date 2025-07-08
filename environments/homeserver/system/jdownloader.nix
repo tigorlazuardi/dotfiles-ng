@@ -6,6 +6,8 @@
 let
   volume = "/nas/jdownloader";
   domain = "jdownloader.tigor.web.id";
+  inherit (config.users.users.jdownloader) uid;
+  inherit (config.users.groups.jdownloader) gid;
 in
 {
   users = {
@@ -52,8 +54,7 @@ in
   system.activationScripts.jdownloader = # sh
     ''
       mkdir -p ${volume}
-      chown jdownloader:jdownloader ${volume}
-      chmod -R ${volume}
+      chown -R ${toString uid}:${toString gid} ${volume}
     '';
   services.caddy.virtualHosts."${domain}".extraConfig = # caddy
     ''

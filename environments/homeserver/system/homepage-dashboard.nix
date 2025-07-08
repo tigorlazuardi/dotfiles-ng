@@ -126,9 +126,14 @@ in
           enable = true;
           package = pkgs.homepage-dashboard.overrideAttrs {
             enableLocalIcons = true;
-            postInstall = lib.concatMapAttrsStringSep "\n" (
-              name: value: "cp ${value} $out/share/homepage/public/icons/${name}"
-            ) config.services.homepage-dashboard.extraIcons;
+            postInstall =
+              # sh
+              ''
+                mkdir -p $out/share/homepage/public/icons
+                ${lib.concatMapAttrsStringSep "\n" (
+                  name: value: "cp ${value} $out/share/homepage/public/icons/${name}"
+                ) config.services.homepage-dashboard.extraIcons}
+              '';
           };
           groups = {
             "Git and Personal Projects" = {
@@ -231,7 +236,7 @@ in
       services.caddy.virtualHosts."tigor.web.id".extraConfig =
         #caddy
         ''
-          reverse_proxy unix/${config.services.anubis.instances.homepage-dashboard.settings.TARGET}
+          reverse_proxy unix/${config.services.anubis.instances.homepage-dashboard.settings.BIND}
         '';
     };
 }

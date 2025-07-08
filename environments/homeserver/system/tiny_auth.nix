@@ -16,8 +16,8 @@
         SECRET_FILE = "/secret";
       };
       volumes = [
-        "${config.sops.secrets."tinyauth/main/users".path}:/users:ro"
-        "${config.sops.secrets."tinyauth/main/secret".path}:/secret:ro"
+        "${config.sops.secrets."tinyauth/main/users".path}:/users"
+        "${config.sops.secrets."tinyauth/main/secret".path}:/secret"
       ];
     };
 

@@ -132,21 +132,21 @@ in
         "podman-${name}-valkey.service"
         "podman-planetmelon-mailhog.service"
       ];
-      serviceConfig.StopWhenUnneeded = true;
+      unitConfig.StopWhenUnneeded = true;
     };
     "podman-${name}-exporter" = {
       wantedBy = lib.mkForce [ ];
       requires = [ "podman-${name}-valkey.service" ];
       after = [ "podman-${name}-valkey.service" ];
-      serviceConfig.StopWhenUnneeded = true;
+      unitConfig.StopWhenUnneeded = true;
     };
     "podman-${name}-postgres" = {
       wantedBy = lib.mkForce [ ];
-      serviceConfig.StopWhenUnneeded = true;
+      unitConfig.StopWhenUnneeded = true;
     };
     "podman-${name}-valkey" = {
       wantedBy = lib.mkForce [ ];
-      serviceConfig.StopWhenUnneeded = true;
+      unitConfig.StopWhenUnneeded = true;
     };
   };
 }

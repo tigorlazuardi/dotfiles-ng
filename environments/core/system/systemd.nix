@@ -85,10 +85,8 @@ in
             cfg = config.systemd.socketActivations."${name}";
           in
           nameValuePair name {
-            serviceConfig = {
-              ExecStartPost = optional cfg.wait.enable cfg.wait.command;
-              StopWhenUnneeded = true;
-            };
+            serviceConfig.ExecStartPost = optional cfg.wait.enable cfg.wait.command;
+            unitConfig.StopWhenUnneeded = true;
             wantedBy = lib.mkForce [ ]; # enfore the service can only be activated by socket activation.
           }
         ) names
@@ -101,7 +99,7 @@ in
             proxy = "${name}-proxy";
           in
           nameValuePair proxy {
-            unitConfig = {
+            serviceConfig = {
               Requires = [
                 "${name}.service"
                 "${proxy}.socket"

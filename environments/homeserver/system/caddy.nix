@@ -14,13 +14,16 @@ in
 {
   services.caddy = {
     enable = true;
-    globalConfig =
-      # caddy
-      ''
-        encode
-        email tigor.hutasuhut@gmail.com
-      '';
+    # globalConfig =
+    #   # caddy
+    #   ''
+    #     email tigor.hutasuhut@gmail.com
+    #   '';
   };
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
   services.caddy.virtualHosts =
     {
       # Discard all unknown domain requests without a response to discourage

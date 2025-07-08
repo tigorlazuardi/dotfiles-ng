@@ -248,12 +248,12 @@ in
   '';
   # Configure systemd services and auto stop services when not needed.
   systemd.services = {
-    "podman-${name}-mongodb".serviceConfig.StopWhenUnneeded = true;
-    "podman-${name}-minio".serviceConfig.StopWhenUnneeded = true;
-    "podman-${name}-elastic".serviceConfig.StopWhenUnneeded = true;
-    "podman-${name}-stats".serviceConfig.StopWhenUnneeded = true;
-    "podman-${name}-workspace".serviceConfig.StopWhenUnneeded = true;
-    "podman-${name}-fulltext".serviceConfig.StopWhenUnneeded = true;
+    "podman-${name}-mongodb".unitConfig.StopWhenUnneeded = true;
+    "podman-${name}-minio".unitConfig.StopWhenUnneeded = true;
+    "podman-${name}-elastic".unitConfig.StopWhenUnneeded = true;
+    "podman-${name}-stats".unitConfig.StopWhenUnneeded = true;
+    "podman-${name}-workspace".unitConfig.StopWhenUnneeded = true;
+    "podman-${name}-fulltext".unitConfig.StopWhenUnneeded = true;
     # Rekoni service already stops when not needed because of socket activation.
     # No need to set StopWhenUnneeded.
     "podman-${name}-rekoni".serviceConfig.MemoryMax = "512M"; # 512 MiB memory limit

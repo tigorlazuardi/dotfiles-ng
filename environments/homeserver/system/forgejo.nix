@@ -24,7 +24,7 @@ in
       # caddy
       ''
         @not_login {
-          not Cookie gitea_incredible
+          not header_regexp Cookie gitea_incredible
         }
         redir @not_login /tigor
         reverse_proxy unix/${config.services.anubis.instances.forgejo.settings.BIND}

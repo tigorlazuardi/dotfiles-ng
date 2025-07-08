@@ -49,7 +49,7 @@ in
   };
   system.activationScripts.radarr = ''
     mkdir -p ${configVolume} ${mediaVolume}
-    chrown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
+    chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
   '';
   services.caddy.virtualHosts =
     let
