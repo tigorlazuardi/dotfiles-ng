@@ -1,16 +1,20 @@
 { config, ... }:
+let
+  name = "planetmelon-tiny-auth";
+  domain = "auth.planetmelon.web.id";
+in
 {
   sops.secrets = {
     "tinyauth/planetmelon/users".sopsFile = ../../../secrets/planetmelon/tinyauth.yaml;
     "tinyauth/planetmelon/secret".sopsFile = ../../../secrets/planetmelon/tinyauth.yaml;
   };
-  virtualisation.oci-containers.containers.planetmelon-tiny-auth = {
+  virtualisation.oci-containers.containers.${name} = {
     image = "ghcr.io/steveiliop56/tinyauth:v3";
     ip = "10.88.10.1";
     httpPort = 3000;
     socketActivation.enable = true;
     environment = {
-      APP_URL = "https://auth.planetmelon.web.id";
+      APP_URL = "https://${domain}";
       USERS_FILE = "/users";
       SECRET_FILE = "/secret";
     };
@@ -20,13 +24,13 @@
     ];
   };
 
-  services.anubis.instances.planetmelon-tinyauth.settings.TARGET =
+  services.anubis.instances.${name}.settings.TARGET =
     let
-      inherit (config.systemd.socketActivations."podman-planetmelon-tiny-auth") address;
+      inherit (config.systemd.socketActivations."podman-${name}") address;
     in
     "unix://${address}";
   services.caddy = {
-    virtualHosts."auth.planetmelon.web.id".extraConfig = # caddy
+    virtualHosts."${domain}".extraConfig = # caddy
       let
         inherit (config.services.anubis.instances.planetmelon-tinyauth.settings) BIND;
       in
@@ -36,7 +40,7 @@
     extraConfig =
       let
         # forward auth must not go through anubis
-        inherit (config.systemd.socketActivations."podman-planetmelon-tiny-auth") address;
+        inherit (config.systemd.socketActivations."podman-${name}") address;
       in
       # caddy
       ''
