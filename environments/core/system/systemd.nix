@@ -85,9 +85,10 @@ in
             cfg = config.systemd.socketActivations."${name}";
           in
           nameValuePair name {
-            # bidnsTo ensures the service is stopped when the socket proxyd (the preoxy service) exits.
-            bindsTo = [ "${name}-proxy.service" ];
-            serviceConfig.ExecStartPost = optional cfg.wait.enable cfg.wait.command;
+            serviceConfig = {
+              ExecStartPost = optional cfg.wait.enable cfg.wait.command;
+              StopWhenUnneeded = true;
+            };
             wantedBy = lib.mkForce [ ]; # enfore the service can only be activated by socket activation.
           }
         ) names
