@@ -6,6 +6,7 @@ let
   root = "/nas/mediaserver/servarr";
   configVolume = "${root}/bazarr";
   mediaVolume = "${root}/data";
+  user = "${toString uid}:${toString gid}";
 in
 {
   virtualisation.oci-containers.containers.bazarr = {
@@ -24,7 +25,7 @@ in
   };
   system.activationScripts.bazarr = ''
     mkdir -p ${configVolume}
-    chown ${uid}:${gid} ${mediaVolume} ${configVolume}
+    chown ${user} ${mediaVolume} ${configVolume}
   '';
   services.caddy.virtualHosts =
     let
@@ -42,10 +43,10 @@ in
         '';
     };
   services.homepage-dashboard.groups."Media Collectors".services.Bazarr.settings = {
+    inherit user;
     description = "Subtitle downloader and manager for the servarr stack";
     href = "https://${domain}";
     icon = "bazarr.svg";
-    user = "${toString uid}:${toString gid}";
     widget = {
       type = "bazarr";
       url = "http://bazarr.local";

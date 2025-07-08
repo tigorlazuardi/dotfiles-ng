@@ -25,10 +25,10 @@ let
 in
 {
   sops = {
-    secrets."servarr/api_keys/sonarr".sopsFile = ../../../../secrets/secrets.yaml;
+    secrets."servarr/api_keys/sonarr".sopsFile = ../../../../secrets/servarr.yaml;
     templates."servarr/sonarr/config.xml" = {
       owner = config.users.users.servarr.name;
-      file = (pkgs.formats.xml { }).generate "config.xml" settings;
+      file = (pkgs.formats.xml { }).generate "config.xml" { Config = settings; };
     };
   };
   virtualisation.oci-containers.containers.sonarr = {

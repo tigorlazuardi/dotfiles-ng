@@ -25,10 +25,10 @@ let
 in
 {
   sops = {
-    secrets."servarr/api_keys/sonarr-anime".sopsFile = ../../../../secrets/secrets.yaml;
+    secrets."servarr/api_keys/sonarr-anime".sopsFile = ../../../../secrets/servarr.yaml;
     templates."servarr/sonarr-anime/config.xml" = {
       owner = config.users.users.servarr.name;
-      file = (pkgs.formats.xml { }).generate "config.xml" settings;
+      file = (pkgs.formats.xml { }).generate "config.xml" { Config = settings; };
     };
   };
   virtualisation.oci-containers.containers.sonarr-anime = {
@@ -46,7 +46,7 @@ in
       TZ = "Asia/Jakarta";
     };
   };
-  system.activationScripts.sonarr = ''
+  system.activationScripts.sonarr-anime = ''
     mkdir -p ${configVolume} ${mediaVolume}
     chrown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
   '';

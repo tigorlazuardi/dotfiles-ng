@@ -35,7 +35,7 @@ in
   };
   services.homepage-dashboard.groups.Media.services.Jellyfin = {
     sortIndex = 50;
-    config = {
+    settings = {
       href = "https://jellyfin.tigor.web.id";
       description = "Media Server for streaming personal media collection";
       icon = "jellyfin.svg";

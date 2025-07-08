@@ -39,12 +39,9 @@
       reverse_proxy unix/${config.services.anubis.instances.porcket-id.settings.BIND}
     '';
 
-  services.homepage-dashboard.groups.Security.services = [
-    {
-      name = "Pocket-Id";
-      href = "https://id.tigor.web.id";
-      description = "OAuth2 Provider with exclusive support using Passkeys";
-      icon = "pocket-id.svg";
-    }
-  ];
+  services.homepage-dashboard.groups.Security.services."Pocket-Id".settings = {
+    href = "https://id.tigor.web.id";
+    description = "OAuth2 Provider with exclusive support using Passkeys";
+    icon = "pocket-id.svg";
+  };
 }

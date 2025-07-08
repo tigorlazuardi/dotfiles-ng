@@ -27,7 +27,7 @@ in
   services.homepage-dashboard = {
     extraIcons."anubis.webp" = pkgs.fetchurl {
       url = "https://anubis.techaro.lol/img/happy.webp";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-fq9ezWZvClOXjJPrJpPh+VrrH/YQcVsOibQz9rIUpxM=";
     };
     groups.Networking.services.Anubis.settings = {
       description = "Anti Bot and Scraper Traffic to avoid triggering unwanted on-demand socket activations of apps";

@@ -18,8 +18,6 @@ let
   };
   inherit (lib)
     nameValuePair
-    attrNames
-    listToAttrs
     mapAttrs'
     generators
     mapAttrsToList
@@ -29,10 +27,9 @@ in
   sops.secrets =
     let
       opts.sopsFile = ../../../secrets/wireguard.yaml;
-      deviceNames = attrNames devices;
-      secrets = listToAttrs (
-        name: nameValuePair "wireguard/devices/${name}/private_key" opts
-      ) deviceNames;
+      secrets = mapAttrs' (
+        name: device: (nameValuePair "wireguard/devices/${name}/private_key" opts)
+      ) devices;
     in
     secrets
     // {
@@ -44,16 +41,16 @@ in
   sops.templates =
     let
       templates = mapAttrs' (
-        name: ip:
+        name: device:
         nameValuePair "wireguard/${name}.conf" {
           content = (generators.toINI { }) {
             Interface = {
-              Address = "${ip}/32";
+              Address = "${device.ip}/32";
               PrivateKey = config.sops.placeholder."wireguard/devices/${name}/private_key";
               DNS = "192.168.100.5";
             };
             Peer = {
-              PublicKey = "mGnw5XBngz/YiNMh19ms7+mqBgxt7il+W7yWIl8hqm8=";
+              PublicKey = "mGnw5XBngz/YiNMh19ms7+mqBgxt7il+W7yWIl8hqm8="; # Server Public Key.
               Endpoint = "vpn.tigor.web.id:51820";
               AllowedIPs = "0.0.0.0/0, ::/0"; # Route all traffics.
             };
@@ -93,7 +90,7 @@ in
             ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/16 -o ${externalInterface} -j MASQUERADE
           '';
 
-          privateKeyFile = config.sops.secrets."wireguard/private_keys/server".path;
+          privateKeyFile = config.sops.secrets."wireguard/server/private_key".path;
 
           peers = mapAttrsToList (_: device: {
             publicKey = device.publicKey;

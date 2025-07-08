@@ -183,7 +183,7 @@ in
         image = "hardcoreeng/front:${HULY_VERSION}";
         ip = "10.88.20.9";
         httpPort = 8080;
-        socketAcivation = {
+        socketActivation = {
           enable = true;
           idleTimeout = "15m";
         };

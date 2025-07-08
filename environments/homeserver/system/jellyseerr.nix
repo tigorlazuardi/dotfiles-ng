@@ -21,7 +21,7 @@
       '';
     services.homepage-dashboard.groups."Media Collectors".services.Jellyseerr = {
       sortIndex = 500;
-      config = {
+      settings = {
         href = "https://jellyseerr.tigor.web.id";
         description = "Media Request Management for Servarr stack with Netflix like UI";
         icon = "jellyseerr.svg";

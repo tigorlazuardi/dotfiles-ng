@@ -11,45 +11,47 @@
             types.submodule (
               { config, name, ... }:
               {
-                enable = mkOption {
-                  type = types.bool;
-                  default = true;
-                  description = "Register this connection to DB-Gate.";
-                };
-                label = mkOption {
-                  type = types.str;
-                  default = name;
-                };
-                engine = mkOption {
-                  type = types.enum [
-                    "mssql@dbgate-plugin-mssql"
-                    "mysql@dbgate-plugin-mysql"
-                    "mariadb@dbgate-plugin-mysql"
-                    "postgres@dbgate-plugin-postgres"
-                    "cockroach@dbgate-plugin-postgres"
-                    "redshift@dbgate-plugin-postgres"
-                    "sqlite@dbgate-plugin-sqlite"
-                    "mongo@dbgate-plugin-mongo"
-                    "redis@dbgate-plugin-redis"
-                  ];
-                };
-                # This instance of DB-Gate are used for connections internal to the homeserver.
-                # So it does not care about the portential secrets in the connection url.
-                url = mkOption {
-                  type = types.str;
-                  description = "Connection URL for DB-Gate. It should be in the format supported by DB-Gate, e.g. 'mssql://user:password@host:port/database'. If sqlite, it should be a path to the database file.";
-                };
-                mount = mkOption {
-                  type = types.nullOr types.str;
-                  default =
-                    # we have to take account for db-shm and db-wal files for sqlite, so mount the directory instead.
-                    if config.engine == "sqlite@dbgate-plugin-sqlite" then (builtins.dirOf config.url) else null;
-                  description = ''
-                    Path to mount a file or directory into the container.
+                options = {
+                  enable = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = "Register this connection to DB-Gate.";
+                  };
+                  label = mkOption {
+                    type = types.str;
+                    default = name;
+                  };
+                  engine = mkOption {
+                    type = types.enum [
+                      "mssql@dbgate-plugin-mssql"
+                      "mysql@dbgate-plugin-mysql"
+                      "mariadb@dbgate-plugin-mysql"
+                      "postgres@dbgate-plugin-postgres"
+                      "cockroach@dbgate-plugin-postgres"
+                      "redshift@dbgate-plugin-postgres"
+                      "sqlite@dbgate-plugin-sqlite"
+                      "mongo@dbgate-plugin-mongo"
+                      "redis@dbgate-plugin-redis"
+                    ];
+                  };
+                  # This instance of DB-Gate are used for connections internal to the homeserver.
+                  # So it does not care about the portential secrets in the connection url.
+                  url = mkOption {
+                    type = types.str;
+                    description = "Connection URL for DB-Gate. It should be in the format supported by DB-Gate, e.g. 'mssql://user:password@host:port/database'. If sqlite, it should be a path to the database file.";
+                  };
+                  mount = mkOption {
+                    type = types.nullOr types.str;
+                    default =
+                      # we have to take account for db-shm and db-wal files for sqlite, so mount the directory instead.
+                      if config.engine == "sqlite@dbgate-plugin-sqlite" then (builtins.dirOf config.url) else null;
+                    description = ''
+                      Path to mount a file or directory into the container.
 
-                    If null, no file / directory will be mounted.
+                      If null, no file / directory will be mounted.
 
-                    Used for mounting socket connections or a database file'';
+                      Used for mounting socket connections or a database file'';
+                  };
                 };
               }
             )
@@ -86,7 +88,7 @@
             ++ (
               let
                 connectionsWithSocketMount = filterAttrs (_: value: value.mount != null) enabledConnections;
-                volumes = mapAttrs' (_: value: "${value.mount}:${value.mount}") connectionsWithSocketMount;
+                volumes = mapAttrsToList (_: value: "${value.mount}:${value.mount}") connectionsWithSocketMount;
               in
               volumes
             )
@@ -102,7 +104,7 @@
             );
           ip = "10.88.1.1";
           httpPort = 3000;
-          socketAcivation = {
+          socketActivation = {
             enable = true;
             idleTimeout = "30s";
           };

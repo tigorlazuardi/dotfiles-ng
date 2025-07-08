@@ -5,7 +5,7 @@
   ...
 }:
 let
-  yamlType = (pkgs.formats.yaml { }.type);
+  yamlType = (pkgs.formats.yaml { }).type;
 in
 {
   options =
@@ -61,6 +61,7 @@ in
                   icon = mkOption {
                     type = types.nullOr types.str;
                     description = "Icon for the group. If null, no icon will be displayed.";
+                    default = null;
                   };
                   services = mkOption {
                     type = types.attrsOf (
@@ -102,7 +103,6 @@ in
         attrValues
         sort
         attrNames
-        filter
         filterAttrs
         ;
     in
@@ -110,11 +110,8 @@ in
       sops.secrets."homepage/env".sopsFile = ../../../secrets/homepage.yaml;
       services.homepage-dashboard =
         let
-          allGroups = attrValues config.services.homepage-dashboard.groups;
-          # Fitler groups that are enabled and have at least one service
-          # under the group
-          enabledGroups = filter (
-            group:
+          enabledGroupsSet = filterAttrs (
+            name: group:
             group.enable
             && (
               let
@@ -122,7 +119,8 @@ in
               in
               enabledServices != { }
             )
-          ) allGroups;
+          ) config.services.homepage-dashboard.groups;
+          enabledGroupsList = attrValues enabledGroupsSet;
         in
         {
           enable = true;
@@ -160,7 +158,7 @@ in
             startUrl = "https://tigor.web.id";
             layout =
               let
-                sortedGroups = sort (l: r: l.sortIndex < r.sortIndex) enabledGroups;
+                sortedGroups = sort (l: r: l.sortIndex < r.sortIndex) enabledGroupsList;
                 layout = map (group: {
                   inherit (group)
                     iconsOnly
@@ -175,11 +173,11 @@ in
           };
           services =
             let
-              groupNames = attrNames enabledGroups;
+              groupNames = attrNames enabledGroupsSet;
               services = map (
                 groupName:
                 let
-                  entries = enabledGroups.${groupName}.services;
+                  entries = attrValues enabledGroupsSet.${groupName}.services;
                   sortedEntries = sort (l: r: l.sortIndex < r.sortIndex) entries;
                   final = map (entry: entry.settings) sortedEntries;
                 in

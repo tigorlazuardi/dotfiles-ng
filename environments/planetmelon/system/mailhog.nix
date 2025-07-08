@@ -20,7 +20,7 @@ in
     image = "docker.io/mailhog/mailhog:latest";
     ip = "10.88.10.3";
     httpPort = 8025;
-    socketAcivation.enable = true;
+    socketActivation.enable = true;
     environment = {
       MH_STORAGE = "maildir";
     };

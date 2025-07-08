@@ -28,7 +28,7 @@ in
     secrets."servarr/api_keys/radarr".sopsFile = ../../../../secrets/servarr.yaml;
     templates."servarr/radarr/config.xml" = {
       owner = config.users.users.servarr.name;
-      file = (pkgs.formatx.xml { }).generate "config.xml" settings;
+      file = (pkgs.formats.xml { }).generate "config.xml" { Config = settings; };
     };
   };
   virtualisation.oci-containers.containers.radarr = {

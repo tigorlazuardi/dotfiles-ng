@@ -51,13 +51,10 @@
         '';
     };
 
-    services.homepage-dashboard.groups.Security.services = lib.mkBefore [
-      {
-        name = "Tiny Auth";
-        href = "https://auth.tigor.web.id";
-        description = "Lightweight Single Sign On Service with OIDC Support. Protects all the exposed services from unauthorized access";
-        icon = "tinyauth.svg";
-      }
-    ];
+    services.homepage-dashboard.groups.Security.services."Tiny Auth".settings = {
+      href = "https://auth.tigor.web.id";
+      description = "Lightweight Single Sign On Service with OIDC Support. Protects all the exposed services from unauthorized access";
+      icon = "tinyauth.svg";
+    };
   };
 }

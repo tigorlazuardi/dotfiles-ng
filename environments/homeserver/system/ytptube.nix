@@ -57,7 +57,7 @@ in
   };
   virtualisation.oci-containers.containers.ytptube = {
     image = "ghcr.io/arabcoders/ytptube:latest";
-    volume = [
+    volumes = [
       "${volume}:/downloads"
       "${(pkgs.formats.json { }).generate "config.json" settings}:/config/ytdlp.json"
       "/var/lib/ytptube:/config"
@@ -67,12 +67,12 @@ in
       TZ = "Asia/Jakarta";
       YTP_MAX_WORKERS = "4";
     };
-    extraGroups = [
+    extraOptions = [
       "--umask=0002"
     ];
     ip = "10.88.2.5";
     httpPort = 8081;
-    socketAcivation = {
+    socketActivation = {
       enable = true;
       idleTimeout = "30m";
     };

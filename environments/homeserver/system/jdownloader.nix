@@ -31,7 +31,7 @@ in
       ip = "10.88.2.1";
       httpPort = 5800;
       user = "${toString uid}:${toString gid}";
-      socketAcivation = {
+      socketActivation = {
         enable = true;
         idleTimeout = "1h";
       };
@@ -60,7 +60,7 @@ in
       import tinyauth_main
       reverse_proxy unix/${config.systemd.socketActivations.podman-jdownloader.address}
     '';
-  services.homepage-dashboard."Media Collectors".services.Jdownloader.settings = {
+  services.homepage-dashboard.groups."Media Collectors".services.Jdownloader.settings = {
     description = "Download automation and link enqueuer for various file hosting services";
     icon = "jdownloader2.png";
     href = "https://${domain}";

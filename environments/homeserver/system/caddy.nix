@@ -7,7 +7,7 @@ let
     ;
   containers = config.virtualisation.oci-containers.containers;
   proxyReadyHttpContainers = filterAttrs (
-    _: c: c.ip != null && c.httpPort != null && !c.socketActivation.enable
+    _: c: (c.ip != null) && (c.httpPort != null) && (!c.socketActivation.enable)
   ) containers;
   socketActivatedContainers = filterAttrs (_: c: c.socketActivation.enable) containers;
 in

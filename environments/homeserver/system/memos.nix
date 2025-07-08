@@ -25,7 +25,7 @@ in
       volumes = [
         "/var/lib/memos:/var/opt/memos"
       ];
-      socketAcivation = {
+      socketActivation = {
         enable = true;
         idleTimeout = "1m";
       };
