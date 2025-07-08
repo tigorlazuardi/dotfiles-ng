@@ -14,6 +14,7 @@
     ./jdownloader.nix
     ./jellyfin.nix
     ./jellyseerr.nix
+    ./mailhog.nix
     ./memos.nix
     ./pocket_id.nix
     ./qbittorrent.nix

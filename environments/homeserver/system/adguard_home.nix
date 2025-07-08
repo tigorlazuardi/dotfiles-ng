@@ -115,4 +115,5 @@
       password = "";
     };
   };
+  networking.firewall.allowedUDPPorts = [ 53 ];
 }

@@ -99,7 +99,7 @@ in
             proxy = "${name}-proxy";
           in
           nameValuePair proxy {
-            serviceConfig = {
+            unitConfig = {
               Requires = [
                 "${name}.service"
                 "${proxy}.socket"
@@ -109,7 +109,7 @@ in
                 "${proxy}.socket"
               ];
             };
-            script = ''${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=${cfg.idleTimeout} ${cfg.host}:${toString cfg.port}'';
+            serviceConfig.ExecStart = ''${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=${cfg.idleTimeout} ${cfg.host}:${toString cfg.port}'';
           }
         ) names
       );
