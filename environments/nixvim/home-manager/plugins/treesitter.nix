@@ -34,8 +34,8 @@
         ["/tmp/%d+/.*.yaml"] = "secrets.yaml",
       },
     }
-    vim.treesitter.language.register("env", "sh")
-    vim.treesitter.language.register("secrets.yaml", "yaml")
+    vim.treesitter.language.register("sh", "env")
+    vim.treesitter.language.register("yaml", "secrets.yaml")
     require("lz.n").load {
       {
         "ultimate-autopair.nvim",
