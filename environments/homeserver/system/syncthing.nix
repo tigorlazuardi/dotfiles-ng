@@ -20,6 +20,13 @@ in
     cert = config.sops.secrets."syncthing/server/cert.pem".path;
     settings = {
       localAccounceEnabled = true;
+      options = {
+        relaysEnabled = false;
+      };
+      gui = {
+        insecureSkipHostcheck = true;
+        password = "";
+      };
       devices = {
         windows = {
           name = "Windows";
@@ -36,11 +43,10 @@ in
       };
     };
   };
-  services.anubis.instances.syncthing.settings.TARGET =
-    "http://${config.services.syncthing.guiAddress}";
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
-    locations."/".proxyPass = "http://unix:${config.services.anubis.instances.syncthing.settings.BIND}";
+    tinyauth.locations = [ "/" ];
+    locations."/".proxyPass = "http://${config.services.syncthing.guiAddress}";
   };
   services.homepage-dashboard.groups.Utilities.services.Syncthing.settings = {
     description = "Peer-to-Peer file synchronization between devices";
