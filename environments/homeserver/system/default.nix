@@ -15,7 +15,9 @@
     ./jellyseerr.nix
     ./mailhog.nix
     ./memos.nix
+    ./navidrome.nix
     ./nginx.nix
+    ./ntfy.nix
     ./pocket_id.nix
     ./qbittorrent.nix
     ./redmage.nix

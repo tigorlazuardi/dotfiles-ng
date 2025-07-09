@@ -10,7 +10,7 @@ in
 {
   options =
     let
-      inherit (lib) mkOption types mkEnableOption;
+      inherit (lib) mkOption types;
     in
     {
       services.homepage-dashboard = {
@@ -149,7 +149,7 @@ in
             Media = {
               settings = {
                 style = "row";
-                columns = 3;
+                columns = 4;
               };
               sortIndex = 900;
             };
@@ -158,6 +158,10 @@ in
                 style = "row";
                 columns = 3;
               };
+            };
+            Utilities.settings = {
+              style = "row";
+              columns = 3;
             };
           };
           settings = {

@@ -10,6 +10,7 @@ in
         baseDir = "/var/lib/ntfy-sh";
       in
       {
+        base-url = "https://${domain}";
         listen-http = "127.0.0.1:9999";
         behind-proxy = true;
         cache-file = "${baseDir}/cache.db";
@@ -39,22 +40,17 @@ in
     port = 9999;
     idleTimeout = "30s";
   };
-  services.caddy.virtualHosts = {
-    "${domain}".extraConfig =
-      let
-        inherit (config.systemd.socketActivations.ntfy-sh) address;
-      in
-      # caddy
-      ''
-        @metrics {
-          path /metrics
-        }
-        respond @metrics 403
-        reverse_proxy unix/${address}
-      '';
-    "http://ntfy.local".extraConfig = # caddy
-      ''
-        reverse_proxy unix/${config.systemd.socketActivations.ntfy-sh.address}
-      '';
-  };
+  services.nginx.virtualHosts =
+    let
+      inherit (config.systemd.socketActivations.ntfy-sh) address;
+    in
+    {
+      "ntfy.tigor.web.id" = {
+        forceSSL = true;
+        locations."/metrics".extraConfig = # nginx
+          "return 403;";
+        locations."/".proxyPass = "http://unix:${address}";
+      };
+      "ntfy.local".locations."/".proxyPass = "http://unix:${address}";
+    };
 }
