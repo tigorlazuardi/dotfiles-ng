@@ -89,7 +89,11 @@ in
         ;
     in
     {
-      sops.secrets."homepage/env".sopsFile = ../../../secrets/homepage.yaml;
+      sops.secrets."homepage.env" = {
+        sopsFile = ../../../secrets/homepage.env;
+        format = "dotenv";
+        key = ""; # Load whole file
+      };
       services.homepage-dashboard =
         let
           enabledGroupsSet = filterAttrs (
@@ -228,7 +232,7 @@ in
             }
           ];
           allowedHosts = "tigor.web.id";
-          environmentFile = config.sops.secrets."homepage/env".path;
+          environmentFile = config.sops.secrets."homepage.env".path;
         };
       systemd.socketActivations.homepage-dashboard = {
         host = "0.0.0.0";
