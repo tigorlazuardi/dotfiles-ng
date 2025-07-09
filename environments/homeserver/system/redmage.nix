@@ -21,9 +21,10 @@ in
       inherit (config.virtualisation.oci-containers.containers.redmage) ip httpPort;
     in
     "http://${ip}:${toString httpPort}";
-  services.caddy.virtualHosts."${domain}".extraConfig = ''
-    reverse_proxy unix/${config.services.anubis.instances.redmage.settings.BIND}
-  '';
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    locations."/".proxyPass = "http://unix:${config.services.anubis.instances.redmage.settings.BIND}";
+  };
   services.homepage-dashboard = {
     groups."Git and Personal Projects".services.Redmage.settings = {
       description = "Redmage is a Reddit Image Getter and Downloader with Device Profile support to filter images based on device type.";

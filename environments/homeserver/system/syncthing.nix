@@ -38,10 +38,10 @@ in
   };
   services.anubis.instances.syncthing.settings.TARGET =
     "http://${config.services.syncthing.guiAddress}";
-  services.caddy.virtualHosts."${domain}".extraConfig = # caddy
-    ''
-      reverse_proxy unix/${config.services.anubis.instances.syncthing.settings.BIND}
-    '';
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    locations."/".proxyPass = "http://unix:${config.services.anubis.instances.syncthing.settings.BIND}";
+  };
   services.homepage-dashboard.groups.Utilities.services.Syncthing.settings = {
     description = "Peer-to-Peer file synchronization between devices";
     href = "https://${domain}";

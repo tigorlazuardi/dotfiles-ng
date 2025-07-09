@@ -15,10 +15,11 @@
         inherit (config.systemd.socketActivations.jellyseerr) address;
       in
       "unix://${address}";
-    services.caddy.virtualHosts."jellyseerr.tigor.web.id".extraConfig = # caddy
-      ''
-        reverse_proxy unix/${config.services.anubis.instances.jellyseerr.settings.BIND}
-      '';
+    services.nginx.virtualHosts."jellyseerr.tigor.web.id" = {
+      forceSSL = true;
+      locations."/".proxyPass =
+        "http://unix:${config.services.anubis.instances.jellyseerr.settings.TARGET}";
+    };
     services.homepage-dashboard.groups."Media Collectors".services.Jellyseerr = {
       sortIndex = 500;
       settings = {

@@ -19,12 +19,13 @@ in
       port = SERVER_PORT;
       idleTimeout = "5min";
     };
-  services.caddy.virtualHosts."${domain}".extraConfig =
-    # caddy
-    ''
-      import tinyauth_main
-      reverse_proxy unix/${config.systemd.socketActivations.stirling-pdf.address}
-    '';
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    tinyauth.locations = [ "/" ];
+    locations = {
+      "/".proxyPass = "http://unix:${config.systemd.socketActivations.stirling-pdf.address}";
+    };
+  };
   services.homepage-dashboard.groups.Utilities.services."Stirling PDF".settings = {
     description = "One stop shop for working with PDF files.";
     href = "https://${domain}";

@@ -50,20 +50,18 @@ in
     mkdir -p ${configVolume} ${mediaVolume}
     chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
   '';
-  services.caddy.virtualHosts =
+  services.nginx.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.sonarr) ip httpPort;
+      proxyPass = "http://${ip}:${toString httpPort}";
     in
     {
-      "${domain}".extraConfig = # caddy
-        ''
-          import tinyauth_main
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
-      "http://sonarr-anime.local".extraConfig = # caddy
-        ''
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
+      "sonarr-anime.tigor.web.id" = {
+        forceSSL = true;
+        tinyauth.locations = [ "/" ];
+        locations."/".proxyPass = proxyPass;
+      };
+      "sonarr-anime.local".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services."Sonarr Anime".settings = {
     description = "Info fetcher and grabber for Anime";

@@ -43,10 +43,6 @@ in
       "--device=/dev/dri:/dev/dri"
     ];
   };
-  system.activationScripts.soulseek = ''
-    mkdir -p ${volume}/{config,downloads,incomplete}
-    chown -R ${toString uid}:${toString gid} ${volume} ${volumeMusic}
-  '';
   systemd =
     let
       unit = "podman-soulseek-restart";
@@ -54,6 +50,10 @@ in
     {
       services.${unit} = {
         description = "Podman Soulseek restart";
+        preStart = ''
+          mkdir -p ${volume}/{config,downloads,incomplete}
+          chown -R ${toString uid}:${toString gid} ${volume} ${volumeMusic}
+        '';
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${pkgs.podman}/bin/podman restart soulseek";
@@ -67,15 +67,15 @@ in
         };
       };
     };
-  services.caddy.virtualHosts."soulseek.tigor.web.id".extraConfig =
+  services.nginx.virtualHosts."soulseek.tigor.web.id" =
     let
       inherit (config.virtualisation.oci-containers.containers.soulseek) ip httpPort;
     in
-    # caddy
-    ''
-      import tinyauth_main
-      reverse_proxy ${ip}:${toString httpPort}
-    '';
+    {
+      forceSSL = true;
+      tinyauth.locations = [ "/" ];
+      locations."/".proxyPass = "http://${ip}:${toString httpPort}";
+    };
   services.homepage-dashboard.groups."Media Collectors".services."Soulseek (Nicotine+)".settings = {
     description = "Share and Download Music";
     href = "https://soulseek.tigor.web.id";

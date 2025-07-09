@@ -33,11 +33,12 @@ in
   systemd.services.podman-memos.serviceConfig.StateDirectory = "memos";
   services.anubis.instances.memos.settings.TARGET =
     "unix://${config.systemd.socketActivations.podman-memos.address}";
-  services.caddy.virtualHosts."${domain}".extraConfig = # caddy
-    ''
-      reverse_proxy /memos.api* unix/${config.systemd.socketActivations.podman-memos.address}
-      reverse_proxy unix/${config.services.anubis.instances.memos.settings.BIND}
-    '';
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    locations."~ /memos.api.*".proxyPass =
+      "http://unix:${config.systemd.socketActivations.podman-memos.address}";
+    locations."/".proxyPass = "http://unix:${config.systemd.socketActivations.podman-memos.address}";
+  };
   services.db-gate.connections.memos = {
     label = "SQLITE - Memos";
     engine = "sqlite@dbgate-plugin-sqlite";

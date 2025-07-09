@@ -32,22 +32,17 @@ in
     CPUQuota = "10%";
     IOWeight = 50;
   };
-  services.caddy.virtualHosts =
+  services.nginx.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.qbittorrent-servarr) ip httpPort;
     in
     {
-      "qbittorrent-servarr.tigor.web.id".extraConfig =
-        # caddy
-        ''
-          import tinyauth_main
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
-      "http://qbittorrent-servarr.local".extraConfig =
-        # caddy
-        ''
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
+      "qbittorrent-servarr.tigor.web.id" = {
+        forceSSL = true;
+        tinyauth.locations = [ "/" ];
+        locations."/".proxyPass = "http://${ip}:${toString httpPort}";
+      };
+      "qbittorrent-servarr.local".locations."/".proxyPass = "http://${ip}:${toString httpPort}";
     };
   services.homepage-dashboard.groups."Media Collectors".services."QBittorrent (Servarr)".settings = {
     description = "Torrent downloader for servarr stack";
