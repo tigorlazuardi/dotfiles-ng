@@ -11,8 +11,8 @@ let
   inherit (lib) optional;
 in
 {
-  # Allow caddy to access anubis sockets.
-  users.users.caddy.extraGroups = optional hasInstances config.users.groups.anubis.name;
+  # Allow nginx to access anubis sockets.
+  users.users.nginx.extraGroups = optional hasInstances config.users.groups.anubis.name;
 
   environment.systemPackages = optional hasInstances (
     pkgs.writeShellScriptBin "restart-anubis" ''

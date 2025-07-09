@@ -233,10 +233,10 @@ in
       };
       services.anubis.instances.homepage-dashboard.settings.TARGET =
         "unix://${config.systemd.socketActivations.homepage-dashboard.address}";
-      services.caddy.virtualHosts."tigor.web.id".extraConfig =
-        #caddy
-        ''
-          reverse_proxy unix/${config.services.anubis.instances.homepage-dashboard.settings.BIND}
-        '';
+      services.nginx.virtualHosts."tigor.web.id" = {
+        forceSSL = true;
+        locations."/".proxyPass =
+          "http://unix:${config.services.anubis.instances.homepage-dashboard.settings.BIND}";
+      };
     };
 }

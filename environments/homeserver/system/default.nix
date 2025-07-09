@@ -5,7 +5,6 @@
 
     ./adguard_home.nix
     ./anubis.nix
-    ./caddy.nix
     ./db-gate.nix
     ./flaresolverr.nix
     ./forgejo.nix
@@ -16,6 +15,7 @@
     ./jellyseerr.nix
     ./mailhog.nix
     ./memos.nix
+    ./nginx.nix
     ./pocket_id.nix
     ./qbittorrent.nix
     ./redmage.nix

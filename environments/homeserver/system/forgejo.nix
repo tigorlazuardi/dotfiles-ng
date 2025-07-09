@@ -19,20 +19,23 @@ in
     };
   };
   services.anubis.instances.forgejo.settings.TARGET = "unix:///run/forgejo/forgejo.sock";
-  services.caddy.virtualHosts = {
-    "${domain}".extraConfig =
-      # caddy
-      ''
-        @not_login {
-          not header_regexp Cookie gitea_incredible
-        }
-        redir @not_login /tigor
-        reverse_proxy unix/${config.services.anubis.instances.forgejo.settings.BIND}
-      '';
-    "http://git.local".extraConfig = # caddy
-      ''
-        reverse_proxy unix/${config.services.anubis.instances.forgejo.settings.BIND}
-      '';
+  services.nginx.virtualHosts = {
+    "${domain}" = {
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://unix:${config.services.anubis.instances.forgejo.settings.BIND}";
+        extraConfig =
+          #nginx
+          ''
+            if ($http_cookie !~ "gitea_incredible") {
+                rewrite ^(.*)$ /tigor redirect;
+            }
+          '';
+      };
+    };
+    "git.local" = {
+      locations."/".proxyPass = "http://unix:${config.services.anubis.instances.forgejo.settings.BIND}";
+    };
   };
   services.homepage-dashboard.groups."Git and Personal Projects".services.Forgejo = {
     sortIndex = 50;

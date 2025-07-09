@@ -131,20 +131,17 @@
             // mapAttrs' (name: value: nameValuePair "FILE_${name}" value.url) sqliteConns;
         };
       systemd.services.podman-db-gate.serviceConfig.StateDirectory = "db-gate";
-      services.caddy.virtualHosts =
+      services.nginx.virtualHosts =
         let
           inherit (config.systemd.socketActivations.podman-db-gate) address;
         in
         {
-          "db.tigor.web.id".extraConfig =
-            #caddy
-            ''
-              import tinyauth_main
-              reverse_proxy unix/${address}
-            '';
-          "http://db.local".extraConfig = ''
-            reverse_proxy unix/${address}
-          '';
+          "db.tigor.web.id" = {
+            forceSSL = true;
+            tinyauth.locations = [ "/" ];
+            locations."/".proxyPass = "http://unix:${address}";
+          };
+          "db.local".locations."/".proxyPass = "http://unix:${address}";
         };
     };
 }

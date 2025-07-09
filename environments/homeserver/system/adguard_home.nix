@@ -41,18 +41,8 @@
         ]
         ++ (
           let
-            inherit (lib) attrNames filter removePrefix;
-            allNames = attrNames config.services.caddy.virtualHosts;
-            names = filter (
-              name: name != ":80" && name != ":443" && name != "http://" && name != "https://"
-            ) allNames;
-            entries = map (
-              name:
-              let
-                cleaned = removePrefix "https://" (removePrefix "http://" name);
-              in
-              "192.168.100.5 ${cleaned}"
-            ) names;
+            names = lib.attrNames config.services.nginx.virtualHosts;
+            entries = map (name: "192.168.100.5 ${name}") names;
           in
           entries
         );
@@ -93,17 +83,18 @@
       };
     };
   };
-  services.caddy.virtualHosts = {
-    "adguard.tigor.web.id".extraConfig = # caddy
-      ''
-        import tinyauth_main
-        reverse_proxy ${config.services.adguardhome.settings.http.address}
-      '';
-    "http://adguard.local".extraConfig = # caddy
-      ''
-        reverse_proxy ${config.services.adguardhome.settings.http.address}
-      '';
-  };
+  services.nginx.virtualHosts =
+    let
+      proxyPass = "http://${config.services.adguardhome.settings.http.address}";
+    in
+    {
+      "adguard.tigor.web.id" = {
+        forceSSL = true;
+        tinyauth.locations = [ "/" ];
+        locations."/".proxyPass = proxyPass;
+      };
+      "adguard.local".locations."/".proxyPass = proxyPass;
+    };
   services.homepage-dashboard.groups.Networking.services."AdGuard Home".settings = {
     description = "DNS server for local domains with ad blocking capabilities.";
     href = "https://adguard.tigor.web.id";

@@ -13,15 +13,13 @@
     serviceConfig = {
       CPUWeight = 10;
       CPUQuota = "10%";
+      MemoryHigh = "512M";
       MemoryMax = "2G";
     };
     environment = {
       HOST = "127.0.0.1";
     };
   };
-  services.caddy.virtualHosts."http://flaresolverr.local".extraConfig =
-    # caddy
-    ''
-      reverse_proxy unix/${config.systemd.socketActivations.flaresolverr.address}
-    '';
+  services.nginx.virtualHosts."flaresolverr.local".locations."/".proxyPass =
+    "http://unix:${config.systemd.socketActivations.flaresolverr.address}";
 }
