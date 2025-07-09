@@ -98,7 +98,7 @@
         acceptTerms = true;
         defaults.email = "tigor.hutasuhut@gmail.com";
         certs."tigor.web.id" = {
-          webroot = "/var/lib/acme/acme-challenges";
+          webroot = "/var/lib/acme/acme-challenge";
           extraDomainNames =
             let
               domains = filterAttrs (
