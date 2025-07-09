@@ -98,7 +98,7 @@
   services.homepage-dashboard.groups.Networking.services."AdGuard Home".settings = {
     description = "DNS server for local domains with ad blocking capabilities.";
     href = "https://adguard.tigor.web.id";
-    icon = "adguard.svg";
+    icon = "adguard-home.svg";
     widget = {
       type = "adguard";
       url = "http://adguard.local";

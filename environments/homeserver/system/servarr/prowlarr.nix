@@ -1,41 +1,44 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
   root = "/nas/mediaserver/servarr";
   configVolume = "${root}/prowlarr";
   inherit (config.users.users.servarr) uid;
   inherit (config.users.groups.servarr) gid;
   domain = "prowlarr.tigor.web.id";
-  settings = {
-    BindAddress = "*";
-    Port = 9696;
-    EnableSsl = "False";
-    LaunchBrowser = "False";
-    ApiKey = config.sops.placeholder."servarr/api_keys/prowlarr";
-    AuthenticationMethod = "External"; # We let tineyauth handle authentication.
-    AuthenticationRequired = "Disabled";
-    Branch = "master";
-    LogLevel = "info";
-    SslCertPath = "";
-    SslCertPassword = "";
-    UrlBase = "";
-    InstanceName = "Prowlarr";
-    UpdateMechanism = "Docker";
-  };
 in
 {
   sops = {
     secrets."servarr/api_keys/prowlarr".sopsFile = ../../../../secrets/servarr.yaml;
     templates."servarr/prowlarr/config.xml" = {
       owner = config.users.users.servarr.name;
-      file = (pkgs.formats.xml { }).generate "config.xml" { Config = settings; };
+      content = # xml
+        ''
+          <Config>
+            <ApiKey>${config.sops.placeholder."servarr/api_keys/prowlarr"}</ApiKey>
+            <AuthenticationMethod>External</AuthenticationMethod>
+            <AuthenticationRequired>Disabled</AuthenticationRequired>
+            <BindAddress>*</BindAddress>
+            <Branch>master</Branch>
+            <EnableSsl>False</EnableSsl>
+            <InstanceName>Prowlarr</InstanceName>
+            <LaunchBrowser>False</LaunchBrowser>
+            <LogLevel>info</LogLevel>
+            <Port>9696</Port>
+            <SslCertPassword></SslCertPassword>
+            <SslCertPath></SslCertPath>
+            <UpdateMechanism>Docker</UpdateMechanism>
+            <UrlBase></UrlBase>
+          </Config>
+        '';
+      path = "${configVolume}/config.xml";
     };
   };
   virtualisation.oci-containers.containers.prowlarr = {
     image = "lscr.io/linuxserver/prowlarr:latest";
     ip = "10.88.3.4";
-    httpPort = settings.Port;
+    user = "${toString uid}:${toString gid}";
+    httpPort = 9696;
     volumes = [
-      "${config.sops.templates."servarr/prowlarr/config.xml".path}:/config/config.xml"
       "${configVolume}:/config"
     ];
     environment = {
@@ -48,20 +51,18 @@ in
     mkdir -p ${configVolume}
     chown -R ${toString uid}:${toString gid} ${configVolume}
   '';
-  services.caddy.virtualHosts =
+  services.nginx.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.prowlarr) ip httpPort;
+      proxyPass = "http://${ip}:${toString httpPort}";
     in
     {
-      "${domain}".extraConfig = # caddy
-        ''
-          import tinyauth_main
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
-      "http://prowlarr.local".extraConfig = # caddy
-        ''
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
+      "${domain}" = {
+        forceSSL = true;
+        tinyauth.locations = [ "/" ];
+        locations."/".proxyPass = proxyPass;
+      };
+      "prowlarr.local".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Prowlarr.settings = {
     description = "Indexer manager for the servarr stack";

@@ -56,11 +56,12 @@ in
       mkdir -p ${volume}
       chown -R ${toString uid}:${toString gid} ${volume}
     '';
-  services.caddy.virtualHosts."${domain}".extraConfig = # caddy
-    ''
-      import tinyauth_main
-      reverse_proxy unix/${config.systemd.socketActivations.podman-jdownloader.address}
-    '';
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    tinyauth.locations = [ "/" ];
+    locations."/".proxyPass =
+      "http://unix:${config.systemd.socketActivations.podman-jdownloader.address}";
+  };
   services.homepage-dashboard.groups."Media Collectors".services.Jdownloader.settings = {
     description = "Download automation and link enqueuer for various file hosting services";
     icon = "jdownloader2.png";

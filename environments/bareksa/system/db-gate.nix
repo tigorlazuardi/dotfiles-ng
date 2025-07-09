@@ -15,10 +15,7 @@
   };
   # Ensure /var/lib/bareksa-db-gate exists
   systemd.services.podman-bareksa-db-gate.serviceConfig.StateDirectory = "bareksa-db-gate";
-  services.caddy.virtualHosts."http://db.bareksa.local".extraConfig =
-    # caddy
-    ''
-      reverse_proxy unix/${config.systemd.socketActivations.podman-bareksa-db-gate.address}
-    '';
+  services.nginx.virtualHosts."db.bareksa.local".proxyPass =
+    "http://unix:${config.systemd.socketActivations.podman-bareksa-db-gate.address}";
   networking.extraHosts = "127.0.0.1 db.bareksa.local";
 }

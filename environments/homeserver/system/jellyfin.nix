@@ -20,18 +20,18 @@ in
     mkdir -p ${dataDir}
     chmod -R 0777 /nas/mediaserver
   '';
-  services.caddy.virtualHosts = {
-    "jellyfin.tigor.web.id".extraConfig = # caddy
-      ''
-        @metrics {
-          path /metrics
-        }
-        respond @metrics 403
-        reverse_proxy 0.0.0.0:8096
-      '';
-    "http://jellyfin.local".extraConfig = ''
-      reverse_proxy 0.0.0.0:8096
-    '';
+  services.nginx.virtualHosts = {
+    "jellyfin.tigor.web.id" = {
+      forceSSL = true;
+      locations = {
+        "/metrics".extraConfig = # nginx
+          ''
+            return 403;
+          '';
+        "/".proxyPass = "http://0.0.0.0:8096";
+      };
+    };
+    "jellyin.local".locations."/".proxyPass = "http://0.0.0:8096";
   };
   services.homepage-dashboard.groups.Media.services.Jellyfin = {
     sortIndex = 50;

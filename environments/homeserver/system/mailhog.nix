@@ -8,15 +8,16 @@
     host = "0.0.0.0";
     port = 8025;
   };
-  services.caddy.virtualHosts = {
-    "mail.tigor.web.id".extraConfig =
-      # caddy
-      ''
-        import tinyauth_main
-        reverse_proxy unix/${config.systemd.socketActivations.mailhog.address}
-      '';
-    "http://mail.local".extraConfig = ''
-      reverse_proxy unix/${config.systemd.socketActivations.mailhog.address}
-    '';
-  };
+  services.nginx.virtualHosts =
+    let
+      proxyPass = "http://unix:${config.systemd.socketActivations.mailhog.address}";
+    in
+    {
+      "mail.tigor.web.id" = {
+        forceSSL = true;
+        tinyauth.locations = [ "/" ];
+        locations."/".proxyPass = proxyPass;
+      };
+      "mail.local".locations."/".proxyPass = proxyPass;
+    };
 }

@@ -22,7 +22,7 @@ in
   services.nginx.virtualHosts = {
     "${domain}" = {
       forceSSL = true;
-      locations."/" = {
+      locations."= /" = {
         proxyPass = "http://unix:${config.services.anubis.instances.forgejo.settings.BIND}";
         extraConfig =
           #nginx
@@ -32,6 +32,7 @@ in
             }
           '';
       };
+      locations."/".proxyPass = "http://unix:${config.services.anubis.instances.forgejo.settings.BIND}";
     };
     "git.local" = {
       locations."/".proxyPass = "http://unix:${config.services.anubis.instances.forgejo.settings.BIND}";

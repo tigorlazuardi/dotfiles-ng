@@ -12,7 +12,6 @@
     image = "ghcr.io/pocket-id/pocket-id:latest";
     ip = "10.88.0.3";
     httpPort = 1411;
-    socketActivation.enable = true;
     volumes = [
       "/var/lib/pocket-id:/app/data"
     ];
@@ -29,16 +28,20 @@
       PUID = "900"; # pocket-id user
       PGID = "900"; # pocket-id group
       ANALYTICS_DISABLED = "true"; # disable analytics
+      SMTP_HOST = "mail.local";
+      SMTP_PORT = "1025";
     };
   };
   systemd.services.podman-pocket-id.serviceConfig.StateDirectory = "pocket-id";
-  services.anubis.instances.porcket-id.settings.TARGET =
-    "unix://${config.systemd.socketActivations.podman-pocket-id.address}";
-  services.caddy.virtualHosts."id.tigor.web.id".extraConfig = # caddy
-    ''
-      reverse_proxy unix/${config.services.anubis.instances.porcket-id.settings.BIND}
-    '';
-
+  services.anubis.instances.pocket-id.settings.TARGET =
+    let
+      inherit (config.virtualisation.oci-containers.containers.pocket-id) ip httpPort;
+    in
+    "http://${ip}:${toString httpPort}";
+  services.nginx.virtualHosts."id.tigor.web.id" = {
+    forceSSL = true;
+    locations."/".proxyPass = "http://unix:${config.services.anubis.instances.pocket-id.settings.BIND}";
+  };
   services.homepage-dashboard.groups.Security.services."Pocket-Id".settings = {
     href = "https://id.tigor.web.id";
     description = "OAuth2 Provider with exclusive support using Passkeys";

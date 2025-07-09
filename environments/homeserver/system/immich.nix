@@ -22,6 +22,21 @@ in
       inherit (config.systemd.socketActivations.immich-server) address;
     in
     "unix://${address}";
+  services.nginx.virtualHosts =
+    let
+      inherit (config.services.anubis.instances.immich.settings) BIND;
+      inherit (config.systemd.socketActivations.immich-server) address;
+    in
+    {
+      "${domain}" = {
+        forceSSL = true;
+        locations = {
+          "/api".proxyPass = "http://unix:${address}";
+          "/".proxyPass = "http://unix:${BIND}";
+        };
+      };
+      "immich.local".locations."/".proxyPass = "http://unix:${address}";
+    };
   services.caddy.virtualHosts =
     let
       inherit (config.services.anubis.instances.immich.settings) BIND;

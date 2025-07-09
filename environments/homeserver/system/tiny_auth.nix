@@ -81,10 +81,27 @@
       };
     };
   config = {
-    sops.secrets = {
-      "tinyauth/main/secret".sopsFile = ../../../secrets/tinyauth.yaml;
-      "tinyauth/main/users".sopsFile = ../../../secrets/tinyauth.yaml;
-    };
+    sops.secrets =
+      let
+        opts.sopsFile = ../../../secrets/tinyauth.yaml;
+      in
+      {
+        "tinyauth/main/secret" = opts;
+        "tinyauth/main/users" = opts;
+        "tinyauth/main/pocket_id/client_id" = opts;
+        "tinyauth/main/pocket_id/client_secret" = opts;
+      };
+    sops.templates."tinyauth/main/env".content = # sh
+      ''
+        GENERIC_CLIENT_ID=${config.sops.placeholder."tinyauth/main/pocket_id/client_id"}
+        GENERIC_CLIENT_SECRET=${config.sops.placeholder."tinyauth/main/pocket_id/client_secret"}
+        GENERIC_AUTH_URL=https://id.tigor.web.id/authorize
+        GENERIC_TOKEN_URL=https://id.tigor.web.id/api/oidc/token
+        GENERIC_USER_URL=https://id.tigor.web.id/api/oidc/userinfo
+        GENERIC_SCOPES=openid email profile groups
+        GENERIC_NAME=Pocket ID
+        OAUTH_AUTO_REDIRECT=generic
+      '';
     virtualisation.oci-containers.containers.tiny-auth = {
       image = "ghcr.io/steveiliop56/tinyauth:v3";
       ip = "10.88.0.2";
@@ -96,6 +113,9 @@
         COOKIE_SECURE = "true";
         DISABLE_CONTINUE = "true"; # skips the annoying continue page.
       };
+      environmentFiles = [
+        config.sops.templates."tinyauth/main/env".path
+      ];
       volumes = [
         "${config.sops.secrets."tinyauth/main/users".path}:/users"
         "${config.sops.secrets."tinyauth/main/secret".path}:/secret"

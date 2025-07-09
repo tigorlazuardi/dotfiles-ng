@@ -48,36 +48,28 @@ in
       };
     };
   };
-  systemd.socketActivations.suwayomi-server = {
-    host = "127.0.0.1";
-    port = 4567;
-    idleTimeout = "6h 30m"; # Add extra 30 minutes so an update schedule will run and guaranteed to work at least once.
-  };
-  services.caddy.virtualHosts =
+  services.nginx.virtualHosts =
     let
-      inherit (config.systemd.socketActivations.suwayomi-server) address;
+      inherit (config.services.suwayomi-server.settings.server) ip port;
+      proxyPass = "http://${ip}:${toString port}";
     in
     {
-      "${domain}".extraConfig =
-        # caddy
-        ''
-          import tinyauth_main
-          reverse_proxy unix/${address}
-        '';
-      "http://suwayomi.local".extraConfig =
-        # caddy
-        ''
-          reverse_proxy unix/${address}
-        '';
+      "${domain}" = {
+        forceSSL = true;
+        tinyauth.locations = [ "/" ];
+        locations."/".proxyPass = proxyPass;
+      };
+      "manga.local".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups.Media.services."Suwayomi Manga Reader".settings = {
     description = "Manga reader and downloader with support for multiple sources.";
     href = "https://${domain}";
     icon = "suwayomi.svg";
-    widget = {
-      type = "suwayomi";
-      url = "http://suwayomi.local";
-      category = 1; # 1 = Manga (First Tab Only)
-    };
+    # widget broke
+    # widget = {
+    #   type = "suwayomi";
+    #   url = "http://manga.local";
+    #   category = 1; # 1 = Manga (First Tab Only)
+    # };
   };
 }

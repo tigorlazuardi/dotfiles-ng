@@ -27,30 +27,29 @@ in
     mkdir -p ${configVolume}
     chown ${user} ${mediaVolume} ${configVolume}
   '';
-  services.caddy.virtualHosts =
+  services.nginx.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.bazarr) ip httpPort;
+      proxyPass = "http://${ip}:${toString httpPort}";
     in
     {
-      "${domain}".extraConfig = # caddy
-        ''
-          import tinyauth_main
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
-      "http://bazarr.local".extraConfig = # caddy
-        ''
-          reverse_proxy ${ip}:${toString httpPort}
-        '';
+      "${domain}" = {
+        forceSSL = true;
+        tinyauth.locations = [ "/" ];
+        locations."/".proxyPass = proxyPass;
+      };
+      "bazarr.local".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Bazarr.settings = {
     inherit user;
     description = "Subtitle downloader and manager for the servarr stack";
     href = "https://${domain}";
     icon = "bazarr.svg";
-    widget = {
-      type = "bazarr";
-      url = "http://bazarr.local";
-      key = "{{HOMEPAGE_VAR_BAZARR_API_KEY}}";
-    };
+    # The widget broke
+    # widget = {
+    #   type = "bazarr";
+    #   url = "http://bazarr.local";
+    #   key = "{{HOMEPAGE_VAR_BAZARR_API_KEY}}";
+    # };
   };
 }

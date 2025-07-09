@@ -66,11 +66,8 @@ in
     ];
     socketActivation.enable = true;
   };
-  services.caddy.virtualHosts."http://kafka.bareksa.local".extraConfig =
-    # caddy
-    ''
-      reverse_proxy unix/${config.systemd.socketActivations.podman-bareksa-kafka-ui.address}
-    '';
+  services.nginx.virtualHosts."kafka.bareksa.local".proxyPass =
+    "http://unix:${config.systemd.socketActivations.podman-bareksa-kafka-ui.address}";
   networking.extraHosts = ''
     127.0.0.1 kafka.bareksa.local
     192.168.50.102 kafka-host-1 kafka-cluster-jkt-1

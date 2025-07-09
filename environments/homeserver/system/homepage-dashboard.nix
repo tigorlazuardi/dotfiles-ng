@@ -41,27 +41,9 @@ in
                     type = types.int;
                     default = 1000;
                   };
-                  iconsOnly = mkEnableOption "enable icons-only display for the group";
-                  style = mkOption {
-                    type = types.enum [
-                      "row"
-                      "column"
-                    ];
-                    default = "row";
-                  };
-                  columns = mkOption {
-                    type = types.int;
-                    default = 1;
-                    description = "Number of columns to display in the group.";
-                  };
-                  header = mkOption {
-                    type = types.bool;
-                    default = true;
-                  };
-                  icon = mkOption {
-                    type = types.nullOr types.str;
-                    description = "Icon for the group. If null, no icon will be displayed.";
-                    default = null;
+                  settings = mkOption {
+                    type = yamlType;
+                    default = { };
                   };
                   services = mkOption {
                     type = types.attrsOf (
@@ -137,41 +119,57 @@ in
           };
           groups = {
             "Git and Personal Projects" = {
-              columns = 2;
+              settings = {
+                style = "row";
+                columns = 2;
+              };
               sortIndex = 50; # Force top of the page.
             };
             Security = {
-              columns = 2;
+              settings = {
+                style = "row";
+                columns = 2;
+              };
               sortIndex = 100;
             };
             Networking = {
-              columns = 3;
+              settings = {
+                style = "row";
+                columns = 3;
+              };
               sortIndex = 250;
             };
             "Media Collectors" = {
-              columns = 4;
+              settings = {
+                style = "row";
+                columns = 4;
+              };
               sortIndex = 950;
             };
             Media = {
-              columns = 4;
+              settings = {
+                style = "row";
+                columns = 3;
+              };
               sortIndex = 900;
+            };
+            Monitoring = {
+              settings = {
+                style = "row";
+                columns = 3;
+              };
             };
           };
           settings = {
             title = "Tigor's Homeserver";
             description = "A front face for my personal server";
             startUrl = "https://tigor.web.id";
+            useEqualHeights = true;
             layout =
               let
                 sortedGroups = sort (l: r: l.sortIndex < r.sortIndex) enabledGroupsList;
                 layout = map (group: {
-                  inherit (group)
-                    iconsOnly
-                    style
-                    columns
-                    header
-                    icon
-                    ;
+                  ${group.name} = group.settings;
                 }) sortedGroups;
               in
               layout;
@@ -184,7 +182,9 @@ in
                 let
                   entries = attrValues enabledGroupsSet.${groupName}.services;
                   sortedEntries = sort (l: r: l.sortIndex < r.sortIndex) entries;
-                  final = map (entry: entry.settings) sortedEntries;
+                  final = map (entry: {
+                    ${entry.name} = entry.settings;
+                  }) sortedEntries;
                 in
                 {
                   ${groupName} = final;

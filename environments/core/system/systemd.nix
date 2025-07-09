@@ -109,7 +109,7 @@ in
                 "${proxy}.socket"
               ];
             };
-            serviceConfig.ExecStart = ''${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=${cfg.idleTimeout} ${cfg.host}:${toString cfg.port}'';
+            serviceConfig.ExecStart = ''${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time='${cfg.idleTimeout}' ${cfg.host}:${toString cfg.port}'';
           }
         ) names
       );
