@@ -32,7 +32,7 @@ in
       hostname = "jdownloader";
       ip = "10.88.2.1";
       httpPort = 5800;
-      user = "${toString uid}:${toString gid}";
+      # user must be root in order to run JDownloader
       socketActivation = {
         enable = true;
         idleTimeout = "1h";
@@ -50,12 +50,13 @@ in
         WEB_FILE_MANAGER = "1";
       };
     };
-  systemd.services.podman-jdownloader.serviceConfig.StateDirectory = "jdownloader";
-  system.activationScripts.jdownloader = # sh
-    ''
+  systemd.services.podman-jdownloader = {
+    serviceConfig.StateDirectory = "jdownloader";
+    preStart = ''
       mkdir -p ${volume}
-      chown -R ${toString uid}:${toString gid} ${volume}
+      chown -R ${toString uid}:${toString gid} ${volume} /var/lib/jdownloader
     '';
+  };
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     tinyauth.locations = [ "/" ];
