@@ -10,7 +10,7 @@
     settings = {
       dhcp.enabled = false;
       http = {
-        address = "127.0.0.1:35000";
+        address = "0.0.0.0:3000";
         session_ttl = "8670h"; # 1 Year. Actual auth will be handled by tinyauth.
       };
       users = [ ]; # Authentication will be handled by tinyauth.

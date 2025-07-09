@@ -6,10 +6,10 @@
         mkOption
         types
         length
-        mkIf
         mkDefault
         hasPrefix
         genAttrs
+        optionalAttrs
         ;
       inherit (config.virtualisation.oci-containers.containers.tiny-auth) environment ip httpPort;
       inherit (environment) APP_URL;
@@ -44,7 +44,7 @@
               config = {
                 # Guide: https://tinyauth.app/docs/guides/nginx-proxy-manager.html
                 locations =
-                  mkIf (config.tinyauth.enable) {
+                  optionalAttrs (config.tinyauth.enable) {
                     "/tinyauth" = {
                       # See https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass to forward to a unix socket with path.
                       proxyPass = mkDefault (
@@ -93,6 +93,8 @@
         APP_URL = "https://auth.tigor.web.id";
         USERS_FILE = "/users";
         SECRET_FILE = "/secret";
+        COOKIE_SECURE = "true";
+        DISABLE_CONTINUE = "true"; # skips the annoying continue page.
       };
       volumes = [
         "${config.sops.secrets."tinyauth/main/users".path}:/users"
