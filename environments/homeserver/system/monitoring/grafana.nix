@@ -54,17 +54,19 @@ in
     };
   services.anubis.instances.grafana.settings.TARGET =
     "unix://${config.systemd.socketActivations.grafana.address}";
-  services.caddy.virtualHosts = {
-    "${domain}".extraConfig =
-      # caddy
-      ''
-        reverse_proxy unix/${config.services.anubis.instances.grafana.settings.BIND}
-      '';
-    "http://grafana.local".extraConfig =
-      # caddy
-      ''
-        reverse_proxy unix/${config.systemd.socketActivations.grafana.address}
-      '';
+  services.nginx.virtualHosts = {
+    "${domain}" = {
+      forceSSL = true;
+      locations = {
+        "/".proxyPass = "http://unix:${config.services.anubis.instances.grafana.settings.BIND}";
+        "/api".proxyPass = "http://unix:${config.systemd.socketActivations.grafana.address}";
+      };
+    };
+    "grafana.local" = {
+      locations."/" = {
+        proxyPass = "http://unix:${config.systemd.socketActivations.grafana.address}";
+      };
+    };
   };
   services.homepage-dashboard.groups.Monitoring.services.Grafana.settings = {
     href = "https://${domain}";

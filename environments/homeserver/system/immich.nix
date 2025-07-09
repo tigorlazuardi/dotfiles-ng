@@ -37,22 +37,6 @@ in
       };
       "immich.local".locations."/".proxyPass = "http://unix:${address}";
     };
-  services.caddy.virtualHosts =
-    let
-      inherit (config.services.anubis.instances.immich.settings) BIND;
-      inherit (config.systemd.socketActivations.immich-server) address;
-    in
-    {
-      "${domain}".extraConfig = # caddy
-        ''
-          reverse_proxy /api* unix/${address}
-          reverse_proxy unix/${BIND}
-        '';
-      "http://immich.local".extraConfig = ''
-        reverse_proxy unix/${address}
-      '';
-    };
-
   services.homepage-dashboard.groups.Media.services.Immich.settings = {
     description = "Family Photos and Videos Server";
     href = "https://${domain}";

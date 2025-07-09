@@ -40,6 +40,7 @@
         mapAttrs'
         nameValuePair
         attrNames
+        hasSuffix
         ;
     in
     {
@@ -102,7 +103,10 @@
           extraDomainNames =
             let
               domains = filterAttrs (
-                _: value: (value.forceSSL || value.onlySSL) && (value.useACMEHost == "tigor.web.id")
+                name: value:
+                (value.forceSSL || value.onlySSL)
+                && (value.useACMEHost == "tigor.web.id")
+                && (hasSuffix "tigor.web.id" name)
               ) config.services.nginx.virtualHosts;
             in
             attrNames domains;

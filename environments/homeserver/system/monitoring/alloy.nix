@@ -9,15 +9,19 @@ in
     enable = true;
     extraFlags = [ ''--server.http.listen-addr=${guiListenAddress}'' ];
   };
-  services.caddy.virtualHosts = {
-    "${domain}".extraConfig =
-      # caddy
-      ''
-        import tinyauth_main
-        reverse_proxy ${guiListenAddress}
-      '';
-    "http://otel.local".extraConfig = "reverse_proxy ${otelcolHTTPListenAddress}";
-    "http://grpc.otel.local".extraConfig = "reverse_proxy ${otelcolGRPCListenAddress}";
+  services.nginx.virtualHosts = {
+    "${domain}" = {
+      forceSSL = true;
+      tinyauth.locations = [ "/" ];
+      locations."/".proxyPass = "http://${guiListenAddress}";
+    };
+    "alloy.local".locations."/".proxyPass = "http://${guiListenAddress}";
+    "otel.local" = {
+      locations."/".proxyPass = "http://${otelcolHTTPListenAddress}";
+    };
+    "grpc.otel.local" = {
+      locations."/".proxyPass = "http://${otelcolGRPCListenAddress}";
+    };
   };
   systemd.services.alloy.serviceConfig.User = "root";
   environment.etc."alloy/config.alloy".text =
