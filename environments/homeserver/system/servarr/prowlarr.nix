@@ -30,9 +30,15 @@ in
             <UrlBase></UrlBase>
           </Config>
         '';
-      path = "${configVolume}/config.xml";
     };
   };
+  systemd.services.podman-prowlarr.preStart = ''
+    mkdir -p ${configVolume}
+    chown -R ${toString uid}:${toString gid} ${configVolume}
+    rm -rf ${configVolume}/config.xml || true
+    cp ${config.sops.templates."servarr/prowlarr/config.xml".path} ${configVolume}/config.xml
+    chown -R ${toString uid}:${toString gid} ${configVolume}/config.xml
+  '';
   virtualisation.oci-containers.containers.prowlarr = {
     image = "lscr.io/linuxserver/prowlarr:latest";
     ip = "10.88.3.4";
