@@ -280,6 +280,10 @@ in
     };
   };
   # Reverse Proxy settings based on https://github.com/hcengineering/huly-selfhost/blob/main/.huly.nginx
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    useACMEHost = "planetmelon.web.id";
+  };
   services.caddy.virtualHosts."${domain}".extraConfig = # caddy
     ''
       # This will trigger double Authentication flow before login to tinyauth,
