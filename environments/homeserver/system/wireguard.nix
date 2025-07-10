@@ -62,7 +62,7 @@ in
 
   networking =
     let
-      externalInterface = "enp3s0";
+      externalInterface = "eth0";
     in
     {
       nat = {

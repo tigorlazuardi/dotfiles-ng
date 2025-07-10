@@ -9,6 +9,7 @@
     ./home-manager.nix
     ./locale.nix
     ./network_manager.nix
+    ./networking.nix
     ./nh.nix
     ./nix_config.nix
     ./nix_index.nix

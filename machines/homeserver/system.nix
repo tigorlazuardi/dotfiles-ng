@@ -25,8 +25,7 @@
   };
 
   networking.defaultGateway = "192.168.100.1";
-  networking.interfaces.enp3s0 = {
-    useDHCP = false;
+  networking.interfaces.eth0 = {
     ipv4.addresses = [
       {
         address = "192.168.100.3";
