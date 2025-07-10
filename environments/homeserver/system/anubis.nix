@@ -24,6 +24,15 @@ in
     ''
   );
 
+  sops.secrets."anubis/private_key" = {
+    sopsFile = ../../../secrets/anubis.yaml;
+    owner = config.users.users.anubis.name;
+  };
+  services.anubis.defaultOptions.settings = {
+    COOKIE_DOMAIN = lib.mkDefault "tigor.web.id";
+    ED25519_PRIVATE_KEY_HEX_FILE = config.sops.secrets."anubis/private_key".path;
+  };
+
   services.homepage-dashboard = {
     extraIcons."anubis.webp" = pkgs.fetchurl {
       url = "https://anubis.techaro.lol/img/happy.webp";
