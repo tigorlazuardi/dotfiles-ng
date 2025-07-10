@@ -34,8 +34,11 @@
       hashedPasswordFile = config.sops.secrets."users/${user.name}/password".path;
       shell = pkgs.fish;
       extraGroups = ["wheel"];
+      group = user.name;
+      uid = 1000;
     };
   };
+  users.groups.${user.name}.gid = 1000;
   programs.fish.enable = config.users.users.${user.name}.shell == pkgs.fish;
   nix.settings.trusted-users = [ user.name ];
 
