@@ -111,7 +111,6 @@ in
         {
           enable = true;
           package = pkgs.homepage-dashboard.overrideAttrs {
-            enableLocalIcons = true;
             postInstall =
               # sh
               ''

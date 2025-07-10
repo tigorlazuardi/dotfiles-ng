@@ -41,7 +41,7 @@ in
     groups.Networking.services.Anubis.settings = {
       description = "Anti Bot and Scraper Traffic to avoid triggering unwanted on-demand socket activations of apps";
       href = "https://anubis.techaro.lol";
-      icon = "anubis.webp";
+      icon = "/icons/anubis.webp";
     };
   };
 }
