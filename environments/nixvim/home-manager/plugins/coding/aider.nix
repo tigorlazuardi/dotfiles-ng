@@ -1,5 +1,8 @@
 { pkgs, inputs, ... }:
 {
+  imports = [
+    ../../../../ai/home-manager/aider.nix
+  ];
   programs.nixvim = {
     extraPlugins = [
       {
