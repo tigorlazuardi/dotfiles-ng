@@ -18,6 +18,7 @@
       ../../environments/bareksa/home-manager
       ../../environments/desktop/home-manager
       ../../environments/nixvim/home-manager
+      ../../environments/ai/home-manager
     ];
   };
 
