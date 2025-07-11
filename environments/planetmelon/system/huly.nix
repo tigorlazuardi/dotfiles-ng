@@ -6,7 +6,9 @@ let
   inherit (config.users.users.${name}) uid;
   inherit (config.users.groups.${name}) gid;
   user = "${toString uid}:${toString gid}";
-  HULY_VERSION = "";
+
+  # Value is taken from here: https://github.com/hcengineering/huly-selfhost/blob/main/.template.huly.conf
+  HULY_VERSION = "v0.6.501";
 in
 {
   sops = {
@@ -118,10 +120,6 @@ in
         image = "docker.io/hardcoreeng/rekoni-service:${HULY_VERSION}";
         ip = "10.88.20.4";
         httpPort = 4004;
-        socketActivation = {
-          enable = true;
-          idleTimeout = "15m"; # 15 minutes idle timeout
-        };
         inherit environmentFiles;
       };
       "${name}-transactor" = {
@@ -129,10 +127,6 @@ in
         image = "docker.io/hardcoreeng/transactor:${HULY_VERSION}";
         ip = "10.88.20.5";
         httpPort = 3333;
-        socketActivation = {
-          enable = true;
-          idleTimeout = "15m"; # 15 minutes idle timeout
-        };
         environment = baseEnv // {
           SERVER_PORT = "3333";
           SERVER_CURSOR_MAXTIMEMS = "30000";
@@ -145,10 +139,6 @@ in
         image = "hardcoreeng/collaborator:${HULY_VERSION}";
         ip = "10.88.20.6";
         httpPort = 3078;
-        socketActivation = {
-          enable = true;
-          idleTimeout = "15m"; # 15 minutes idle timeout
-        };
         environment = baseEnv // {
           COLLABORATOR_PORT = "3078";
         };
@@ -164,10 +154,6 @@ in
           FRONT_URL = "http://${name}-front:8080";
           ACCOUNTS_URL = "http://localhost:3000";
           ACCOUNT_PORT = "3000";
-        };
-        socketActivation = {
-          enable = true;
-          idleTimeout = "15m"; # 15 minutes idle timeout
         };
         inherit environmentFiles;
       };
@@ -185,7 +171,7 @@ in
         httpPort = 8080;
         socketActivation = {
           enable = true;
-          idleTimeout = "15m";
+          idleTimeout = "30m";
         };
         environment =
           let
@@ -247,38 +233,61 @@ in
     chown -R ${user} ${dataDir}
   '';
   # Configure systemd services and auto stop services when not needed.
-  systemd.services = {
-    "podman-${name}-mongodb".unitConfig.StopWhenUnneeded = true;
-    "podman-${name}-minio".unitConfig.StopWhenUnneeded = true;
-    "podman-${name}-elastic".unitConfig.StopWhenUnneeded = true;
-    "podman-${name}-stats".unitConfig.StopWhenUnneeded = true;
-    "podman-${name}-workspace".unitConfig.StopWhenUnneeded = true;
-    "podman-${name}-fulltext".unitConfig.StopWhenUnneeded = true;
-    # Rekoni service already stops when not needed because of socket activation.
-    # No need to set StopWhenUnneeded.
-    "podman-${name}-rekoni".serviceConfig.MemoryMax = "512M"; # 512 MiB memory limit
-    "podman-${name}-account" =
-      let
-        services = [
+  systemd.services =
+    let
+      baseServices = [
+        "podman-${name}-mongodb.service"
+        "podman-${name}-minio.service"
+        "podman-${name}-elastic.service"
+        "podman-${name}-stats.service"
+      ];
+    in
+    {
+      "podman-${name}-mongodb".unitConfig.StopWhenUnneeded = true;
+      "podman-${name}-minio".unitConfig.StopWhenUnneeded = true;
+      "podman-${name}-elastic".unitConfig.StopWhenUnneeded = true;
+      "podman-${name}-stats".unitConfig.StopWhenUnneeded = true;
+      "podman-${name}-account" = {
+        after = baseServices;
+        unitConfig.StopWhenUnneeded = true;
+      };
+      "podman-${name}-workspace" = {
+        after = baseServices;
+        unitConfig.StopWhenUnneeded = true;
+      };
+      "podman-${name}-fulltext" = {
+        after = baseServices;
+        unitConfig.StopWhenUnneeded = true;
+      };
+      "podman-${name}-rekoni" = {
+        after = baseServices;
+        serviceConfig.MemoryMax = "512M";
+        unitConfig.StopWhenUnneeded = true;
+      }; # 512 MiB memory limit
+      "podman-${name}-transactor" = {
+        after = baseServices;
+        unitConfig.StopWhenUnneeded = true;
+      };
+      "podman-${name}-collaborator" = {
+        after = baseServices;
+        unitConfig.StopWhenUnneeded = true;
+      };
+      "podman-${name}-front" = rec {
+        requires = [
           "podman-${name}-mongodb.service"
           "podman-${name}-minio.service"
           "podman-${name}-elastic.service"
           "podman-${name}-stats.service"
+          "podman-${name}-account.service"
+          "podman-${name}-workspace.service"
+          "podman-${name}-fulltext.service"
+          "podman-${name}-rekoni.service"
+          "podman-${name}-transactor.service"
+          "podman-${name}-collaborator.service"
         ];
-      in
-      {
-        requires = services ++ [ "podman-${name}-transactor.service" ];
-        after = services;
+        after = requires;
       };
-    "podman-${name}-transactor" = rec {
-      bindsTo = [ "podman-${name}-account.service" ];
-      after = bindsTo;
     };
-    "podman-${name}-collaborator" = rec {
-      bindsTo = [ "podman-${name}-account.service" ];
-      after = bindsTo;
-    };
-  };
   # Reverse Proxy settings based on https://github.com/hcengineering/huly-selfhost/blob/main/.huly.nginx
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
@@ -286,39 +295,60 @@ in
   };
   services.nginx.virtualHosts."${domain}" = {
     tinyauth = {
-      locations = [
-        "/"
-        "/_accounts/"
-        "/_collaborator/"
-        "/_rekoni/"
-        "/_transactor/"
-        "~ ^/eyJ"
-      ];
+      enable = true;
       backend =
         let
           inherit (config.virtualisation.oci-containers.containers."planetmelon-tinyauth") ip httpPort;
         in
         "http://${ip}:${toString httpPort}";
     };
-    locations = {
-      "/_accounts/" = {
-        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-account".address}";
+    locations =
+      let
+        frontBackend = "http://unix:${config.systemd.socketActivations."podman-${name}-front".address}";
+      in
+      {
+        "/_accounts" =
+          let
+            inherit (config.virtualisation.oci-containers.containers."${name}-account") ip httpPort;
+          in
+          {
+            proxyPass = "http://${ip}:${toString httpPort}";
+          };
+        "/_collaborator" =
+          let
+            inherit (config.virtualisation.oci-containers.containers."${name}-collaborator") ip httpPort;
+          in
+          {
+            proxyPass = "http://${ip}:${toString httpPort}";
+          };
+
+        "/_rekoni/" =
+          let
+            inherit (config.virtualisation.oci-containers.containers."${name}-rekoni") ip httpPort;
+          in
+          {
+            proxyPass = "http://${ip}:${toString httpPort}";
+          };
+
+        "/_transactor/" =
+          let
+            inherit (config.virtualisation.oci-containers.containers."${name}-transactor") ip httpPort;
+          in
+          {
+            proxyPass = "http://${ip}:${toString httpPort}";
+          };
+
+        "~ ^/eyJ" =
+          let
+            inherit (config.virtualisation.oci-containers.containers."${name}-transactor") ip httpPort;
+          in
+          {
+            proxyPass = "http://${ip}:${toString httpPort}";
+          };
+
+        "/" = {
+          proxyPass = frontBackend;
+        };
       };
-      "/_collaborator/" = {
-        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-collaborator".address}";
-      };
-      "/_rekoni/" = {
-        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-rekoni".address}";
-      };
-      "/_transactor/" = {
-        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-transactor".address}";
-      };
-      "~ ^/eyJ" = {
-        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-transactor".address}";
-      };
-      "/" = {
-        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-front".address}";
-      };
-    };
   };
 }
