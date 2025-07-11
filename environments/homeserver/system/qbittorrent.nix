@@ -63,7 +63,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "qbittorrrent.local".locations."/".proxyPass = proxyPass;
+      "qbittorrent.local".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.QBittorrent.settings = {
     description = "Torrent downloader";
