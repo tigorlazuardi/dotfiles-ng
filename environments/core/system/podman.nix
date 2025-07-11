@@ -80,5 +80,9 @@
           idleTimeout = value.socketActivation.idleTimeout;
         })
       ) socketActivatedContainers;
+      virtualisation.podman.autoPrune = {
+        enable = true;
+        flags = [ "--all" ];
+      };
     };
 }
