@@ -38,6 +38,7 @@
       user_rules =
         [
           "192.168.100.5 vpn.tigor.web.id"
+          "127.0.0.1 sg.api.miwifi.com" # Xiaomi routers
         ]
         ++ (
           let
