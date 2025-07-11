@@ -51,8 +51,20 @@ let
           };
           command = mkOption {
             type = types.str;
-            # default = "${waitport} ${config.host} ${toString config.port}";
-            default = "${pkgs.netcat-gnu}/bin/nc --wait=${toString config.wait.startTimeout} --zero ${config.host} ${toString config.port}";
+            default = "${lib.meta.getExe (
+              pkgs.writeShellScriptBin "waitport-${name}" ''
+                attempts=${toString (config.wait.startTimeout * 10)}
+                while [ $attempts -gt 0 ]; do
+                  if ${pkgs.netcat-gnu}/bin/nc -z ${config.host} ${toString config.port}; then
+                    exit 0
+                  fi
+                  sleep 0.1
+                  attempts=$((attempts - 1))
+                done
+                echo "Service ${name} at ${config.host}:${toString config.port} did not become ready within ${toString config.wait.startTimeout} seconds."
+                exit 1
+              ''
+            )}";
             description = "The command to use to wait for the service to be ready. This can be used to customize the waiting behavior, e.g. to use a different tool or command.";
           };
         };
