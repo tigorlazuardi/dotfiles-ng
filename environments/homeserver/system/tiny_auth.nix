@@ -6,10 +6,10 @@
         mkOption
         types
         length
-        mkDefault
         hasPrefix
         genAttrs
         optionalAttrs
+        mkIf
         ;
       inherit (config.virtualisation.oci-containers.containers.tiny-auth) environment ip httpPort;
       inherit (environment) APP_URL;
@@ -24,6 +24,7 @@
                 enable = mkOption {
                   type = types.bool;
                   default = (length config.tinyauth.locations) > 0;
+                  description = "enable tinyauth auth proxy. If no specific locations are provided, all endpoints will be protected by tinyauth";
                 };
                 appUrl = mkOption {
                   type = types.str;
@@ -38,21 +39,28 @@
                 locations = mkOption {
                   type = types.listOf types.str;
                   default = [ ];
-                  description = "List of locations to protect with Tiny Auth";
+                  description = "List of locations to protect with Tiny Auth, if empty and tinyauth.enable is true, all locations will be handled with tinyauth";
                 };
               };
               config = {
+                extraConfig =
+                  # This should be made if empty locations but user still enables the tinyauth.
+                  # Meaning the user wants all routes.
+                  mkIf (config.tinyauth.enable && (length config.tinyauth.locations == 0)) # nginx
+                    ''
+                      auth_request /tinyauth;
+                      error_page 401 = @tinyauth_login;
+                    '';
                 # Guide: https://tinyauth.app/docs/guides/nginx-proxy-manager.html
                 locations =
                   optionalAttrs (config.tinyauth.enable) {
                     "/tinyauth" = {
                       # See https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass to forward to a unix socket with path.
-                      proxyPass = mkDefault (
+                      proxyPass =
                         if (hasPrefix "http://unix:" config.tinyauth.backend) then
                           "${config.tinyauth.backend}:/api/auth/nginx"
                         else
-                          "${config.tinyauth.backend}/api/auth/nginx"
-                      );
+                          "${config.tinyauth.backend}/api/auth/nginx";
                       extraConfig =
                         # nginx
                         ''
