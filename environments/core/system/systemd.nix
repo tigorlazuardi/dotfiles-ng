@@ -13,21 +13,6 @@ let
     attrNames
     optional
     ;
-  waitportDrv = pkgs.writeShellScriptBin "waitport" ''
-    host=$1
-    port=$2
-    tries=600
-    for i in `seq $tries`; do
-        if ${pkgs.netcat}/bin/nc -z $host $port > /dev/null ; then
-          # Ready
-          exit 0
-        fi
-        ${pkgs.coreutils}/bin/sleep 0.1
-    done
-    # FAIL
-    exit -1
-  '';
-  waitport = lib.meta.getExe waitportDrv;
   socketActivationType = types.submodule (
     { config, name, ... }:
     {
@@ -59,9 +44,15 @@ let
             default = true;
             description = "wait tells systemd to buffer the connection until the service is ready to accept it. Has a deadline of 1 minute.";
           };
+          startTimeout = mkOption {
+            type = types.ints.positive;
+            default = 60;
+            description = "The time in seconds to wait for the service's port to be ready before giving up";
+          };
           command = mkOption {
             type = types.str;
-            default = "${waitport} ${config.host} ${toString config.port}";
+            # default = "${waitport} ${config.host} ${toString config.port}";
+            default = "${pkgs.netcat-gnu}/bin/nc --wait=${toString config.wait.startTimeout} --zero ${config.host} ${toString config.port}";
             description = "The command to use to wait for the service to be ready. This can be used to customize the waiting behavior, e.g. to use a different tool or command.";
           };
         };
