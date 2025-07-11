@@ -29,7 +29,7 @@ in
     owner = config.users.users.anubis.name;
   };
   services.anubis.defaultOptions.settings = {
-    COOKIE_DOMAIN = lib.mkDefault "tigor.web.id";
+    COOKIE_DYNAMIC_DOMAIN = true;
     ED25519_PRIVATE_KEY_HEX_FILE = config.sops.secrets."anubis/private_key".path;
   };
 
