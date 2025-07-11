@@ -16,8 +16,6 @@
   };
   networking.hostName = "homeserver";
   system.stateVersion = "24.05";
-  # Entering passwords from mobile phone is a paaaaaain!!
-  security.sudo.wheelNeedsPassword = false;
 
   # Allows ssh access to this homeserver user from the following machines.
   users.users.${user.name}.openssh.authorizedKeys.keys = [
