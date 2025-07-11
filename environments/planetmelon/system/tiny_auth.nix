@@ -1,7 +1,8 @@
 { config, ... }:
 let
-  name = "planetmelon-tiny-auth";
+  name = "planetmelon-tinyauth";
   domain = "auth.planetmelon.web.id";
+  inherit (config.virtualisation.oci-containers.containers.${name}) ip httpPort;
 in
 {
   sops.secrets = {
@@ -12,7 +13,6 @@ in
     image = "ghcr.io/steveiliop56/tinyauth:v3";
     ip = "10.88.10.1";
     httpPort = 3000;
-    socketActivation.enable = true;
     environment = {
       APP_URL = "https://${domain}";
       USERS_FILE = "/users";
@@ -24,32 +24,12 @@ in
     ];
   };
 
-  services.anubis.instances.${name}.settings.TARGET =
-    let
-      inherit (config.systemd.socketActivations."podman-${name}") address;
-    in
-    "unix://${address}";
-  services.caddy = {
-    virtualHosts."${domain}".extraConfig = # caddy
-      let
-        inherit (config.services.anubis.instances.planetmelon-tinyauth.settings) BIND;
-      in
-      ''
-        reverse_proxy unix/${BIND}
-      '';
-    extraConfig =
-      let
-        # forward auth must not go through anubis
-        inherit (config.systemd.socketActivations."podman-${name}") address;
-      in
-      # caddy
-      ''
-        (tinyauth_planetmelon) {
-          forward_auth unix/${address} {
-            uri /api/auth/caddy
-            copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
-          }
-        }
-      '';
+  services.anubis.instances.${name}.settings.TARGET = "unix://${ip}:${toString httpPort}";
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    useACMEHost = "planetmelon.web.id";
+    locations."/" = {
+      proxyPass = "http://unix:${config.services.anubis.instances.planetmelon-tinyauth.settings.BIND}";
+    };
   };
 }
