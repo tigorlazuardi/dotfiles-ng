@@ -6,6 +6,7 @@
     ./bruno.nix
     ./git.nix
     ./openvpn.nix
+    ./slack.nix
     ./zoom.nix
   ];
 }
