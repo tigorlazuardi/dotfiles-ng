@@ -12,12 +12,12 @@ let
 in
 {
   sops = {
-    secrets."planetmelon/huly/secrets".sopsFile = ../../../secrets/planetmelon/huly.yaml;
+    secrets."planetmelon/huly/secret".sopsFile = ../../../secrets/planetmelon/huly.yaml;
     templates."planetmelon/huly.env" = {
       content = # sh
         ''
-          SECRET=${config.sops.placeholder."planetmelon/huly/secrets"}
-          SERVER_SECRET=${config.sops.placeholder."planetmelon/huly/secrets"}
+          SECRET=${config.sops.placeholder."planetmelon/huly/secret"}
+          SERVER_SECRET=${config.sops.placeholder."planetmelon/huly/secret"}
         '';
       owner = name;
     };
@@ -40,6 +40,7 @@ in
         FULLTEXT_URL = "http://${name}-fulltext:4700";
         STATS_URL = "http://${name}-stats:4900";
         TRANSACTOR_URL = "ws://${name}-transactor:3333;wss://${domain}/_transactor";
+        LAST_NAME_FIRST = "true";
       };
       environmentFiles = [
         config.sops.templates."planetmelon/huly.env".path
@@ -84,7 +85,7 @@ in
         image = "docker.io/library/elasticsearch:7.14.2";
         entrypoint = "/bin/sh";
         ip = "10.88.20.3";
-        command = [
+        cmd = [
           "-c"
           ''
             ./bin/elasticsearch-plugin list | grep -q ingest-attachment || yes | ./bin/elasticsearch-plugin install --silent ingest-attachment;
@@ -292,8 +293,6 @@ in
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     useACMEHost = "planetmelon.web.id";
-  };
-  services.nginx.virtualHosts."${domain}" = {
     tinyauth = {
       enable = true;
       backend =
@@ -301,6 +300,7 @@ in
           inherit (config.virtualisation.oci-containers.containers."planetmelon-tinyauth") ip httpPort;
         in
         "http://${ip}:${toString httpPort}";
+      appUrl = "https://auth.planetmelon.web.id";
     };
     locations =
       let

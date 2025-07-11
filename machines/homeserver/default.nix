@@ -3,6 +3,7 @@
   imports = [
     ../../environments/core/system
     ../../environments/homeserver/system
+    ../../environments/planetmelon/system
 
     ./hardware.nix
     ./system.nix

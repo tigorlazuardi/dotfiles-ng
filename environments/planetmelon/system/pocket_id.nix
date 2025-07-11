@@ -1,7 +1,8 @@
 { config, ... }:
 let
-  inherit (config.users.planetmelon-pocket-id) uid;
+  inherit (config.users.users.planetmelon-pocket-id) uid;
   inherit (config.users.groups.planetmelon-pocket-id) gid;
+  inherit (config.virtualisation.oci-containers.containers.planetmelon-pocket-id) ip httpPort;
   name = "planetmelon-pocket-id";
   domain = "id.planetmelon.web.id";
 in
@@ -19,7 +20,6 @@ in
     image = "ghcr.io/pocket-id/pocket-id:latest";
     ip = "10.88.10.2";
     httpPort = 1411;
-    socketActivation.enable = true;
     volumes = [
       "/var/lib/${name}:/app/data"
     ];
@@ -39,9 +39,7 @@ in
     };
   };
   systemd.services."podman-${name}".serviceConfig.StateDirectory = name;
-  services.anubis.instances.${name}.settings.TARGET = "unix://${
-    config.systemd.socketActivations."podman-${name}".address
-  }";
+  services.anubis.instances.${name}.settings.TARGET = "http://${ip}:${toString httpPort}";
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     useACMEHost = "planetmelon.web.id";
