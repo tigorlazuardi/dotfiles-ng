@@ -66,7 +66,7 @@ in
     ];
     socketActivation.enable = true;
   };
-  services.nginx.virtualHosts."kafka.bareksa.local".proxyPass =
+  services.nginx.virtualHosts."kafka.bareksa.local".locations."/".proxyPass =
     "http://unix:${config.systemd.socketActivations.podman-bareksa-kafka-ui.address}";
   networking.extraHosts = ''
     127.0.0.1 kafka.bareksa.local
