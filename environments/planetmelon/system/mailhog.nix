@@ -29,9 +29,19 @@ in
     ];
   };
   systemd.services."podman-${name}".serviceConfig.StateDirectory = name;
-  services.caddy.virtualHosts."${domain}".extraConfig = # caddy
-    ''
-      import tinyauth_planetmelon
-      reverse_proxy unix/${config.systemd.socketActivations."podman-${name}".address}
-    '';
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    useACMEHost = "planetmelon.web.id";
+    tinyauth = {
+      locations = [ "/" ];
+      backend =
+        let
+          inherit (config.virtualisation.oci-containers.containers."planetmelon-tinyauth") ip httpPort;
+        in
+        "http://${ip}:${toString httpPort}";
+    };
+    locations."/" = {
+      proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}".address}";
+    };
+  };
 }

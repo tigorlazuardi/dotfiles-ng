@@ -149,4 +149,19 @@ in
       unitConfig.StopWhenUnneeded = true;
     };
   };
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    useACMEHost = "planetmelon.web.id";
+    tinyauth = {
+      locations = [ "/" ];
+      backend =
+        let
+          inherit (config.virtualisation.oci-containers.containers."planetmelon-tinyauth") ip httpPort;
+        in
+        "http://${ip}:${toString httpPort}";
+    };
+    locations."/" = {
+      proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-frontend".address}";
+    };
+  };
 }

@@ -42,8 +42,11 @@ in
   services.anubis.instances.${name}.settings.TARGET = "unix://${
     config.systemd.socketActivations."podman-${name}".address
   }";
-  services.caddy.virtualHosts."${domain}".extraConfig = # caddy
-    ''
-      reverse_proxy unix/${config.services.anubis.instances.${name}.settings.BIND}
-    '';
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    useACMEHost = "planetmelon.web.id";
+    locations."/" = {
+      proxyPass = "http://unix:${config.services.anubis.instances.${name}.settings.BIND}";
+    };
+  };
 }

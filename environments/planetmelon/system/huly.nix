@@ -284,37 +284,41 @@ in
     forceSSL = true;
     useACMEHost = "planetmelon.web.id";
   };
-  services.caddy.virtualHosts."${domain}".extraConfig = # caddy
-    ''
-      # This will trigger double Authentication flow before login to tinyauth,
-      # but the CPU usage saving by causing huly apps to sleep when unused and preventing
-      # public traffic from waking up the huly dependencies are worth it.
-      import tinyauth_planetmelon
-
-      # caddy automatically strips prefixes when using handle_path directive.
-      handle_path /_accounts/* {
-        reverse_proxy unix/${config.systemd.socketActivations."podman-${name}-account".address}
-      }
-
-      handle_path /_collaborator/* {
-        reverse_proxy unix/${config.systemd.socketActivations."podman-${name}-collaborator".address}
-      }
-
-      handle_path /_rekoni/* {
-        reverse_proxy unix/${config.systemd.socketActivations."podman-${name}-rekoni".address}
-      }
-
-      handle_path /_transactor/* {
-        reverse_proxy unix/${config.systemd.socketActivations."podman-${name}-transactor".address}
-      }
-
-      @wtf path_regexp ^/eyJ
-      handle @wtf {
-        reverse_proxy unix/${config.systemd.socketActivations."podman-${name}-transactor".address}
-      }
-
-      handle {
-        reverse_proxy unix/${config.systemd.socketActivations."podman-${name}-front".address}
-      }
-    '';
+  services.nginx.virtualHosts."${domain}" = {
+    tinyauth = {
+      locations = [
+        "/"
+        "/_accounts/"
+        "/_collaborator/"
+        "/_rekoni/"
+        "/_transactor/"
+        "~ ^/eyJ"
+      ];
+      backend =
+        let
+          inherit (config.virtualisation.oci-containers.containers."planetmelon-tinyauth") ip httpPort;
+        in
+        "http://${ip}:${toString httpPort}";
+    };
+    locations = {
+      "/_accounts/" = {
+        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-account".address}";
+      };
+      "/_collaborator/" = {
+        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-collaborator".address}";
+      };
+      "/_rekoni/" = {
+        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-rekoni".address}";
+      };
+      "/_transactor/" = {
+        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-transactor".address}";
+      };
+      "~ ^/eyJ" = {
+        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-transactor".address}";
+      };
+      "/" = {
+        proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-front".address}";
+      };
+    };
+  };
 }
