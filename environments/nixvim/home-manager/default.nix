@@ -11,6 +11,7 @@
   ];
   programs.nixvim = {
     enable = true;
+    nixpkgs.pkgs = pkgs;
     defaultEditor = true;
     package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
     extraPackages = with pkgs; [

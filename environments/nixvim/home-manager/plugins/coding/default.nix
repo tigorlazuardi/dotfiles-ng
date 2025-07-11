@@ -1,7 +1,8 @@
 { lib, ... }:
 {
   imports = [
-    ./aider.nix
+    # ./aider.nix
+    ./claude-code.nix
     ./codecompanion.nix
     ./conform.nix
     ./copilot.nix
