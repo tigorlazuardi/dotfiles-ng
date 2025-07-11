@@ -19,12 +19,12 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/c3c29825-5fa6-4cd2-974f-58bbc52ce01d";
+    label = "NIXROOT";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/80DE-6FF2";
+    label = "NIXBOOT";
     fsType = "vfat";
     options = [
       "fmask=0022"
@@ -33,7 +33,7 @@
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/85901cfd-16b5-44d4-8795-77d6f4d4d8cd"; }
+    { label = "NIXSWAP"; }
   ];
 
   networking.useDHCP = lib.mkDefault true;

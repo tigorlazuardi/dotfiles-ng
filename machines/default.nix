@@ -18,6 +18,13 @@ in
         description = "Tigor Hutasuhut";
       };
     };
+    fort = mkNixosConfiguration {
+      module = ./fort;
+      user = {
+        name = "tigor";
+        description = "Tigor Hutasuhut";
+      };
+    };
     homeserver = mkNixosConfiguration {
       module = ./homeserver;
       user = {
