@@ -54,12 +54,11 @@ let
             default = "${lib.meta.getExe (
               pkgs.writeShellScriptBin "waitport-${name}" ''
                 attempts=${toString (config.wait.startTimeout * 10)}
-                while [ $attempts -gt 0 ]; do
-                  if ${pkgs.netcat-gnu}/bin/nc -z ${config.host} ${toString config.port}; then
+                for i in `seq $attempts`; do
+                  if ${pkgs.netcat}/bin/nc -z ${config.host} ${toString config.port} > /dev/null; then
                     exit 0
                   fi
-                  sleep 0.1
-                  attempts=$((attempts - 1))
+                  ${pkgs.coreutils}/bin/sleep 0.1
                 done
                 echo "Service ${name} at ${config.host}:${toString config.port} did not become ready within ${toString config.wait.startTimeout} seconds."
                 exit 1
