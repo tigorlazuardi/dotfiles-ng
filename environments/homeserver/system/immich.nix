@@ -7,7 +7,7 @@ in
     enable = true;
     host = "127.0.0.1";
     mediaLocation = "/wolf/services/immich";
-    settings.server.externalDomain = "https://${domain}";
+    settings = null; # The rest of the config will be set in the application itself.
     accelerationDevices = [ "/dev/dri/renderD128" ];
   };
   systemd.socketActivations.immich-server =
