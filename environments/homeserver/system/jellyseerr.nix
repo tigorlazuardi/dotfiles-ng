@@ -18,7 +18,7 @@
     services.nginx.virtualHosts."jellyseerr.tigor.web.id" = {
       forceSSL = true;
       locations."/".proxyPass =
-        "http://unix:${config.services.anubis.instances.jellyseerr.settings.TARGET}";
+        "http://unix:${config.services.anubis.instances.jellyseerr.settings.BIND}";
     };
     services.homepage-dashboard.groups."Media Collectors".services.Jellyseerr = {
       sortIndex = 500;
