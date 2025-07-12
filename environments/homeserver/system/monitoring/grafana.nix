@@ -15,6 +15,8 @@ in
       "grafana/admin_password" = opts;
       "grafana/admin_email" = opts;
       "grafana/secret_key" = opts;
+      "grafana/oauth/generic/client_id" = opts;
+      "grafana/oauth/generic/client_secret" = opts;
     };
   services.grafana = {
     enable = true;
@@ -40,6 +42,21 @@ in
         cookie_secure = true;
         cookie_samesite = "lax";
         strict_transport_security = true;
+      };
+      "auth.generic_oauth" = {
+        enabled = true;
+        name = "Pocket ID";
+        allow_sign_up = true;
+        auto_login = true;
+        client_id = "$__file{${config.sops.secrets."grafana/oauth/generic/client_id".path}}";
+        client_secret = "$__file{${config.sops.secrets."grafana/oauth/generic/client_secret".path}}";
+        scopes = "openid profile email";
+        auth_url = "https://id.tigor.web.id/authorize";
+        token_url = "https://id.tigor.web.id/api/oidc/token";
+        api_url = "https://id.tigor.web.id/api/oidc/userinfo";
+        use_pkce = true;
+        use_refresh_token = true;
+        role_attribute_path = "grafana_role";
       };
     };
   };
