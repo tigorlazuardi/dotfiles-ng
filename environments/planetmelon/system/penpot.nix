@@ -157,20 +157,14 @@ in
       unitConfig.StopWhenUnneeded = true;
     };
   };
+  services.anubis.instances."${name}".settings.TARGET = "unix://${
+    config.systemd.socketActivations."podman-${name}-frontend".address
+  }";
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     useACMEHost = "planetmelon.web.id";
-    tinyauth = {
-      enable = true;
-      backend =
-        let
-          inherit (config.virtualisation.oci-containers.containers."planetmelon-tinyauth") ip httpPort;
-        in
-        "http://${ip}:${toString httpPort}";
-      appUrl = "https://auth.planetmelon.web.id";
-    };
     locations."/" = {
-      proxyPass = "http://unix:${config.systemd.socketActivations."podman-${name}-frontend".address}";
+      proxyPass = "http://unix:${config.services.anubis.instances."${name}".settings.BIND}";
     };
   };
 }

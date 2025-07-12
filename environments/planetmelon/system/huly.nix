@@ -5,8 +5,6 @@ let
   dataDir = "/var/lib/planetmelon/huly";
   inherit (config.users.users.planetmelon) uid;
   inherit (config.users.groups.planetmelon) gid;
-  # user = "${toString uid}:${toString gid}";
-
   # Value is taken from here: https://github.com/hcengineering/huly-selfhost/blob/main/.template.huly.conf
   HULY_VERSION = "v0.6.501";
   baseEndpoint = "https://${domain}";
@@ -15,22 +13,11 @@ in
   sops = {
     secrets."planetmelon/huly/secret".sopsFile = ../../../secrets/planetmelon/huly.yaml;
     secrets."planetmelon/huly/oidc".sopsFile = ../../../secrets/planetmelon/huly.yaml;
-    templates."planetmelon/huly.env" = {
-      content = # sh
-        ''
-          SECRET=${config.sops.placeholder."planetmelon/huly/secret"}
-          SERVER_SECRET=${config.sops.placeholder."planetmelon/huly/secret"}
-        '';
-      owner = name;
+    secrets."planetmelon/huly.env" = {
+      sopsFile = ../../../secrets/planetmelon/huly.env;
+      format = "dotenv";
+      key = "";
     };
-  };
-  users = {
-    users.${name} = {
-      isSystemUser = true;
-      uid = 922; # Unique UID for huly user
-      group = name;
-    };
-    groups.${name}.gid = 922; # Unique GID for huly group
   };
   virtualisation.oci-containers.containers =
     let
@@ -45,15 +32,13 @@ in
         LAST_NAME_FIRST = "true";
       };
       environmentFiles = [
-        config.sops.templates."planetmelon/huly.env".path
-        config.sops.secrets."planetmelon/huly/oidc".path
+        config.sops.secrets."planetmelon/huly.env".path
       ];
     in
     {
       # Configurations are based on:
       # https://github.com/hcengineering/huly-selfhost/blob/main/compose.yml
       "${name}-mongodb" = {
-        # inherit user;
         autoStart = false;
         image = "docker.io/library/mongo:7-jammy";
         ip = "10.88.20.1";
@@ -66,7 +51,6 @@ in
         ];
       };
       "${name}-minio" = {
-        # inherit user;
         autoStart = false;
         image = "docker.io/minio/minio:latest";
         ip = "10.88.20.2";
@@ -83,7 +67,6 @@ in
         ];
       };
       "${name}-elastic" = {
-        # inherit user;
         autoStart = false;
         image = "docker.io/library/elasticsearch:7.14.2";
         entrypoint = "/bin/sh";
@@ -218,13 +201,6 @@ in
         httpPort = 4900;
       };
     };
-  system.activationScripts.${name} =
-    # 1000 is the UID of the elasticsearch user in the container and root is the group. Must be used for elasticsearch to work properly.
-    # sh
-    ''
-      mkdir -p ${dataDir}/{mongodb,minio} ${dataDir}/elasticsearch/data
-      chown -R 1000:root ${dataDir}/elasticsearch/data 
-    '';
   # Configure systemd services and auto stop services when not needed.
   systemd.services =
     let
@@ -236,12 +212,22 @@ in
       ];
     in
     {
-      "podman-${name}-mongodb".unitConfig.StopWhenUnneeded = true;
-      "podman-${name}-minio".unitConfig.StopWhenUnneeded = true;
+      "podman-${name}-mongodb" = {
+        preStart = "mkdir -p ${dataDir}/mongodb";
+        unitConfig.StopWhenUnneeded = true;
+      };
+      "podman-${name}-minio" = {
+        preStart = "mkdir -p ${dataDir}/minio";
+        unitConfig.StopWhenUnneeded = true;
+      };
       "podman-${name}-elastic" = {
+        preStart = ''
+          mkdir -p ${dataDir}/elasticsearch/data
+          chown -R 1000:root ${dataDir}/elasticsearch/data
+        '';
         unitConfig.StopWhenUnneeded = true;
         postStart = ''
-          attempts=600
+          attempts=1200
           for i in `seq $attempts`; do
             if ${pkgs.netcat}/bin/nc -z 10.88.20.3 9200 > /dev/null; then
               exit 0
@@ -292,19 +278,13 @@ in
         after = requires;
       };
     };
+  services.anubis.instances."${name}".settings.TARGET = "unix://${
+    config.systemd.socketActivations."podman-${name}-front".address
+  }";
   # Reverse Proxy settings based on https://github.com/hcengineering/huly-selfhost/blob/main/.huly.nginx
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     useACMEHost = "planetmelon.web.id";
-    tinyauth = {
-      enable = true;
-      backend =
-        let
-          inherit (config.virtualisation.oci-containers.containers."planetmelon-tinyauth") ip httpPort;
-        in
-        "http://${ip}:${toString httpPort}";
-      appUrl = "https://auth.planetmelon.web.id";
-    };
     locations = {
       "/_accounts" =
         let
@@ -376,7 +356,7 @@ in
 
       "/" =
         let
-          front = "http://unix:${config.systemd.socketActivations."podman-${name}-front".address}";
+          front = "http://unix:${config.services.anubis.instances."${name}".settings.BIND}";
         in
         {
           proxyPass = front;
