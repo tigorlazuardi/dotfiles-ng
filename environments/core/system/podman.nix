@@ -80,9 +80,15 @@
           idleTimeout = value.socketActivation.idleTimeout;
         })
       ) socketActivatedContainers;
-      virtualisation.podman.autoPrune = {
-        enable = true;
-        flags = [ "--all" ];
+      virtualisation.podman = {
+        autoPrune = {
+          enable = true;
+          flags = [ "--all" ];
+        };
+        defaultNetwork.settings.dns_enabled = true;
+      };
+      networking.firewall.interfaces."podman[0-9]+" = {
+        allowedUDPPorts = [ 53 ]; # this needs to be there so that containers can look eachother's names up over DNS
       };
     };
 }
