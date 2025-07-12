@@ -1,11 +1,11 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   name = "planetmelon-huly";
   domain = "huly.planetmelon.web.id";
   dataDir = "/var/lib/planetmelon/huly";
   inherit (config.users.users.planetmelon) uid;
   inherit (config.users.groups.planetmelon) gid;
-  user = "${toString uid}:${toString gid}";
+  # user = "${toString uid}:${toString gid}";
 
   # Value is taken from here: https://github.com/hcengineering/huly-selfhost/blob/main/.template.huly.conf
   HULY_VERSION = "v0.6.501";
@@ -50,7 +50,7 @@ in
       # Configurations are based on:
       # https://github.com/hcengineering/huly-selfhost/blob/main/compose.yml
       "${name}-mongodb" = {
-        inherit user;
+        # inherit user;
         autoStart = false;
         image = "docker.io/library/mongo:7-jammy";
         ip = "10.88.20.1";
@@ -63,7 +63,7 @@ in
         ];
       };
       "${name}-minio" = {
-        inherit user;
+        # inherit user;
         autoStart = false;
         image = "docker.io/minio/minio:latest";
         ip = "10.88.20.2";
@@ -80,7 +80,7 @@ in
         ];
       };
       "${name}-elastic" = {
-        inherit user;
+        # inherit user;
         autoStart = false;
         image = "docker.io/library/elasticsearch:7.14.2";
         entrypoint = "/bin/sh";
@@ -103,18 +103,18 @@ in
           "http.cors.enabled" = "true";
           "http.cors.allow-origin" = "http://localhost:8082";
         };
-        podman.sdnotify = "healthy";
-        extraOptions =
-          let
-            healthCmd = # sh
-              ''curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'';
-          in
-          [
-            "--health-cmd=${healthCmd}"
-            "--health-startup-cmd=${healthCmd}"
-            "--health-startup-interval=200ms"
-            "--health-startup-retries=150" # 30 second maximum wait.
-          ];
+        # podman.sdnotify = "healthy";
+        # extraOptions =
+        #   let
+        #     healthCmd = # sh
+        #       ''curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'';
+        #   in
+        #   [
+        #     "--health-cmd=${healthCmd}"
+        #     "--health-startup-cmd=${healthCmd}"
+        #     "--health-startup-interval=200ms"
+        #     "--health-startup-retries=150" # 30 second maximum wait.
+        #   ];
       };
       "${name}-rekoni" = {
         autoStart = false;
@@ -229,10 +229,13 @@ in
         ip = "10.88.20.11";
       };
     };
-  system.activationScripts.${name} = ''
-    mkdir -p ${dataDir}/{mongodb,minio} ${dataDir}/elasticsearch/data
-    chown -R ${user} ${dataDir}
-  '';
+  system.activationScripts.${name} =
+    # 1000 is the UID of the elasticsearch user in the container and root is the group. Must be used for elasticsearch to work properly.
+    # sh
+    ''
+      mkdir -p ${dataDir}/{mongodb,minio} ${dataDir}/elasticsearch/data
+      chown -R 1000:root ${dataDir}/elasticsearch/data 
+    '';
   # Configure systemd services and auto stop services when not needed.
   systemd.services =
     let
@@ -246,7 +249,18 @@ in
     {
       "podman-${name}-mongodb".unitConfig.StopWhenUnneeded = true;
       "podman-${name}-minio".unitConfig.StopWhenUnneeded = true;
-      "podman-${name}-elastic".unitConfig.StopWhenUnneeded = true;
+      "podman-${name}-elastic" = {
+        unitConfig.StopWhenUnneeded = true;
+        postStart = ''
+          attempts=600
+          for i in `seq $attempts`; do
+            if ${pkgs.netcat}/bin/nc -z 10.88.20.3 9200 > /dev/null; then
+              exit 0
+            fi
+            ${pkgs.coreutils}/bin/sleep 0.1
+          done
+        '';
+      };
       "podman-${name}-stats".unitConfig.StopWhenUnneeded = true;
       "podman-${name}-account" = {
         after = baseServices;
