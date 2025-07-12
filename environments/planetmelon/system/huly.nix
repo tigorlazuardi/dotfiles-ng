@@ -13,6 +13,7 @@ in
 {
   sops = {
     secrets."planetmelon/huly/secret".sopsFile = ../../../secrets/planetmelon/huly.yaml;
+    secrets."planetmelon/huly/oidc".sopsFile = ../../../secrets/planetmelon/huly.yaml;
     templates."planetmelon/huly.env" = {
       content = # sh
         ''
@@ -44,6 +45,7 @@ in
       };
       environmentFiles = [
         config.sops.templates."planetmelon/huly.env".path
+        config.sops.secrets."planetmelon/huly/oidc".path
       ];
     in
     {
@@ -103,18 +105,6 @@ in
           "http.cors.enabled" = "true";
           "http.cors.allow-origin" = "http://localhost:8082";
         };
-        # podman.sdnotify = "healthy";
-        # extraOptions =
-        #   let
-        #     healthCmd = # sh
-        #       ''curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'';
-        #   in
-        #   [
-        #     "--health-cmd=${healthCmd}"
-        #     "--health-startup-cmd=${healthCmd}"
-        #     "--health-startup-interval=200ms"
-        #     "--health-startup-retries=150" # 30 second maximum wait.
-        #   ];
       };
       "${name}-rekoni" = {
         autoStart = false;
@@ -327,6 +317,10 @@ in
           in
           {
             proxyPass = "http://${ip}:${toString httpPort}";
+            extraConfig = # nginx
+              ''
+                rewrite ^/_accounts(/.*)$ $1 break;
+              '';
           };
         "/_collaborator" =
           let
@@ -334,6 +328,10 @@ in
           in
           {
             proxyPass = "http://${ip}:${toString httpPort}";
+            extraConfig = # nginx
+              ''
+                rewrite ^/_collaborator(/.*)$ $1 break;
+              '';
           };
 
         "/_rekoni/" =
@@ -342,6 +340,10 @@ in
           in
           {
             proxyPass = "http://${ip}:${toString httpPort}";
+            extraConfig = # nginx
+              ''
+                rewrite ^/_rekoni(/.*)$ $1 break;
+              '';
           };
 
         "/_transactor/" =
@@ -350,6 +352,10 @@ in
           in
           {
             proxyPass = "http://${ip}:${toString httpPort}";
+            extraConfig = # nginx
+              ''
+                rewrite ^/_transactor(/.*)$ $1 break;
+              '';
           };
 
         "~ ^/eyJ" =
@@ -358,6 +364,17 @@ in
           in
           {
             proxyPass = "http://${ip}:${toString httpPort}";
+          };
+        "/_stats" =
+          let
+            inherit (config.virtualisation.oci-containers.containers."${name}-stats") ip httpPort;
+          in
+          {
+            proxyPass = "http://${ip}:${toString httpPort}";
+            extraConfig = # nginx
+              ''
+                rewrite ^/_stats(/.*)$ $1 break;
+              '';
           };
 
         "/" = {
