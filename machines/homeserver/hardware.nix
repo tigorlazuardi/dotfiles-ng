@@ -36,6 +36,10 @@
       "dmask=0022"
     ];
   };
+  # fileSystems."/var/lib" = {
+  #   label = "VARLIB";
+  #   fsType = "ext4";
+  # };
 
   fileSystems."/nas" = {
     label = "WD_RED_4T_1";
