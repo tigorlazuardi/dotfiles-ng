@@ -130,19 +130,13 @@
       ];
     };
 
-    services.anubis.instances.tinyauth.settings.TARGET =
+    services.nginx.virtualHosts."auth.tigor.web.id" =
       let
         inherit (config.virtualisation.oci-containers.containers.tiny-auth) ip httpPort;
       in
-      "http://${ip}:${toString httpPort}";
-
-    services.nginx.virtualHosts."auth.tigor.web.id" =
-      let
-        inherit (config.services.anubis.instances.tinyauth.settings) BIND;
-      in
       {
         forceSSL = true;
-        locations."/".proxyPass = "http://unix:${BIND}";
+        locations."/".proxyPass = "http://${ip}:${toString httpPort}";
       };
 
     services.homepage-dashboard.groups.Security.services."Tiny Auth".settings = {

@@ -33,15 +33,15 @@
     };
   };
   systemd.services.podman-pocket-id.serviceConfig.StateDirectory = "pocket-id";
-  services.anubis.instances.pocket-id.settings.TARGET =
+  services.nginx.virtualHosts."id.tigor.web.id" =
+
     let
       inherit (config.virtualisation.oci-containers.containers.pocket-id) ip httpPort;
     in
-    "http://${ip}:${toString httpPort}";
-  services.nginx.virtualHosts."id.tigor.web.id" = {
-    forceSSL = true;
-    locations."/".proxyPass = "http://unix:${config.services.anubis.instances.pocket-id.settings.BIND}";
-  };
+    {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${ip}:${toString httpPort}";
+    };
   services.homepage-dashboard.groups.Security.services."Pocket-Id".settings = {
     href = "https://id.tigor.web.id";
     description = "OAuth2 Provider with exclusive support using Passkeys";
