@@ -57,6 +57,8 @@ in
 
         limits_config = {
           retention_period = "30d";
+          ingestion_rate_mb = 32;
+          ingestion_burst_size_mb = 64;
         };
 
         storage_config = {
@@ -112,6 +114,7 @@ in
       // read systemd journal logs
       loki.source.journal "read" {
           forward_to = [loki.process.journal.receiver]
+          format_as_json = true
           relabel_rules = loki.relabel.journal.rules
           labels = {
               job = "systemd-journal",
@@ -121,7 +124,6 @@ in
 
       loki.relabel "journal" {
           forward_to = []
-          format_as_json = true
           rule {
               source_labels = ["__journal__systemd_unit"]
               target_label  = "unit"

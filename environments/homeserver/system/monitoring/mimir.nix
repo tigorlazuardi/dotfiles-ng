@@ -100,6 +100,10 @@ in
           targets     = prometheus.exporter.self.alloy.targets
           forward_to  = [prometheus.remote_write.mimir.receiver]
       }
+
+      otelcol.exporter.prometheus "mimir" {
+        forward_to = [prometheus.remote_write.mimir.receiver]
+      }
     '';
   services.homepage-dashboard.groups.Monitoring.services.Mimir.settings = {
     description = "Metrics storage and querier";
