@@ -3,9 +3,6 @@ let
   name = "planetmelon-penpot";
   domain = "penpot.planetmelon.web.id";
   dataDir = "/var/lib/planetmelon/penpot";
-  inherit (config.users.users.planetmelon) uid;
-  inherit (config.users.groups.planetmelon) gid;
-  user = "${toString uid}:${toString gid}";
 in
 {
   sops.secrets."planetmelon/penpot.env" = {
@@ -15,18 +12,6 @@ in
   };
   virtualisation.oci-containers.containers =
     let
-      backend = {
-        inherit (config.virtualisation.oci-containers.containers."${name}-backend") ip;
-      };
-      exporter = {
-        inherit (config.virtualisation.oci-containers.containers."${name}-exporter") ip;
-      };
-      redis = {
-        inherit (config.virtualisation.oci-containers.containers."${name}-valkey") ip;
-      };
-      postgres = {
-        inherit (config.virtualisation.oci-containers.containers."${name}-postgres") ip;
-      };
       penpotEnv = {
         TZ = "Asia/Jakarta";
         PENPOT_FLAGS = lib.concatStringsSep " " [
@@ -34,18 +19,18 @@ in
           "enable-smtp"
           "enable-prepl-server"
           "disable-secure-session-cookies"
-          "enable-login-with-oidc"
+          "enable-login-with-github"
         ];
         PENPOT_ASSETS_STORAGE_BACKEND = "assets-fs";
-        PENPOT_BACKEND_URI = "http://${backend.ip}:6060";
+        PENPOT_BACKEND_URI = "http://${name}-backend:6060";
         PENPOT_DATABASE_PASSWORD = "penpot";
-        PENPOT_DATABASE_URI = "postgresql://${postgres.ip}/penpot";
+        PENPOT_DATABASE_URI = "postgresql://${name}-postgres/penpot";
         PENPOT_DATABASE_USERNAME = "penpot";
-        PENPOT_EXPORTER_URI = "http://${exporter.ip}:6061";
+        PENPOT_EXPORTER_URI = "http://${name}-exporter:6061";
         PENPOT_HTTP_SERVER_MAX_BODY_SIZE = toString (1024 * 1024 * 32); # 32MB
         PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE = toString (1024 * 1024 * 512); # 512 MB
         PENPOT_PUBLIC_URI = "https://${domain}";
-        PENPOT_REDIS_URI = "redis://${redis.ip}/0";
+        PENPOT_REDIS_URI = "redis://${name}-valkey/0";
         PENPOT_SMTP_HOST = "planetmelon-mailhog";
         PENPOT_SMTP_PORT = "8025";
         PENPOT_SMTP_SSL = "false";
@@ -56,7 +41,6 @@ in
     in
     {
       "${name}-frontend" = {
-        inherit user;
         image = "docker.io/penpotapp/frontend:latest";
         volumes = [ "${dataDir}/data/assets:/opt/data/assets" ];
         environment = penpotEnv;
@@ -68,7 +52,6 @@ in
         };
       };
       "${name}-backend" = {
-        inherit user;
         image = "docker.io/penpotapp/backend:latest";
         volumes = [
           "${dataDir}/data/assets:/opt/data/assets"
@@ -80,13 +63,11 @@ in
         environment = penpotEnv;
       };
       "${name}-exporter" = {
-        inherit user;
         image = "docker.io/penpotapp/exporter:latest";
         environment = penpotEnv;
         ip = "10.88.10.12";
       };
       "${name}-postgres" = {
-        inherit user;
         image = "docker.io/postgres:15";
         ip = "10.88.10.13";
         podman.sdnotify = "healthy"; # Only notifies 'ready' to systemd when service healthcheck passes.
@@ -97,7 +78,7 @@ in
           ''--health-startup-retries=300'' # 30 second maximum wait.
         ];
         volumes = [
-          "${dataDir}/postgresql/data:/var/lib/postgresql/data"
+          "${dataDir}/postgresql:/var/lib/postgresql/data"
         ];
         environment = {
           POSTGRES_DB = "penpot";
@@ -106,9 +87,11 @@ in
         };
       };
       "${name}-valkey" = {
-        inherit user;
         image = "docker.io/valkey/valkey:8.1";
         ip = "10.88.10.14";
+        volumes = [
+          "${dataDir}/valkey:/data"
+        ];
         podman.sdnotify = "healthy"; # Only notifies 'ready' to systemd when service healthcheck passes.
         extraOptions = [
           ''--health-cmd=valkey-cli ping | grep PONG''
@@ -118,10 +101,6 @@ in
         ];
       };
     };
-  system.activationScripts.${name}.text = ''
-    mkdir -p ${dataDir}/{data/assets,postgresql/data}
-    chown -R ${user} ${dataDir}
-  '';
   # setup dependencies of service orderings and stop
   # services when not needed.
   systemd.services = {
@@ -133,6 +112,7 @@ in
       after = requires;
     };
     "podman-${name}-backend" = rec {
+      preStart = "mkdir -p ${dataDir}/data/assets";
       wantedBy = lib.mkForce [ ];
       requires = [
         "podman-${name}-postgres.service"
@@ -149,10 +129,12 @@ in
       unitConfig.StopWhenUnneeded = true;
     };
     "podman-${name}-postgres" = {
+      preStart = "mkdir -p ${dataDir}/postgresql";
       wantedBy = lib.mkForce [ ];
       unitConfig.StopWhenUnneeded = true;
     };
     "podman-${name}-valkey" = {
+      preStart = "mkdir -p ${dataDir}/valkey";
       wantedBy = lib.mkForce [ ];
       unitConfig.StopWhenUnneeded = true;
     };
