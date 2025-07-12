@@ -9,6 +9,7 @@ let
 
   # Value is taken from here: https://github.com/hcengineering/huly-selfhost/blob/main/.template.huly.conf
   HULY_VERSION = "v0.6.501";
+  baseEndpoint = "https://${domain}";
 in
 {
   sops = {
@@ -142,8 +143,9 @@ in
         httpPort = 3000;
         environment = baseEnv // {
           SERVER_PORT = "3000";
-          FRONT_URL = "http://${name}-front:8080";
-          ACCOUNTS_URL = "http://localhost:3000";
+          # FRONT_URL = "http://${name}-front:8080";
+          FRONT_URL = baseEndpoint;
+          ACCOUNTS_URL = "${baseEndpoint}/_accounts";
           ACCOUNT_PORT = "3000";
         };
         inherit environmentFiles;
@@ -164,32 +166,28 @@ in
           enable = true;
           idleTimeout = "30m";
         };
-        environment =
-          let
-            baseEndpoint = "https://${domain}";
-          in
-          {
-            SERVER_PORT = "8080";
-            LOVE_ENDPOINT = "${baseEndpoint}/_love";
-            ACCOUNTS_URL = "${baseEndpoint}/_accounts";
-            REKONI_URL = "${baseEndpoint}/_rekoni";
-            CALENDAR_URL = "${baseEndpoint}/_calendar";
-            GMAIL_URL = "${baseEndpoint}/_gmail";
-            TELEGRAM_URL = "${baseEndpoint}/_telegram";
-            STATS_URL = "${baseEndpoint}/_stats";
-            UPLOAD_URL = "/files";
-            ELASTIC_URL = "http://${name}-elastic:9200";
-            COLLABORATOR_URL = "wss://${domain}/_collaborator";
-            inherit (baseEnv)
-              STORAGE_CONFIG
-              DB_URL
-              MONGO_URL
-              LAST_NAME_FIRST
-              ;
-            TITLE = "Planet Melon";
-            DEFAULT_LANGUAGE = "en";
-            DESKTOP_UPDATES_CHANNEL = "selfhost";
-          };
+        environment = {
+          SERVER_PORT = "8080";
+          LOVE_ENDPOINT = "${baseEndpoint}/_love";
+          ACCOUNTS_URL = "${baseEndpoint}/_accounts";
+          REKONI_URL = "${baseEndpoint}/_rekoni";
+          CALENDAR_URL = "${baseEndpoint}/_calendar";
+          GMAIL_URL = "${baseEndpoint}/_gmail";
+          TELEGRAM_URL = "${baseEndpoint}/_telegram";
+          STATS_URL = "${baseEndpoint}/_stats";
+          UPLOAD_URL = "/files";
+          ELASTIC_URL = "http://${name}-elastic:9200";
+          COLLABORATOR_URL = "wss://${domain}/_collaborator";
+          inherit (baseEnv)
+            STORAGE_CONFIG
+            DB_URL
+            MONGO_URL
+            LAST_NAME_FIRST
+            ;
+          TITLE = "Planet Melon";
+          DEFAULT_LANGUAGE = "en";
+          DESKTOP_UPDATES_CHANNEL = "selfhost";
+        };
         inherit environmentFiles;
       };
       "${name}-fulltext" = {
@@ -217,6 +215,7 @@ in
         };
         inherit environmentFiles;
         ip = "10.88.20.11";
+        httpPort = 4900;
       };
     };
   system.activationScripts.${name} =
@@ -306,80 +305,82 @@ in
         "http://${ip}:${toString httpPort}";
       appUrl = "https://auth.planetmelon.web.id";
     };
-    locations =
-      let
-        frontBackend = "http://unix:${config.systemd.socketActivations."podman-${name}-front".address}";
-      in
-      {
-        "/_accounts" =
-          let
-            inherit (config.virtualisation.oci-containers.containers."${name}-account") ip httpPort;
-          in
-          {
-            proxyPass = "http://${ip}:${toString httpPort}";
-            extraConfig = # nginx
-              ''
-                rewrite ^/_accounts(/.*)$ $1 break;
-              '';
-          };
-        "/_collaborator" =
-          let
-            inherit (config.virtualisation.oci-containers.containers."${name}-collaborator") ip httpPort;
-          in
-          {
-            proxyPass = "http://${ip}:${toString httpPort}";
-            extraConfig = # nginx
-              ''
-                rewrite ^/_collaborator(/.*)$ $1 break;
-              '';
-          };
-
-        "/_rekoni/" =
-          let
-            inherit (config.virtualisation.oci-containers.containers."${name}-rekoni") ip httpPort;
-          in
-          {
-            proxyPass = "http://${ip}:${toString httpPort}";
-            extraConfig = # nginx
-              ''
-                rewrite ^/_rekoni(/.*)$ $1 break;
-              '';
-          };
-
-        "/_transactor/" =
-          let
-            inherit (config.virtualisation.oci-containers.containers."${name}-transactor") ip httpPort;
-          in
-          {
-            proxyPass = "http://${ip}:${toString httpPort}";
-            extraConfig = # nginx
-              ''
-                rewrite ^/_transactor(/.*)$ $1 break;
-              '';
-          };
-
-        "~ ^/eyJ" =
-          let
-            inherit (config.virtualisation.oci-containers.containers."${name}-transactor") ip httpPort;
-          in
-          {
-            proxyPass = "http://${ip}:${toString httpPort}";
-          };
-        "/_stats" =
-          let
-            inherit (config.virtualisation.oci-containers.containers."${name}-stats") ip httpPort;
-          in
-          {
-            proxyPass = "http://${ip}:${toString httpPort}";
-            extraConfig = # nginx
-              ''
-                rewrite ^/_stats(/.*)$ $1 break;
-              '';
-          };
-
-        "/" = {
-          proxyPass = frontBackend;
+    locations = {
+      "/_accounts" =
+        let
+          inherit (config.virtualisation.oci-containers.containers."${name}-account") ip httpPort;
+        in
+        {
+          proxyPass = "http://${ip}:${toString httpPort}/";
+          extraConfig = # nginx
+            ''
+              rewrite ^/_accounts(/.*)$ $1 break;
+            '';
         };
-      };
+      "/_collaborator" =
+        let
+          inherit (config.virtualisation.oci-containers.containers."${name}-collaborator") ip httpPort;
+        in
+        {
+          proxyPass = "http://${ip}:${toString httpPort}/";
+          extraConfig = # nginx
+            ''
+              rewrite ^/_collaborator(/.*)$ $1 break;
+            '';
+        };
+
+      "/_rekoni" =
+        let
+          inherit (config.virtualisation.oci-containers.containers."${name}-rekoni") ip httpPort;
+        in
+        {
+          proxyPass = "http://${ip}:${toString httpPort}/";
+          extraConfig = # nginx
+            ''
+              rewrite ^/_rekoni(/.*)$ $1 break;
+            '';
+        };
+
+      "/_transactor" =
+        let
+          inherit (config.virtualisation.oci-containers.containers."${name}-transactor") ip httpPort;
+        in
+        {
+          proxyPass = "http://${ip}:${toString httpPort}/";
+          extraConfig = # nginx
+            ''
+              rewrite ^/_transactor(/.*)$ $1 break;
+            '';
+        };
+
+      "~ ^/eyJ" =
+        let
+          inherit (config.virtualisation.oci-containers.containers."${name}-transactor") ip httpPort;
+        in
+        {
+          # The no slash at the end of line is significant here.
+          # See: https://github.com/hcengineering/huly-selfhost/blob/f22d0b9c729fcdb70bc6b89191c40e29b28dc7b7/.huly.nginx#L72
+          proxyPass = "http://${ip}:${toString httpPort}";
+        };
+      "/_stats" =
+        let
+          inherit (config.virtualisation.oci-containers.containers."${name}-stats") ip httpPort;
+        in
+        {
+          proxyPass = "http://${ip}:${toString httpPort}/";
+          extraConfig = # nginx
+            ''
+              rewrite ^/_stats(/.*)$ $1 break;
+            '';
+        };
+
+      "/" =
+        let
+          front = "http://unix:${config.systemd.socketActivations."podman-${name}-front".address}";
+        in
+        {
+          proxyPass = front;
+        };
+    };
   };
 }
