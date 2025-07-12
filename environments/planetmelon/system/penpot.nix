@@ -2,20 +2,12 @@
 let
   name = "planetmelon-penpot";
   domain = "penpot.planetmelon.web.id";
-  dataDir = "/var/lib/${name}";
-  # inherit (config.users.users.${name}) uid;
-  # inherit (config.users.groups.${name}) gid;
-  # user = "${toString uid}:${toString gid}";
+  dataDir = "/var/lib/planetmelon/penpot";
+  inherit (config.users.users.planetmelon) uid;
+  inherit (config.users.groups.planetmelon) gid;
+  user = "${toString uid}:${toString gid}";
 in
 {
-  # users = {
-  #   users.${name} = {
-  #     isSystemUser = true;
-  #     uid = 921; # Unique UID for penpot user
-  #     group = name;
-  #   };
-  #   groups.${name}.gid = 921; # Unique GID for penpot group
-  # };
   sops.secrets."planetmelon/penpot.env" = {
     sopsFile = ../../../secrets/planetmelon/penpot.env;
     format = "dotenv";
@@ -64,7 +56,7 @@ in
     in
     {
       "${name}-frontend" = {
-        # inherit user;
+        inherit user;
         image = "docker.io/penpotapp/frontend:latest";
         volumes = [ "${dataDir}/data/assets:/opt/data/assets" ];
         environment = penpotEnv;
@@ -76,7 +68,7 @@ in
         };
       };
       "${name}-backend" = {
-        # inherit user;
+        inherit user;
         image = "docker.io/penpotapp/backend:latest";
         volumes = [
           "${dataDir}/data/assets:/opt/data/assets"
@@ -88,13 +80,13 @@ in
         environment = penpotEnv;
       };
       "${name}-exporter" = {
-        # inherit user;
+        inherit user;
         image = "docker.io/penpotapp/exporter:latest";
         environment = penpotEnv;
         ip = "10.88.10.12";
       };
       "${name}-postgres" = {
-        # inherit user;
+        inherit user;
         image = "docker.io/postgres:15";
         ip = "10.88.10.13";
         podman.sdnotify = "healthy"; # Only notifies 'ready' to systemd when service healthcheck passes.
@@ -114,7 +106,7 @@ in
         };
       };
       "${name}-valkey" = {
-        # inherit user;
+        inherit user;
         image = "docker.io/valkey/valkey:8.1";
         ip = "10.88.10.14";
         podman.sdnotify = "healthy"; # Only notifies 'ready' to systemd when service healthcheck passes.
@@ -128,6 +120,7 @@ in
     };
   system.activationScripts.${name}.text = ''
     mkdir -p ${dataDir}/{data/assets,postgresql/data}
+    chown -R ${user} ${dataDir}
   '';
   # setup dependencies of service orderings and stop
   # services when not needed.

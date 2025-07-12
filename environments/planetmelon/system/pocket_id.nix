@@ -1,27 +1,20 @@
 { config, ... }:
 let
-  inherit (config.users.users.planetmelon-pocket-id) uid;
-  inherit (config.users.groups.planetmelon-pocket-id) gid;
+  inherit (config.users.users.planetmelon) uid;
+  inherit (config.users.groups.planetmelon) gid;
   inherit (config.virtualisation.oci-containers.containers.planetmelon-pocket-id) ip httpPort;
   name = "planetmelon-pocket-id";
   domain = "id.planetmelon.web.id";
+  user = "${toString uid}:${toString gid}";
 in
 {
-  users = {
-    users.${name} = {
-      isSystemUser = true;
-      uid = 920;
-      group = name;
-    };
-    groups.${name}.gid = 920;
-  };
-
   virtualisation.oci-containers.containers.${name} = {
+    inherit user;
     image = "ghcr.io/pocket-id/pocket-id:latest";
     ip = "10.88.10.2";
     httpPort = 1411;
     volumes = [
-      "/var/lib/${name}:/app/data"
+      "/var/lib/planetmelon/pocket-id:/app/data"
     ];
     podman.sdnotify = "healthy";
     extraOptions = [
@@ -38,7 +31,12 @@ in
       ANALYTICS_DISABLED = "true"; # disable analytics
     };
   };
-  systemd.services."podman-${name}".serviceConfig.StateDirectory = name;
+  systemd.services."podman-${name}" = {
+    preStart = ''
+      mkdir -p /var/lib/planetmelon/pocket-id
+      chown -R ${user} /var/lib/planetmelon/pocket-id
+    '';
+  };
   services.anubis.instances.${name}.settings.TARGET = "http://${ip}:${toString httpPort}";
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;

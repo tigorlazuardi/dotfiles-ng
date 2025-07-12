@@ -2,9 +2,9 @@
 let
   name = "planetmelon-huly";
   domain = "huly.planetmelon.web.id";
-  dataDir = "/var/lib/${name}";
-  inherit (config.users.users.${name}) uid;
-  inherit (config.users.groups.${name}) gid;
+  dataDir = "/var/lib/planetmelon/huly";
+  inherit (config.users.users.planetmelon) uid;
+  inherit (config.users.groups.planetmelon) gid;
   user = "${toString uid}:${toString gid}";
 
   # Value is taken from here: https://github.com/hcengineering/huly-selfhost/blob/main/.template.huly.conf
@@ -137,7 +137,7 @@ in
       };
       "${name}-collaborator" = {
         autoStart = false;
-        image = "hardcoreeng/collaborator:${HULY_VERSION}";
+        image = "docker.io/hardcoreeng/collaborator:${HULY_VERSION}";
         ip = "10.88.20.6";
         httpPort = 3078;
         environment = baseEnv // {
@@ -147,7 +147,7 @@ in
       };
       "${name}-account" = {
         autoStart = false;
-        image = "hardcoreeng/account:${HULY_VERSION}";
+        image = "docker.io/hardcoreeng/account:${HULY_VERSION}";
         ip = "10.88.20.7";
         httpPort = 3000;
         environment = baseEnv // {
@@ -160,14 +160,14 @@ in
       };
       "${name}-workspace" = {
         autoStart = false;
-        image = "hardcoreeng/workspace:${HULY_VERSION}";
+        image = "docker.io/hardcoreeng/workspace:${HULY_VERSION}";
         ip = "10.88.20.8";
         environment = baseEnv;
         inherit environmentFiles;
       };
       "${name}-front" = {
         autoStart = false;
-        image = "hardcoreeng/front:${HULY_VERSION}";
+        image = "docker.io/hardcoreeng/front:${HULY_VERSION}";
         ip = "10.88.20.9";
         httpPort = 8080;
         socketActivation = {
@@ -204,7 +204,7 @@ in
       };
       "${name}-fulltext" = {
         autoStart = false;
-        image = "hardcoreeng/fulltext:${HULY_VERSION}";
+        image = "docker.io/hardcoreeng/fulltext:${HULY_VERSION}";
         ip = "10.88.20.10";
         environment = {
           inherit (baseEnv)
@@ -221,7 +221,7 @@ in
       };
       "${name}-stats" = {
         autoStart = false;
-        image = "hardcoreeng/stats:${HULY_VERSION}";
+        image = "docker.io/hardcoreeng/stats:${HULY_VERSION}";
         environment = {
           PORT = "4900";
         };
