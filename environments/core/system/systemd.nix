@@ -51,19 +51,9 @@ let
           };
           command = mkOption {
             type = types.str;
-            default = "${lib.meta.getExe (
-              pkgs.writeShellScriptBin "waitport-${name}" ''
-                attempts=${toString (config.wait.startTimeout * 10)}
-                for i in `seq $attempts`; do
-                  if ${pkgs.netcat}/bin/nc -z ${config.host} ${toString config.port} > /dev/null; then
-                    exit 0
-                  fi
-                  ${pkgs.coreutils}/bin/sleep 0.1
-                done
-                echo "Service ${name} at ${config.host}:${toString config.port} did not become ready within ${toString config.wait.startTimeout} seconds."
-                exit 1
-              ''
-            )}";
+            default = "${lib.meta.getExe pkgs.waitport} ${
+              toString (config.wait.startTimeout * 10)
+            } ${config.host} ${toString config.port}";
             description = "The command to use to wait for the service to be ready. This can be used to customize the waiting behavior, e.g. to use a different tool or command.";
           };
         };
@@ -79,6 +69,19 @@ in
     default = { };
   };
   config = {
+    nixpkgs.overlays = [
+      (self: super: {
+        waitport = super.writeShellScriptBin "waitport" ''
+          for i in `seq $1`; do
+            if ${pkgs.netcat}/bin/nc -z $2 $3 > /dev/null; then
+              exit 0
+            fi
+            ${pkgs.coreutils}/bin/sleep 0.1
+          done
+          exit 1
+        '';
+      })
+    ];
     systemd.services =
       listToAttrs (
         map (
