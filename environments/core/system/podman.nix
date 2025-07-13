@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   imports = [
     # dependency for socket.socketActivations option.
@@ -90,5 +95,10 @@
       networking.firewall.interfaces."podman[0-9]+" = {
         allowedUDPPorts = [ 53 ]; # this needs to be there so that containers can look eachother's names up over DNS
       };
+      environment.systemPackages = [
+        (pkgs.writeShellScriptBin "pod-ips" ''
+          sudo podman inspect --format '{{.Name}} - {{.NetworkSettings.IPAddress}}' $(sudo podman ps -q) | sort -t . -k 3,4
+        '')
+      ];
     };
 }

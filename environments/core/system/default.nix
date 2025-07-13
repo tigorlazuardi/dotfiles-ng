@@ -18,6 +18,7 @@
     ./sops.nix
     ./systemd.nix
     ./user.nix
+    ./utils.nix
     ./zoxide.nix
   ];
   time.timeZone = lib.mkDefault "Asia/Jakarta";
