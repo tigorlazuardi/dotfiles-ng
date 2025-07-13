@@ -12,12 +12,15 @@ in
 {
   sops = {
     secrets."planetmelon/huly/secret".sopsFile = ../../../secrets/planetmelon/huly.yaml;
-    secrets."planetmelon/huly/oidc".sopsFile = ../../../secrets/planetmelon/huly.yaml;
     secrets."planetmelon/huly.env" = {
       sopsFile = ../../../secrets/planetmelon/huly.env;
       format = "dotenv";
       key = "";
     };
+    templates."planetmelon/huly.oidc.env".content = ''
+      OPENID_CLIENT_ID=${config.sops.placeholder."planetmelon/dex/clients/huly/client_id"}
+      OPENID_CLIENT_SECRET=${config.sops.placeholder."planetmelon/dex/clients/huly/client_secret"}
+    '';
   };
   virtualisation.oci-containers.containers =
     let
@@ -30,8 +33,10 @@ in
         STATS_URL = "http://${name}-stats:4900";
         TRANSACTOR_URL = "ws://${name}-transactor:3333;wss://${domain}/_transactor";
         LAST_NAME_FIRST = "true";
+        OPENID_ISSUER = "https://auth.planetmelon.web.id";
       };
       environmentFiles = [
+        config.sops.templates."planetmelon/huly.oidc.env".path
         config.sops.secrets."planetmelon/huly.env".path
       ];
     in

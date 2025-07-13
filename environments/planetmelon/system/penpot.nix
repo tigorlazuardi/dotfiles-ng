@@ -5,11 +5,18 @@ let
   dataDir = "/var/lib/planetmelon/penpot";
 in
 {
-  sops.secrets."planetmelon/penpot.env" = {
-    sopsFile = ../../../secrets/planetmelon/penpot.env;
-    format = "dotenv";
-    key = "";
+  sops.secrets = {
+    "planetmelon/penpot.env" = {
+      sopsFile = ../../../secrets/planetmelon/penpot.env;
+      format = "dotenv";
+      key = "";
+    };
   };
+  sops.templates."planetmelon/penpot.oidc.env".content = ''
+    PENPOT_OIDC_BASE_URI=https://auth.planetmelon.web.id
+    PENPOT_OIDC_CLIENT_ID=${config.sops.placeholder."planetmelon/dex/clients/penpot/client_id"}
+    PENPOT_OIDC_CLIENT_SECRET=${config.sops.placeholder."planetmelon/dex/clients/penpot/client_secret"}
+  '';
   virtualisation.oci-containers.containers =
     let
       penpotEnv = {
@@ -18,8 +25,8 @@ in
           "disable-email-verification"
           "enable-smtp"
           "enable-prepl-server"
-          "disable-secure-session-cookies"
-          "enable-login-with-github"
+          # "enable-login-with-github"
+          "enable-login-with-oidc"
         ];
         PENPOT_ASSETS_STORAGE_BACKEND = "assets-fs";
         PENPOT_BACKEND_URI = "http://${name}-backend:6060";
@@ -58,7 +65,7 @@ in
         ];
         ip = "10.88.10.11";
         environmentFiles = [
-          config.sops.secrets."planetmelon/penpot.env".path
+          config.sops.templates."planetmelon/penpot.oidc.env".path
         ];
         environment = penpotEnv;
       };
