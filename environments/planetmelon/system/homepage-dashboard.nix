@@ -8,8 +8,6 @@ let
   domain = "planetmelon.web.id";
   name = "planetmelon-homepage-dashboard";
   volume = "/var/lib/planetmelon/homepage-dashboard";
-  inherit (config.users.users.planetmelon) uid;
-  user = "${toString uid}:${toString uid}";
   settings = {
     title = "Planet Melon";
     description = "Planet Melon Services";
@@ -24,9 +22,10 @@ let
       {
         "Services" = {
           style = "row";
-          columns = 2;
+          columns = 1;
         };
       }
+      { "Organization" = { }; }
     ];
   };
   services = [
@@ -48,7 +47,19 @@ let
         }
       ];
     }
+    {
+      Organization = [
+        {
+          "Planet Melon" = {
+            description = "Planet Melon Github Base Camp";
+            href = "https://github.com/Planet-Melon";
+            icon = "github.svg";
+          };
+        }
+      ];
+    }
   ];
+  bookmarks = [ ];
   hulyIcon = pkgs.fetchurl {
     url = "https://docs.huly.io/_astro/huly-logo-bw.Dw8a0Ist_ZSPpJP.svg";
     hash = "sha256-RbM6aeMphp3UAR3RbswY6rfc9A4+Bt3RDpD5SqEmeUE=";
@@ -66,7 +77,6 @@ let
 in
 {
   virtualisation.oci-containers.containers.${name} = {
-    inherit user;
     image = "ghcr.io/gethomepage/homepage:latest";
     ip = "10.88.10.254";
     httpPort = 3000;
@@ -77,8 +87,6 @@ in
     ];
     environment = {
       HOMEPAGE_ALLOWED_HOSTS = domain;
-      PUID = toString uid;
-      PGID = toString uid;
     };
   };
   systemd.services."podman-${name}" =
@@ -95,6 +103,7 @@ in
       removes = lib.concatStringsSep " " [
         "${volume}/config/settings.yaml"
         "${volume}/config/services.yaml"
+        "${volume}/config/bookmarks.yaml"
       ];
     in
     {
@@ -103,8 +112,9 @@ in
         rm -f ${removes} || true
         cp ${format.generate "settings.yaml" settings} ${volume}/config/settings.yaml
         cp ${format.generate "services.yaml" services} ${volume}/config/services.yaml
+        cp ${format.generate "bookmarks.yaml" bookmarks} ${volume}/config/bookmarks.yaml
         ${cpIcons}
-        chown -R ${user} ${volume}
+        chown -R 0:0 ${volume}
         chmod -R 700 ${volume}
       '';
     };
