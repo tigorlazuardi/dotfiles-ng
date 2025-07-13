@@ -1,6 +1,7 @@
 {
   imports = [
     ./dex.nix
+    ./homepage-dashboard.nix
     ./huly.nix
     ./nginx.nix
     ./penpot.nix

@@ -8,14 +8,17 @@ let
   domain = "planetmelon.web.id";
   name = "planetmelon-homepage-dashboard";
   volume = "/var/lib/planetmelon/homepage-dashboard";
+  inherit (config.users.users.planetmelon) uid;
+  user = "${toString uid}:${toString uid}";
   settings = {
     title = "Planet Melon";
     description = "Planet Melon Services";
     # Source: https://old.reddit.com/r/NoMansSkyTheGame/comments/1igcetq/found_a_watermelon/
-    background = {
-      image = "https://i.redd.it/kfzvgz40ltge1.jpeg";
-      blur = "sm";
-    };
+    # background = {
+    #   image = "/images/planetmelon.jpg";
+    #   # image = "https://i.redd.it/kfzvgz40ltge1.jpeg";
+    #   blur = "sm";
+    # };
     favicon = "/images/fruit-watermelon.svg";
     layout = [
       {
@@ -36,13 +39,23 @@ let
             icon = "/icons/huly.svg";
           };
         }
-
+        {
+          Penpot = {
+            description = "Figma Alternative Document Designing";
+            href = "https://penpot.planetmelon.web.id";
+            icon = "/icons/penpot.png";
+          };
+        }
       ];
     }
   ];
   hulyIcon = pkgs.fetchurl {
     url = "https://docs.huly.io/_astro/huly-logo-bw.Dw8a0Ist_ZSPpJP.svg";
-    hash = "";
+    hash = "sha256-RbM6aeMphp3UAR3RbswY6rfc9A4+Bt3RDpD5SqEmeUE=";
+  };
+  penpotIcon = pkgs.fetchurl {
+    url = "https://avatars.githubusercontent.com/u/30179644?s=200&v=4";
+    hash = "sha256-F26kOuiQeh8iivkb7wOvMhGsnbfoVZf4z+LzUssZ2rk=";
   };
   favicon =
     # Source: https://pictogrammers.com/library/mdi/icon/fruit-watermelon/
@@ -53,17 +66,19 @@ let
 in
 {
   virtualisation.oci-containers.containers.${name} = {
+    inherit user;
     image = "ghcr.io/gethomepage/homepage:latest";
     ip = "10.88.10.254";
     httpPort = 3000;
     socketActivation.enable = true;
     volumes = [
       "${volume}/config:/app/config"
-      "${volume}/images:/app/public/images"
       "${volume}/icons:/app/public/icons"
     ];
     environment = {
       HOMEPAGE_ALLOWED_HOSTS = domain;
+      PUID = toString uid;
+      PGID = toString uid;
     };
   };
   systemd.services."podman-${name}" =
@@ -72,25 +87,33 @@ in
       icons = {
         "fruit-watermelon.svg" = favicon;
         "huly.svg" = hulyIcon;
+        "penpot.png" = penpotIcon;
       };
       cpIcons = lib.concatMapAttrsStringSep "\n" (
-        name: value: "cp ${value} ${volume}/images/${name}"
+        name: value: "cp ${value} ${volume}/icons/${name} || true"
       ) icons;
-      removes = lib.concatStringsSep " " (
-        [
-          "${volume}/config/settings.yaml"
-          "${volume}/config/services.yaml"
-        ]
-        ++ lib.mapAttrsToList (name: _: "${volume}/icons/${name}") icons
-      );
+      removes = lib.concatStringsSep " " [
+        "${volume}/config/settings.yaml"
+        "${volume}/config/services.yaml"
+      ];
     in
     {
       preStart = ''
-        mkdir -p ${volume}/{config,images,icons}
+        mkdir -p ${volume}/{config,icons}
         rm -f ${removes} || true
         cp ${format.generate "settings.yaml" settings} ${volume}/config/settings.yaml
         cp ${format.generate "services.yaml" services} ${volume}/config/services.yaml
         ${cpIcons}
+        chown -R ${user} ${volume}
+        chmod -R 700 ${volume}
       '';
     };
+  services.anubis.instances.${name}.settings.TARGET = "unix://${
+    config.systemd.socketActivations."podman-${name}".address
+  }";
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    useACMEHost = "planetmelon.web.id";
+    locations."/".proxyPass = "http://unix:${config.services.anubis.instances.${name}.settings.BIND}";
+  };
 }
