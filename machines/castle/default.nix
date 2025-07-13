@@ -19,6 +19,7 @@
 
       ../../environments/ai/home-manager
       ../../environments/bareksa/home-manager
+      ../../environments/game/home-manager
       ../../environments/game-development/home-manager
       ../../environments/nixvim/home-manager
     ];
