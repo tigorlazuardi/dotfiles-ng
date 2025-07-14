@@ -7,23 +7,12 @@
 let
   volume = "/nas/podman/soulseek";
   volumeMusic = "/nas/Syncthing/Sync/Music";
-  inherit (config.users.users.soulseek) uid;
-  inherit (config.users.groups.soulseek) gid;
+  uid = config.users.users.${user.name}.uid;
+  gid = config.users.groups.${user.name}.gid;
 in
 {
-  users = {
-    users.soulseek = {
-      isSystemUser = true;
-      uid = 904;
-      group = "soulseek";
-    };
-    users.syncthing.extraGroups = [ "soulseek" ];
-    users.${user.name}.extraGroups = [ "soulseek" ];
-    groups.soulseek.gid = 904;
-  };
   virtualisation.oci-containers.containers.soulseek = {
     image = "ghcr.io/fletchto99/nicotine-plus-docker:latest";
-    user = "${toString uid}:${toString gid}";
     ip = "10.88.2.4";
     httpPort = 6080;
     volumes = [
