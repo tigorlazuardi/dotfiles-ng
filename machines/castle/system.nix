@@ -30,6 +30,11 @@
     };
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   sops.secrets."smb/credentials/homeserver".sopsFile = ../../secrets/smb.yaml;
   services.printing = {
     enable = true;
