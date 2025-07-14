@@ -8,5 +8,6 @@
     ./stylix.nix
     ./syncthing.nix
     ./vivaldi.nix
+    ./whatsapp.nix
   ];
 }
