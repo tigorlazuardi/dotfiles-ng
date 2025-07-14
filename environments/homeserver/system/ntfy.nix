@@ -7,7 +7,7 @@ in
     enable = true;
     settings =
       let
-        baseDir = "/var/lib/ntfy-sh";
+        baseDir = "/var/lib/private/ntfy-sh";
       in
       {
         base-url = "https://${domain}";

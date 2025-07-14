@@ -32,10 +32,6 @@ in
         '';
     };
   };
-  systemd.services.podman-prowlarr.preStart = ''
-    mkdir -p ${configVolume}
-    chown -R ${toString uid}:${toString gid} ${configVolume}
-  '';
   virtualisation.oci-containers.containers.prowlarr = {
     image = "lscr.io/linuxserver/prowlarr:latest";
     ip = "10.88.3.4";
@@ -49,6 +45,12 @@ in
       TZ = "Asia/Jakarta";
     };
   };
+  systemd.services.podman-prowlarr.preStart = ''
+    mkdir -p ${configVolume}
+    rm -f ${configVolume}/config.xml || true
+    cp ${config.sops.templates."servarr/prowlarr/config.xml".path} ${configVolume}/config.xml || true
+    chown -R ${toString uid}:${toString gid} ${configVolume}
+  '';
   services.nginx.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.prowlarr) ip httpPort;

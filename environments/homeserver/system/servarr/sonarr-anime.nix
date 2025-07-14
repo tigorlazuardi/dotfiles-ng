@@ -31,7 +31,7 @@ in
     secrets."servarr/api_keys/sonarr-anime".sopsFile = ../../../../secrets/servarr.yaml;
     templates."servarr/sonarr-anime/config.xml" = {
       owner = config.users.users.servarr.name;
-      file = (pkgs.formats.xml { }).generate "config.xml" { Config = settings; };
+      content = settings;
     };
   };
   virtualisation.oci-containers.containers.sonarr-anime = {
@@ -39,7 +39,6 @@ in
     ip = "10.88.3.2";
     httpPort = 8989;
     volumes = [
-      "${config.sops.templates."servarr/sonarr-anime/config.xml".path}:/config/config.xml"
       "${configVolume}:/config"
       "${mediaVolume}:/data"
     ];
@@ -51,11 +50,15 @@ in
   };
   systemd.services.podman-sonarr-anime.preStart = ''
     mkdir -p ${configVolume} ${mediaVolume}
+    rm -f ${configVolume}/config.xml || true
+    cp ${
+      config.sops.templates."servarr/sonarr-anime/config.xml".path
+    } ${configVolume}/config.xml || true
     chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
   '';
   services.nginx.virtualHosts =
     let
-      inherit (config.virtualisation.oci-containers.containers.sonarr) ip httpPort;
+      inherit (config.virtualisation.oci-containers.containers.sonarr-anime) ip httpPort;
       proxyPass = "http://${ip}:${toString httpPort}";
     in
     {
@@ -63,6 +66,7 @@ in
         forceSSL = true;
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
+        locations."/api".proxyPass = proxyPass;
       };
       "sonarr-anime.local".locations."/".proxyPass = proxyPass;
     };

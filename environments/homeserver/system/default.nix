@@ -7,7 +7,7 @@
     ./anubis.nix
     ./db-gate.nix
     ./flaresolverr.nix
-    ./forgejo.nix
+    # ./forgejo.nix
     ./homepage-dashboard.nix
     ./immich.nix
     ./jdownloader.nix

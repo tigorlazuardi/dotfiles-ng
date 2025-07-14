@@ -40,7 +40,6 @@ in
     ip = "10.88.3.1";
     httpPort = 8989;
     volumes = [
-      "${config.sops.templates."servarr/sonarr/config.xml".path}:/config/config.xml"
       "${configVolume}:/config"
       "${mediaVolume}:/data"
     ];
@@ -52,6 +51,8 @@ in
   };
   systemd.services.podman-sonarr.preStart = ''
     mkdir -p ${configVolume} ${mediaVolume}
+    rm -rf ${configVolume}/config.xml || true
+    cp ${config.sops.templates."servarr/sonarr/config.xml".path} ${configVolume}/config.xml
     chown -R ${toString uid}:${toString gid} ${configVolume}
   '';
   # rm -rf ${configVolume}/config.xml || true
