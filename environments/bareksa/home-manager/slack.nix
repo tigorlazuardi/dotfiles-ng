@@ -21,7 +21,9 @@
 
         # Only run during office hours: Mon-Fri (1-5), 8 AM - 5 PM (08-17)
         if [ "$weekdayNum" -ge 1 ] && [ "$weekdayNum" -le 5 ] && [ "$hour" -ge 8 ] && [ "$hour" -lt 17 ]; then
-          ${pkgs.netcat}/bin/nc --zero slack.com 443
+          until ${pkgs.netcat}/bin/nc -z slack.com 443; do
+            sleep 0.1
+          done
           ${pkgs.slack}/bin/slack "$@"
         fi
       '';
