@@ -19,6 +19,8 @@
       ../../environments/desktop/home-manager
       ../../environments/nixvim/home-manager
       ../../environments/ai/home-manager
+
+      ./home-manager.nix
     ];
   };
 
