@@ -11,7 +11,6 @@ in
     image = "docker.io/linuxserver/qbittorrent:latest";
     ip = "10.88.3.7";
     httpPort = 8080;
-    user = "${toString uid}:${toString gid}";
     environment = {
       PUID = toString uid;
       PGID = toString gid;
@@ -27,10 +26,16 @@ in
       "6882:6882/udp"
     ];
   };
-  systemd.services."podman-qbittorrent-servarr".serviceConfig = {
-    CPUWeight = 10;
-    CPUQuota = "10%";
-    IOWeight = 50;
+  systemd.services.podman-qbittorrent-servarr = {
+    preStart = ''
+      mkdir -p ${configVolume} ${mediaVolume}
+      chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
+    '';
+    serviceConfig = {
+      CPUWeight = 10;
+      CPUQuota = "10%";
+      IOWeight = 50;
+    };
   };
   services.nginx.virtualHosts =
     let

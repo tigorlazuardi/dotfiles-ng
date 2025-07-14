@@ -83,7 +83,6 @@ in
   };
   virtualisation.oci-containers.containers.recyclarr = {
     image = "ghcr.io/recyclarr/recyclarr:latest";
-    user = "${toString uid}:${toString gid}";
     environment = {
       TZ = "Asia/Jakarta";
     };
@@ -93,6 +92,10 @@ in
       "${configVolume}:/config"
     ];
   };
+  systemd.services.podman-recyclarr.preStart = ''
+    mkdir -p ${configVolume}
+    chown -R ${toString uid}:${toString gid} ${configVolume}
+  '';
   system.activationScripts.recyclarr = ''
     mkdir -p ${configVolume} 
     chown ${toString uid}:${toString gid} ${configVolume}

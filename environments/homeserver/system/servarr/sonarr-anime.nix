@@ -1,22 +1,25 @@
 { config, pkgs, ... }:
 let
   domain = "sonarr-anime.tigor.web.id";
-  settings = {
-    BindAddress = "*";
-    Port = 8989;
-    EnableSsl = "False";
-    LaunchBrowser = "False";
-    ApiKey = config.sops.placeholder."servarr/api_keys/sonarr-anime";
-    AuthenticationMethod = "External"; # We let tineyauth handle authentication.
-    AuthenticationRequired = "Disabled";
-    Branch = "main";
-    LogLevel = "info";
-    SslCertPath = "";
-    SslCertPassword = "";
-    UrlBase = "";
-    InstanceName = "Sonarr Anime";
-    UpdateMechanism = "Docker";
-  };
+  settings = # xml
+    ''
+      <Config>
+        <ApiKey>${config.sops.placeholder."servarr/api_keys/sonarr-anime"}</ApiKey>
+        <AuthenticationMethod>External</AuthenticationMethod>
+        <AuthenticationRequired>Enabled</AuthenticationRequired>
+        <BindAddress>*</BindAddress>
+        <Branch>main</Branch>
+        <EnableSsl>False</EnableSsl>
+        <InstanceName>Sonarr Anime</InstanceName>
+        <LaunchBrowser>False</LaunchBrowser>
+        <LogLevel>info</LogLevel>
+        <Port>8989</Port>
+        <SslCertPassword></SslCertPassword>
+        <SslCertPath></SslCertPath>
+        <UpdateMechanism>Docker</UpdateMechanism>
+        <UrlBase></UrlBase>
+      </Config>
+    '';
   root = "/nas/mediaserver/servarr";
   configVolume = "${root}/sonarr-anime";
   mediaVolume = "${root}/data";
@@ -34,7 +37,7 @@ in
   virtualisation.oci-containers.containers.sonarr-anime = {
     image = "lscr.io/linuxserver/sonarr:latest";
     ip = "10.88.3.2";
-    httpPort = settings.Port;
+    httpPort = 8989;
     volumes = [
       "${config.sops.templates."servarr/sonarr-anime/config.xml".path}:/config/config.xml"
       "${configVolume}:/config"
@@ -46,7 +49,7 @@ in
       TZ = "Asia/Jakarta";
     };
   };
-  system.activationScripts.sonarr-anime = ''
+  systemd.services.podman-sonarr-anime.preStart = ''
     mkdir -p ${configVolume} ${mediaVolume}
     chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
   '';
@@ -67,7 +70,6 @@ in
     description = "Info fetcher and grabber for Anime";
     href = "https://${domain}";
     icon = "sonarr.svg";
-    user = "${toString uid}:${toString gid}";
     widget = {
       type = "sonarr";
       url = "http://sonarr-anime.local";

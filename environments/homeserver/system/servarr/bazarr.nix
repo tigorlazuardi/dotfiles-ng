@@ -6,7 +6,6 @@ let
   root = "/nas/mediaserver/servarr";
   configVolume = "${root}/bazarr";
   mediaVolume = "${root}/data";
-  user = "${toString uid}:${toString gid}";
 in
 {
   virtualisation.oci-containers.containers.bazarr = {
@@ -23,9 +22,9 @@ in
     ip = "10.88.3.5";
     httpPort = 6767;
   };
-  system.activationScripts.bazarr = ''
-    mkdir -p ${configVolume}
-    chown ${user} ${mediaVolume} ${configVolume}
+  systemd.services.podman-bazarr.preStart = ''
+    mkdir -p ${configVolume} ${mediaVolume}
+    chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
   '';
   services.nginx.virtualHosts =
     let
@@ -41,7 +40,6 @@ in
       "bazarr.local".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Bazarr.settings = {
-    inherit user;
     description = "Subtitle downloader and manager for the servarr stack";
     href = "https://${domain}";
     icon = "bazarr.svg";

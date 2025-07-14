@@ -1,22 +1,26 @@
 { config, pkgs, ... }:
 let
   domain = "sonarr.tigor.web.id";
-  settings = {
-    BindAddress = "*";
-    Port = 8989;
-    EnableSsl = "False";
-    LaunchBrowser = "False";
-    ApiKey = config.sops.placeholder."servarr/api_keys/sonarr";
-    AuthenticationMethod = "External"; # We let tineyauth handle authentication.
-    AuthenticationRequired = "Disabled";
-    Branch = "main";
-    LogLevel = "info";
-    SslCertPath = "";
-    SslCertPassword = "";
-    UrlBase = "";
-    InstanceName = "Sonarr";
-    UpdateMechanism = "Docker";
-  };
+  settings = # xml
+    ''
+      <Config>
+        <BindAddress>*</BindAddress>
+        <Port>8989</Port>
+        <SslPort>9898</SslPort>
+        <EnableSsl>False</EnableSsl>
+        <LaunchBrowser>True</LaunchBrowser>
+        <ApiKey>${config.sops.placeholder."servarr/api_keys/sonarr"}</ApiKey>
+        <AuthenticationMethod>External</AuthenticationMethod>
+        <AuthenticationRequired>Enabled</AuthenticationRequired>
+        <Branch>main</Branch>
+        <LogLevel>debug</LogLevel>
+        <SslCertPath></SslCertPath>
+        <SslCertPassword></SslCertPassword>
+        <UrlBase></UrlBase>
+        <InstanceName>Sonarr</InstanceName>
+        <UpdateMechanism>Docker</UpdateMechanism>
+      </Config>
+    '';
   root = "/nas/mediaserver/servarr";
   configVolume = "${root}/sonarr";
   mediaVolume = "${root}/data";
@@ -28,13 +32,13 @@ in
     secrets."servarr/api_keys/sonarr".sopsFile = ../../../../secrets/servarr.yaml;
     templates."servarr/sonarr/config.xml" = {
       owner = config.users.users.servarr.name;
-      file = (pkgs.formats.xml { }).generate "config.xml" { Config = settings; };
+      content = settings;
     };
   };
   virtualisation.oci-containers.containers.sonarr = {
     image = "lscr.io/linuxserver/sonarr:latest";
     ip = "10.88.3.1";
-    httpPort = settings.Port;
+    httpPort = 8989;
     volumes = [
       "${config.sops.templates."servarr/sonarr/config.xml".path}:/config/config.xml"
       "${configVolume}:/config"
@@ -46,10 +50,12 @@ in
       TZ = "Asia/Jakarta";
     };
   };
-  system.activationScripts.sonarr = ''
+  systemd.services.podman-sonarr.preStart = ''
     mkdir -p ${configVolume} ${mediaVolume}
-    chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
+    chown -R ${toString uid}:${toString gid} ${configVolume}
   '';
+  # rm -rf ${configVolume}/config.xml || true
+  # cp ${config.sops.templates."servarr/sonarr/config.xml".path} ${configVolume}/config.xml
   services.nginx.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.sonarr) ip httpPort;
@@ -67,7 +73,6 @@ in
     description = "Info fetcher and grabber of TV Shows";
     href = "https://${domain}";
     icon = "sonarr.svg";
-    user = "${toString uid}:${toString gid}";
     widget = {
       type = "sonarr";
       url = "http://sonarr.local";

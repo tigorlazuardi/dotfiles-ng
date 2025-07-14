@@ -36,7 +36,6 @@ in
   };
   virtualisation.oci-containers.containers.radarr = {
     image = "lscr.io/linuxserver/radarr:latest";
-    user = "${toString uid}:${toString gid}";
     environment = {
       PUID = toString uid;
       PGID = toString gid;
@@ -45,6 +44,7 @@ in
     ip = "10.88.3.3";
     httpPort = 7878;
     volumes = [
+      "${config.sops.templates."servarr/radarr/config.xml".path}:/config/config.xml"
       "${configVolume}:/config"
       "${mediaVolume}:/data"
     ];
@@ -53,9 +53,6 @@ in
     ''
       mkdir -p ${configVolume} ${mediaVolume}
       chown -R ${toString uid}:${toString gid} ${configVolume} ${mediaVolume}
-      rm -rf ${configVolume}/config.xml || true
-      cp ${config.sops.templates."servarr/radarr/config.xml".path} ${configVolume}/config.xml
-      chown -R ${toString uid}:${toString gid} ${configVolume}/config.xml
     '';
   services.nginx.virtualHosts =
     let
