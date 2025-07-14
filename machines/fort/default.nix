@@ -15,10 +15,12 @@
   home-manager.users.${user.name} = {
     imports = [
       ../../environments/core/home-manager
-      ../../environments/bareksa/home-manager
       ../../environments/desktop/home-manager
+
+      ../../environments/bareksa/home-manager
       ../../environments/nixvim/home-manager
       ../../environments/ai/home-manager
+      ../../environments/game-development/home-manager
 
       ./home-manager.nix
     ];
