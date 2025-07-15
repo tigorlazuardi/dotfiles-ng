@@ -132,5 +132,19 @@
             }
           ''
         ) devices);
+      security.sudo.extraRules = [
+        {
+          users = [ user.name ];
+          commands = [
+            {
+              command = "${pkgs.wireguard-tools}/bin/wg-quick";
+              options = [
+                "SETENV"
+                "NOPASSWD"
+              ];
+            }
+          ];
+        }
+      ];
     };
 }
