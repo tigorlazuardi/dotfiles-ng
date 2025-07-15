@@ -5,6 +5,7 @@
     ./jellyfin.nix
     ./mpv.nix
     ./neovide.nix
+    ./spotify.nix
     ./stylix.nix
     ./syncthing.nix
     ./vivaldi.nix
