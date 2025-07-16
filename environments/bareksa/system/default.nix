@@ -1,9 +1,10 @@
 {
   imports = [
-    ./db-gate.nix
-    ./openvpn.nix
     ./akhq.nix
+    ./db-gate.nix
+    ./networking.nix
     ./nginx.nix
+    ./openvpn.nix
+    ./resolved.nix
   ];
-  networking.extraHosts = "192.168.50.217 gitlab.bareksa.com";
 }
