@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 let
   settings = {
     akhq = {
@@ -37,25 +42,23 @@ in
       sopsFile = ../../../secrets/bareksa.yaml;
     };
   };
-  sops.templates."bareksa/akhq/configuration.yml".file =
-    (pkgs.formats.yaml { }).generate "config.yaml"
-      settings;
+  sops.templates."bareksa/akhq/application.yml" = {
+    file = (pkgs.formats.yaml { }).generate "config.yaml" settings;
+    mode = "0444";
+  };
   virtualisation.oci-containers.containers.bareksa-akhq = {
     image = "docker.io/tchiotludo/akhq:latest";
     ip = "10.88.200.2";
     httpPort = 8080;
     socketActivation.enable = true;
     volumes = [
-      "/var/lib/podman-bareksa-akhq/app:/app"
+      "${config.sops.templates."bareksa/akhq/application.yml".path}:/app/application.yml"
       "${config.sops.secrets."aiven.bareksa.p12".path}:/aiven.bareksa.p12"
       "${config.sops.secrets."aiven.keystore.jks".path}:/aiven.keystore.jks"
     ];
   };
   systemd.services.podman-bareksa-akhq.preStart = ''
     mkdir -p /var/lib/podman-bareksa-akhq/app
-    cp ${
-      config.sops.templates."bareksa/akhq/configuration.yml".path
-    } /var/lib/podman-bareksa-akhq/app/configuration.yml
   '';
   services.nginx.virtualHosts."kafka.bareksa.local".locations."/".proxyPass =
     "http://unix:${config.systemd.socketActivations.podman-bareksa-akhq.address}";
