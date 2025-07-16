@@ -47,7 +47,7 @@ in
     mode = "0444";
   };
   virtualisation.oci-containers.containers.bareksa-akhq = {
-    image = "docker.io/tchiotludo/akhq:latest";
+    image = "ghcr.io/kafbat/kafka-ui:main";
     ip = "10.88.200.2";
     httpPort = 8080;
     socketActivation.enable = true;

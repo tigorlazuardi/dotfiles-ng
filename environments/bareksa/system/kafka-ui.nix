@@ -18,18 +18,15 @@ let
         }
         {
           name = "Bareksa Aiven";
-          #bootstrapServers = "@PRODUCTION_SERVERS@";
           bootstrapServers = config.sops.placeholder."bareksa/aiven/kafka/host";
           readOnly = true;
           properties = {
             security.protocol = "SSL";
             ssl.truststore.location = "/aiven.keystore.jks";
             ssl.truststore.password = config.sops.placeholder."bareksa/aiven/kafka/truststore/password";
-            #ssl.truststore.password = "@TRUSTSTORE_PASSWORD@";
             ssl.keystore.type = "PKCS12";
             ssl.keystore.location = "/aiven.bareksa.p12";
             ssl.keystore.password = config.sops.placeholder."bareksa/aiven/kafka/truststore/password";
-            #ssl.keystore.password = "@KEYSTORE_PASSWORD@";
           };
         }
       ];
@@ -42,10 +39,12 @@ in
     "aiven.bareksa.p12" = {
       format = "binary";
       sopsFile = ../../../secrets/bareksa/aiven.bareksa.p12;
+      mode = "0444";
     };
     "aiven.keystore.jks" = {
       format = "binary";
       sopsFile = ../../../secrets/bareksa/aiven.truststore.jks;
+      mode = "0444";
     };
     "bareksa/aiven/kafka/truststore/password" = {
       sopsFile = ../../../secrets/bareksa.yaml;
@@ -54,7 +53,10 @@ in
       sopsFile = ../../../secrets/bareksa.yaml;
     };
   };
-  sops.templates."bareksa/kafka-ui/config.yaml".file = yaml.generate "config.yaml" settings;
+  sops.templates."bareksa/kafka-ui/config.yaml" = {
+    file = yaml.generate "config.yaml" settings;
+    mode = "0444";
+  };
   virtualisation.oci-containers.containers.bareksa-kafka-ui = {
     image = "docker.io/provectuslabs/kafka-ui:latest";
     ip = "10.88.200.2";
@@ -65,6 +67,9 @@ in
       "${config.sops.secrets."aiven.keystore.jks".path}:/aiven.keystore.jks"
     ];
     socketActivation.enable = true;
+    environment = {
+      SPRING_CONFIG_ADDITIONAL-LOCATION = "/config.yaml";
+    };
   };
   services.nginx.virtualHosts."kafka.bareksa.local".locations."/".proxyPass =
     "http://unix:${config.systemd.socketActivations.podman-bareksa-kafka-ui.address}";
