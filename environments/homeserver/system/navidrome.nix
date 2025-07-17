@@ -18,6 +18,7 @@ in
       Address = "127.0.0.1";
       MusicFolder = "/nas/Syncthing/Sync/Music";
       SessionTimeout = "8760h"; # 1 Year. Authentication will be handled by TinyAuth.
+      ReverseProxyWhitelist = "0.0.0.0/0,::/0"; # This service is only accessible via reverse proxy.
     };
   };
   systemd.socketActivations.navidrome =
@@ -39,8 +40,8 @@ in
         in
         {
           "/".proxyPass = "http://unix:${address}";
-          "/api".proxyPass = "http://unix:${address}";
-          "/rest".proxyPass = "http://unix:${address}";
+          # "/api".proxyPass = "http://unix:${address}";
+          "/rest".proxyPass = "http://unix:${address}"; # Subsonic API endpoint. Let Navidrome handle this.
         };
     };
   };
