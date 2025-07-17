@@ -23,6 +23,8 @@
       ../../environments/game-development/home-manager
       ../../environments/nixvim/home-manager
 
+      ../../environments/desktop/home-manager/optional/obs-studio.nix
+
       ./home-manager.nix
     ];
   };
