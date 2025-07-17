@@ -7,22 +7,22 @@
     ];
 
     plugins = {
-      lazydev = {
-        enable = true;
-        lazyLoad.settings.ft = [ "lua" ];
-      };
+      # lazydev = {
+      #   enable = true;
+      #   lazyLoad.settings.ft = [ "lua" ];
+      # };
       conform-nvim.settings.formatters_by_ft.lua = [ "stylua" ];
-      blink-cmp.settings.sources = {
-        default = [ "lazydev" ];
-        providers = {
-          lazydev = {
-            name = "LazyDev";
-            module = "lazydev.integrations.blink";
-            # make lazydev completions top priority (see `:h blink.cmp`)
-            score_offset = 100;
-          };
-        };
-      };
+      # blink-cmp.settings.sources = {
+      #   default = [ "lazydev" ];
+      #   providers = {
+      #     lazydev = {
+      #       name = "LazyDev";
+      #       module = "lazydev.integrations.blink";
+      #       # make lazydev completions top priority (see `:h blink.cmp`)
+      #       score_offset = 100;
+      #     };
+      #   };
+      # };
     };
   };
 }

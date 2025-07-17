@@ -159,6 +159,7 @@
       settings = {
         enable = true;
         max_lines = 1;
+        trim_scope = "inner"; # Always show the current function.
       };
       lazyLoad.settings.event = [
         "BufReadPost"
@@ -167,7 +168,7 @@
       ];
     };
     treesitter-textobjects = {
-      enable = true;
+      enable = false;
       move = {
         enable = true;
         gotoNextStart = {
