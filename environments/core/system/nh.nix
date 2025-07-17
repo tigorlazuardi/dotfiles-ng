@@ -7,4 +7,18 @@
     clean.dates = "weekly";
     flake = "/home/${user.name}/dotfiles";
   };
+  security.sudo.extraRules = [
+    {
+      users = [ user.name ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nh";
+          options = [
+            "SETENV"
+            "NOPASSWD"
+          ];
+        }
+      ];
+    }
+  ];
 }

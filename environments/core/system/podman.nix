@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  user,
   ...
 }:
 {
@@ -99,6 +100,20 @@
         (pkgs.writeShellScriptBin "pod-ips" ''
           sudo podman inspect --format '{{.Name}} - {{.NetworkSettings.IPAddress}}' $(sudo podman ps -q) | sort -t . -k 3,4
         '')
+      ];
+      security.sudo.extraRules = [
+        {
+          users = [ user.name ];
+          commands = [
+            {
+              command = "/run/current-system/sw/bin/podman";
+              options = [
+                "SETENV"
+                "NOPASSWD"
+              ];
+            }
+          ];
+        }
       ];
     };
 }

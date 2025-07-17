@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  user,
   ...
 }:
 let
@@ -131,5 +132,26 @@ in
         }
       ) names
     );
+    security.sudo.extraRules = [
+      {
+        users = [ user.name ];
+        commands = [
+          {
+            command = "/run/current-system/sw/bin/systemctl";
+            options = [
+              "SETENV"
+              "NOPASSWD"
+            ];
+          }
+          {
+            command = "/run/current-system/sw/bin/journalctl";
+            options = [
+              "SETENV"
+              "NOPASSWD"
+            ];
+          }
+        ];
+      }
+    ];
   };
 }

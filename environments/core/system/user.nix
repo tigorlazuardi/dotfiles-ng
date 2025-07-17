@@ -44,6 +44,25 @@
   users.groups.${user.name}.gid = 1000;
   programs.fish.enable = config.users.users.${user.name}.shell == pkgs.fish;
   nix.settings.trusted-users = [ user.name ];
+  security.sudo.extraRules = [
+    {
+      users = [ user.name ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/reboot";
+          options = [
+            "NOPASSWD"
+          ];
+        }
+        {
+          command = "/run/current-system/sw/bin/shutdown";
+          options = [
+            "NOPASSWD"
+          ];
+        }
+      ];
+    }
+  ];
 
   # Alternative to systemd sysusers for creating users.
   #
