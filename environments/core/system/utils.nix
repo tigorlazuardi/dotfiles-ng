@@ -7,7 +7,16 @@
         export NIXPKGS_ALLOW_UNFREE=1
         build_path=$(nix build "nixpkgs#$1" --impure --no-link --print-out-paths)
         shift 1
-        ${fd}/bin/fd --color=always --type f "$@" . $build_path
+        ${fd}/bin/fd --type f "$@" . $build_path
+      ''
+    )
+    # packopen opens the build path of a package in a file manager if it's directory, an image viewer if it's an image, or a text editor if it's a text file.
+    (writeShellScriptBin "packopen" # sh
+      ''
+        set -e
+        export NIXPKGS_ALLOW_UNFREE=1
+        build_path=$(nix build "nixpkgs#$1" --impure --no-link --print-out-paths)
+        ${xdg-utils}/bin/xdg-open $build_path
       ''
     )
     (writeShellScriptBin "build" # sh

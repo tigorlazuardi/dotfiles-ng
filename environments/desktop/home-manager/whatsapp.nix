@@ -5,7 +5,7 @@
 }:
 {
   home.packages = with pkgs; [
-    whatsie
+    wasistlos
   ];
 
   home.file.".config/autostart/whatsapp.desktop".source =
@@ -14,12 +14,12 @@
         until ${pkgs.netcat}/bin/nc -z web.whatsapp.com 443 > /dev/null; do
           sleep 0.1
         done
-        ${pkgs.whatsie}/bin/whatsie
+        ${pkgs.wasistlos}/bin/wasistlos
       '';
       inherit (lib.meta) getExe;
     in
     (pkgs.runCommand "whatsapp" { }) # sh
       ''
-        sed -e 's#Exec=.*#Exec=${getExe script}#' ${pkgs.whatsie}/share/applications/whatsie.desktop > $out
+        sed -e 's#Exec=.*#Exec=${getExe script}#' ${pkgs.wasistlos}/share/applications/com.github.xeco23.WasIstLos.desktop > $out
       '';
 }
