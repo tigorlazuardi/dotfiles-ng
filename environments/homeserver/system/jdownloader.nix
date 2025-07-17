@@ -60,8 +60,16 @@ in
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     tinyauth.locations = [ "/" ];
-    locations."/".proxyPass =
-      "http://unix:${config.systemd.socketActivations.podman-jdownloader.address}";
+    locations."/" = {
+      proxyPass = "http://unix:${config.systemd.socketActivations.podman-jdownloader.address}";
+      # Prevent nginx from timing out connections to JDownloader
+      extraConfig = # nginx
+        ''
+          proxy_read_timeout 1d;
+          proxy_connect_timeout 1d;
+          proxy_send_timeout 1d;
+        '';
+    };
   };
   services.homepage-dashboard.groups."Media Collectors".services.Jdownloader.settings = {
     description = "Download automation and link enqueuer for various file hosting services";
