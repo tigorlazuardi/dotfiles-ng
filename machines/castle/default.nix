@@ -24,6 +24,7 @@
       ../../environments/nixvim/home-manager
 
       ../../environments/desktop/home-manager/optional/obs-studio.nix
+      ../../environments/desktop/home-manager/optional/supersonic.nix
 
       ./home-manager.nix
     ];
