@@ -1,5 +1,8 @@
 { pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    difftastic
+  ];
   programs.git = {
     enable = true;
     extraConfig = {
