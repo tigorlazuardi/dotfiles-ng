@@ -7,7 +7,10 @@ in
 {
   services.alloy = {
     enable = true;
-    extraFlags = [ ''--server.http.listen-addr=${guiListenAddress}'' ];
+    extraFlags = [
+      ''--server.http.listen-addr=${guiListenAddress}''
+      "--disable-reporting"
+    ];
   };
   services.nginx.virtualHosts = {
     "${domain}" = {
