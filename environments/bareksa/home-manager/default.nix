@@ -5,6 +5,7 @@
 
     ./bruno.nix
     ./git.nix
+    ./go.nix
     ./openvpn.nix
     ./slack.nix
     ./zoom.nix
