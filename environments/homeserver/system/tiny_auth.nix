@@ -116,10 +116,12 @@
       httpPort = 3000;
       environment = {
         APP_URL = "https://auth.tigor.web.id";
+        APP_TITLE = "Homeserver";
         USERS_FILE = "/users";
         SECRET_FILE = "/secret";
         COOKIE_SECURE = "true";
         DISABLE_CONTINUE = "true"; # skips the annoying continue page.
+        SESSION_EXPIRY = toString (30 * 24 * 60 * 60); # 30 days
       };
       environmentFiles = [
         config.sops.templates."tinyauth/main/env".path
