@@ -12,25 +12,21 @@ in
       group = "memos";
     };
   };
-  virtualisation.oci-containers.containers.memos =
-    let
-      inherit (config.users.groups.memos) gid;
-      inherit (config.users.users.memos) uid;
-    in
-    {
-      image = "docker.io/neosmemo/memos:stable";
-      user = "${toString uid}:${toString gid}";
-      ip = "10.88.5.1";
-      httpPort = 5230;
-      volumes = [
-        "/var/lib/memos:/var/opt/memos"
-      ];
-      socketActivation = {
-        enable = true;
-        idleTimeout = "1m";
-      };
+  virtualisation.oci-containers.containers.memos = {
+    image = "docker.io/neosmemo/memos:stable";
+    ip = "10.88.5.1";
+    httpPort = 5230;
+    volumes = [
+      "/var/lib/memos:/var/opt/memos"
+    ];
+    socketActivation = {
+      enable = true;
+      idleTimeout = "15m";
     };
-  systemd.services.podman-memos.serviceConfig.StateDirectory = "memos";
+  };
+  systemd.services.podman-memos.preStart = ''
+    mkdir -p /var/lib/memos
+  '';
   services.anubis.instances.memos.settings.TARGET =
     "unix://${config.systemd.socketActivations.podman-memos.address}";
   services.nginx.virtualHosts."${domain}" = {
