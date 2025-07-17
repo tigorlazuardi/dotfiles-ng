@@ -87,10 +87,7 @@
         })
       ) socketActivatedContainers;
       virtualisation.podman = {
-        autoPrune = {
-          enable = true;
-          flags = [ "--all" ];
-        };
+        autoPrune.enable = true;
         defaultNetwork.settings.dns_enabled = true;
       };
       networking.firewall.interfaces."podman[0-9]+" = {
