@@ -63,7 +63,15 @@ in
     {
       forceSSL = true;
       tinyauth.locations = [ "/" ];
-      locations."/".proxyPass = "http://${ip}:${toString httpPort}";
+      locations."/" = {
+        proxyPass = "http://${ip}:${toString httpPort}";
+        extraConfig = # nginx
+          ''
+            proxy_read_timeout 1d;
+            proxy_send_timeout 1d;
+            proxy_connect_timeout 1d;
+          '';
+      };
     };
   services.homepage-dashboard.groups."Media Collectors".services."Soulseek (Nicotine+)".settings = {
     description = "Share and Download Music";
