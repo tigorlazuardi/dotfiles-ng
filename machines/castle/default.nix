@@ -22,6 +22,8 @@
       ../../environments/game/home-manager
       ../../environments/game-development/home-manager
       ../../environments/nixvim/home-manager
+
+      ./home-manager.nix
     ];
   };
 
