@@ -15,6 +15,7 @@
     ./jellyseerr.nix
     ./mailhog.nix
     ./memos.nix
+    ./musicbrainz.nix
     ./navidrome.nix
     ./nginx.nix
     ./ntfy.nix

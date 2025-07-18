@@ -164,7 +164,7 @@ in
             };
             Utilities.settings = {
               style = "row";
-              columns = 3;
+              columns = 4;
             };
           };
           settings = {
@@ -180,6 +180,7 @@ in
                 }) sortedGroups;
               in
               layout;
+            hideErrors = true;
           };
           services =
             let
