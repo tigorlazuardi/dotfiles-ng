@@ -1,4 +1,7 @@
 { config, ... }:
+let
+  inherit (config.virtualisation.oci-containers.containers.pocket-id) ip httpPort;
+in
 {
   users = {
     users.pocket-id = {
@@ -33,15 +36,12 @@
     };
   };
   systemd.services.podman-pocket-id.serviceConfig.StateDirectory = "pocket-id";
-  services.nginx.virtualHosts."id.tigor.web.id" =
-
-    let
-      inherit (config.virtualisation.oci-containers.containers.pocket-id) ip httpPort;
-    in
-    {
-      forceSSL = true;
-      locations."/".proxyPass = "http://${ip}:${toString httpPort}";
-    };
+  services.anubis.instances.podman-pocket-id.settings.TARGET = "http://${ip}:${toString httpPort}";
+  services.nginx.virtualHosts."id.tigor.web.id" = {
+    forceSSL = true;
+    locations."/".proxyPass =
+      "http://unix:${config.services.anubis.instances.podman-pocket-id.settings.BIND}";
+  };
   services.homepage-dashboard.groups.Security.services."Pocket-Id".settings = {
     href = "https://id.tigor.web.id";
     description = "OAuth2 Provider with exclusive support using Passkeys";

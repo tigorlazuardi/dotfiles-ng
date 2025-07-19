@@ -1,4 +1,7 @@
 { config, lib, ... }:
+let
+  inherit (config.virtualisation.oci-containers.containers.tiny-auth) ip httpPort;
+in
 {
   options =
     let
@@ -138,14 +141,12 @@
       ];
     };
 
-    services.nginx.virtualHosts."auth.tigor.web.id" =
-      let
-        inherit (config.virtualisation.oci-containers.containers.tiny-auth) ip httpPort;
-      in
-      {
-        forceSSL = true;
-        locations."/".proxyPass = "http://${ip}:${toString httpPort}";
-      };
+    services.anubis.instances.podman-tinyauth.settings.TARGET = "http://${ip}:${toString httpPort}";
+    services.nginx.virtualHosts."auth.tigor.web.id" = {
+      forceSSL = true;
+      locations."/".proxyPass =
+        "http://unix:${config.services.anubis.instances.podman-tinyauth.settings.BIND}";
+    };
 
     services.homepage-dashboard.groups.Security.services."Tiny Auth".settings = {
       href = "https://auth.tigor.web.id";

@@ -31,6 +31,7 @@ in
   services.anubis.defaultOptions.settings = {
     COOKIE_DYNAMIC_DOMAIN = true;
     ED25519_PRIVATE_KEY_HEX_FILE = config.sops.secrets."anubis/private_key".path;
+    SERVE_ROBOTS_TXT = true;
   };
 
   services.homepage-dashboard = {
