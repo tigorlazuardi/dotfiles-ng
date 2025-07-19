@@ -19,6 +19,7 @@
     ./navidrome.nix
     ./nginx.nix
     ./ntfy.nix
+    ./paperless-ngx.nix
     ./pocket_id.nix
     ./qbittorrent.nix
     ./redmage.nix
