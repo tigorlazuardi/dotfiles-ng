@@ -12,6 +12,6 @@
       group = "grandboard";
       uid = 951;
     };
-    groups.planetmelon.gid = 951;
+    groups.grandboard.gid = 951;
   };
 }

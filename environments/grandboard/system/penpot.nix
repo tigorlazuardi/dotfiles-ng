@@ -20,6 +20,7 @@ in
           "enable-smtp"
           "enable-prepl-server"
           "enable-login-with-oidc"
+          "disable-login-with-password"
         ];
         PENPOT_ASSETS_STORAGE_BACKEND = "assets-fs";
         PENPOT_BACKEND_URI = "http://${name}-backend:6060";

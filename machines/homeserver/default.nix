@@ -4,6 +4,7 @@
     ../../environments/core/system
     ../../environments/homeserver/system
     ../../environments/planetmelon/system
+    ../../environments/grandboard/system
 
     ./hardware.nix
     ./system.nix
