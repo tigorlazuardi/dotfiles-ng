@@ -30,6 +30,7 @@
     lrzip
     lzop
     zstd
+    kdePackages.filelight
   ];
   programs.kdeconnect.enable = true; # KDE Connect integration
 }
