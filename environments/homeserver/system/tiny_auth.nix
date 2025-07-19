@@ -86,9 +86,9 @@ in
                         auth_request_set $tinyauth_remote_user $upstream_http_remote_user;
                         auth_request_set $tinyauth_remote_groups $upstream_http_remote_groups;
                         auth_request_set $tinyauth_remote_email $upstream_http_remote_email;
-                        proxy_set_header remote-user $tinyauth_remote_user;
-                        proxy_set_header remote-groups $tinyauth_remote_groups;
-                        proxy_set_header remote-email $tinyauth_remote_email;
+                        proxy_set_header Remote-User $tinyauth_remote_user;
+                        proxy_set_header Remote-Groups $tinyauth_remote_groups;
+                        proxy_set_header Remote-Email $tinyauth_remote_email;
                       '';
                   });
               };
