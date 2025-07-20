@@ -7,6 +7,5 @@
     wineWow64Packages.stagingFull
     winetricks
     gamescope
-    bottles
   ];
 }
