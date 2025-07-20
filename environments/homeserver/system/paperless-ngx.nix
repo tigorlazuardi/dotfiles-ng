@@ -20,30 +20,6 @@ in
     PAPERLESS_ADMIN_PASSWORD=${config.sops.placeholder."paperless/admin/password"}
     PAPERLESS_AUTO_LOGIN_USERNAME=${config.sops.placeholder."paperless/admin/username"}
     PAPERLESS_SECRET_KEY=${config.sops.placeholder."paperless/secret"}
-    PAPERLESS_SOCIALACCOUNT_PROVIDERS=${
-      builtins.toJSON {
-        openid_connect = {
-          # OAUTH_PKCE_ENABLED = false;
-          SCOPE = [
-            "openid"
-            "profile"
-            "email"
-          ];
-          APPS = [
-            {
-              provider_id = "pocket-id";
-              name = "Pocket ID";
-              client_id = config.sops.placeholder."paperless/client_id";
-              client_secret = config.sops.placeholder."paperless/client_secret";
-              settings = {
-                server_url = "https://id.tigor.web.id";
-                token_auth_method = "client_secret_basic";
-              };
-            }
-          ];
-        };
-      }
-    }
   '';
   virtualisation.oci-containers.containers.paperless-ngx = {
     image = "ghcr.io/paperless-ngx/paperless-ngx:latest";
@@ -67,12 +43,12 @@ in
       PAPERLESS_TIME_ZONE = "Asia/Jakarta";
       PAPERLESS_OCR_LANGUAGE = "ind"; # Set the default OCR language to Indonesian
       PAPERLESS_OCR_LANGUAGES = "ind"; # Ensure to install Indonesian language pack
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER = "true";
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER_API = "true";
-      PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
       PAPERLESS_USE_X_FORWARD_HOST = "true";
       PAPERLESS_USE_X_FORWARD_PORT = "true";
       PAPERLESS_PROXY_SSL_HEADER = ''["HTTP_X_FORWARDED_PROTO", "https"]'';
+      PAPERLESS_CSRF_TRUSTED_ORIGINS = "https://${domain},https://auth.tigor.web.id";
+      PAPERLESS_ALLOWED_HOSTS = "${domain},auth.tigor.web.id";
+      PAPERLESS_CORS_ALLOWED_HOSTS = "https://${domain},https://auth.tigor.web.id";
     };
     environmentFiles = [
       "${config.sops.templates."paperless.env".path}"
