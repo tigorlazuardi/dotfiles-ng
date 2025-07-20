@@ -4,7 +4,7 @@
 }:
 {
   home.packages = with pkgs; [
-    wineWow64Packages.stagingFull
+    wineWowPackages.stagingFull
     winetricks
     gamescope
   ];
