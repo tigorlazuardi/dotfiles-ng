@@ -1,5 +1,4 @@
 {
-  pkgs,
   inputs,
   ...
 }:
@@ -15,8 +14,6 @@
       common-pc
       common-pc-ssd
     ]);
-  # Use the latest kernel packages
-  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader = {
     systemd-boot.enable = true;
     efi = {
