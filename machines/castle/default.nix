@@ -8,6 +8,8 @@
     ../../environments/kde/system
     ../../environments/game/system
 
+    ../../environments/desktop/system/optional/vial.nix
+
     ./hardware.nix
     ./system.nix
   ];
