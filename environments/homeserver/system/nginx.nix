@@ -69,7 +69,6 @@
         # So we just copy the default value from NixOS but remove the ssl_stapling option.
         #
         # recommendedTlsSettings = true;
-        recommendedZstdSettings = true;
         recommendedOptimisation = true;
         recommendedGzipSettings = true;
         recommendedProxySettings = true;
