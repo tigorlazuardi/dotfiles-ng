@@ -16,7 +16,7 @@
       common-pc
       common-pc-ssd
     ]);
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader = {
     efi = {
       efiSysMountPoint = "/boot";
