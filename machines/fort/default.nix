@@ -2,6 +2,7 @@
 {
   imports = [
     ../../environments/core/system
+    ../../environments/core/system/optional/post-build-hook.nix
     ../../environments/bareksa/system
 
     # We will use KDE Plasma 6 as the desktop environment
