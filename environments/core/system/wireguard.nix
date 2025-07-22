@@ -27,7 +27,7 @@
           endpoint = mkOption {
             type = types.str;
             description = "The endpoint of the WireGuard server";
-            default = "103.156.119.209:${toString config.networking.wireguard.server.port}";
+            default = "vpn.tigor.web.id:${toString config.networking.wireguard.server.port}";
           };
           port = mkOption {
             type = types.ints.u16;

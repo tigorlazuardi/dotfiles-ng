@@ -5,7 +5,6 @@
   ...
 }:
 let
-  domain = "vpn.tigor.web.id";
   inherit (lib)
     mapAttrsToList
     ;
@@ -13,18 +12,26 @@ let
 in
 {
   sops.secrets."${server.privateKeySecret}".sopsFile = ../../../secrets/wireguard.yaml;
+  services.resolved.enable = true;
 
   networking =
     let
       externalInterface = "eth0";
     in
     {
+      networkmanager.dns = "systemd-resolved";
       nat = {
         enable = true;
         inherit externalInterface;
         internalInterfaces = [ "wg0" ];
       };
-      firewall.allowedUDPPorts = [ server.port ];
+      firewall.allowedTCPPorts = [
+        53
+      ];
+      firewall.allowedUDPPorts = [
+        53
+        server.port
+      ];
       wireguard.interfaces = {
         wg0 = {
           # Determines the IP address and subnet of the server's end of the tunnel interface.
@@ -36,11 +43,13 @@ in
           # This allows the wireguard server to route your traffic to the internet and hence be like a VPN
           # For this to work you have to set the dnsserver IP of your router (or dnsserver of choice) in your clients
           postSetup = ''
+            ${pkgs.iptables}/bin/iptables -A FORWARD -i wg0 -j ACCEPT
             ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.100.0.0/16 -o ${externalInterface} -j MASQUERADE
           '';
 
           # This undoes the above command
           postShutdown = ''
+            ${pkgs.iptables}/bin/iptables -D FORWARD -i wg0 -j ACCEPT
             ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/16 -o ${externalInterface} -j MASQUERADE
           '';
 
@@ -56,7 +65,7 @@ in
     };
 
   services.adguardhome.settings.user_rules = [
-    "192.168.100.5 ${domain}"
+    "192.168.100.5 vpn.tigor.web.id"
   ];
 
   services.homepage-dashboard.groups.Networking.services.WireGuard.settings = {

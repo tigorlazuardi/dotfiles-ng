@@ -35,18 +35,16 @@
           "tls://8.8.8.8"
         ];
       };
-      user_rules =
-        [
-          "192.168.100.5 vpn.tigor.web.id"
-          "127.0.0.1 sg.api.miwifi.com" # Xiaomi routers
-        ]
-        ++ (
-          let
-            names = lib.attrNames config.services.nginx.virtualHosts;
-            entries = map (name: "192.168.100.5 ${name}") names;
-          in
-          entries
-        );
+      user_rules = [
+        "127.0.0.1 sg.api.miwifi.com" # Xiaomi routers
+      ]
+      ++ (
+        let
+          names = lib.attrNames config.services.nginx.virtualHosts;
+          entries = map (name: "192.168.100.5 ${name}") names;
+        in
+        entries
+      );
       filters = [
         {
           enabled = true;
