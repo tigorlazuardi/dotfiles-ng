@@ -23,7 +23,8 @@
     ./paperless-ngx.nix
     ./pocket_id.nix
     ./qbittorrent.nix
-    ./redmage.nix
+    # ./redmage.nix
+    ./router.nix
     ./samba.nix
     ./soulseek.nix
     ./stirling-pdf.nix

@@ -24,10 +24,10 @@
             description = "The sops secrets containing private key of the WireGuard server.";
             default = "wireguard/server/private_key";
           };
-          ipSecret = mkOption {
+          endpoint = mkOption {
             type = types.str;
-            description = "The sops secrets containing the IP address of the WireGuard server.";
-            default = "wireguard/server/ip";
+            description = "The endpoint of the WireGuard server";
+            default = "vpn.tigor.web.id:${toString config.networking.wireguard.server.port}";
           };
           port = mkOption {
             type = types.ints.u16;
@@ -92,13 +92,11 @@
           publicKey = "ExGQMlmSVKpP3lpZKcnuAiOUOeSD44RMKf2k016rqHs=";
         };
       };
-      sops.secrets =
-        (mapAttrs' (
+      sops.secrets = (
+        mapAttrs' (
           _: device: nameValuePair device.secret { sopsFile = ../../../secrets/wireguard.yaml; }
-        ) devices)
-        // {
-          "${server.ipSecret}".sopsFile = ../../../secrets/wireguard.yaml;
-        };
+        ) devices
+      );
       sops.templates = mapAttrs' (
         name: device:
         nameValuePair "wireguard/${name}.conf" {
@@ -111,7 +109,7 @@
             };
             Peer = {
               PublicKey = server.publicKey;
-              Endpoint = "${config.sops.placeholder."${server.ipSecret}"}:${toString server.port}";
+              Endpoint = server.endpoint;
               AllowedIPs = device.allowedIPs;
             };
           };
