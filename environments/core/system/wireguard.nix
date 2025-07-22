@@ -17,7 +17,7 @@
           publicKey = mkOption {
             type = types.str;
             description = "The public key of the WireGuard server.";
-            default = "mGnw5XBngz/YiNMh19ms7+mqBgxt7il+W7yWIl8hqm8=";
+            default = "SRcpsOMOTabLZfVRETc0AVexx0mnBRHZyzX9XAQ8Smc=";
           };
           privateKeySecret = mkOption {
             type = types.str;
@@ -27,7 +27,7 @@
           endpoint = mkOption {
             type = types.str;
             description = "The endpoint of the WireGuard server";
-            default = "vpn.tigor.web.id:${toString config.networking.wireguard.server.port}";
+            default = "103.156.119.209:${toString config.networking.wireguard.server.port}";
           };
           port = mkOption {
             type = types.ints.u16;

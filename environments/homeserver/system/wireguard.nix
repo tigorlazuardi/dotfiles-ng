@@ -49,7 +49,7 @@ in
           peers = mapAttrsToList (_: device: {
             publicKey = device.publicKey;
             allowedIPs = [ "${device.ip}/32" ];
-            endpoint = "vpn.tigor.web.id:${toString server.port}";
+            endpoint = server.endpoint;
           }) devices;
         };
       };
