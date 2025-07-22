@@ -18,6 +18,7 @@
     ./musicbrainz.nix
     ./navidrome.nix
     ./nginx.nix
+    ./nix-serve.nix
     ./ntfy.nix
     ./paperless-ngx.nix
     ./pocket_id.nix
