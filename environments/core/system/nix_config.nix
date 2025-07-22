@@ -5,6 +5,7 @@
     "nix-command"
     "flakes"
   ];
+  nix.settings.trusted-users = [ "@wheel" ];
   nix.extraOptions = ''
     http-connections = 8
     connect-timeout = 5
