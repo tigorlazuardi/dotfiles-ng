@@ -1,6 +1,6 @@
 {
   imports = [
-    ./aider.nix
+    # ./aider.nix
     ./claude-code.nix
   ];
 }
