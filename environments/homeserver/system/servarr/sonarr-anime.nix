@@ -68,7 +68,7 @@ in
         locations."/".proxyPass = proxyPass;
         locations."/api".proxyPass = proxyPass;
       };
-      "sonarr-anime.local".locations."/".proxyPass = proxyPass;
+      "sonarr-anime.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services."Sonarr Anime".settings = {
     description = "Info fetcher and grabber for Anime";
@@ -76,7 +76,7 @@ in
     icon = "sonarr.svg";
     widget = {
       type = "sonarr";
-      url = "http://sonarr-anime.local";
+      url = "http://sonarr-anime.lan";
       key = "{{HOMEPAGE_VAR_SONARR_ANIME_API_KEY}}";
     };
   };

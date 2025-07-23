@@ -47,7 +47,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = "http://${ip}:${toString httpPort}";
       };
-      "qbittorrent-servarr.local".locations."/".proxyPass = "http://${ip}:${toString httpPort}";
+      "qbittorrent-servarr.lan".locations."/".proxyPass = "http://${ip}:${toString httpPort}";
     };
   services.homepage-dashboard.groups."Media Collectors".services."QBittorrent (Servarr)".settings = {
     description = "Torrent downloader for servarr stack";
@@ -55,7 +55,7 @@ in
     url = "https://qbittorrent-servarr.tigor.web.id";
     widget = {
       type = "qbittorrent";
-      url = "http://qbittorrent-servarr.local";
+      url = "http://qbittorrent-servarr.lan";
       enableLeechProgress = true;
     };
   };

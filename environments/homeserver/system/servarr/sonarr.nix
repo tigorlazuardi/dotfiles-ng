@@ -68,7 +68,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "sonarr.local".locations."/".proxyPass = proxyPass;
+      "sonarr.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Sonarr.settings = {
     description = "Info fetcher and grabber of TV Shows";
@@ -76,7 +76,7 @@ in
     icon = "sonarr.svg";
     widget = {
       type = "sonarr";
-      url = "http://sonarr.local";
+      url = "http://sonarr.lan";
       key = "{{HOMEPAGE_VAR_SONARR_API_KEY}}";
     };
   };

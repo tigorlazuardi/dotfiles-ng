@@ -31,7 +31,7 @@ in
         "/".proxyPass = "http://0.0.0.0:8096";
       };
     };
-    "jellyin.local".locations."/".proxyPass = "http://0.0.0:8096";
+    "jellyin.lan".locations."/".proxyPass = "http://0.0.0:8096";
   };
   services.homepage-dashboard.groups.Media.services.Jellyfin = {
     sortIndex = 50;

@@ -41,7 +41,7 @@ in
         updateMangas = true;
 
         flareSolverrEnabled = true;
-        flareSolverrUrl = "http://flaresolverr.local";
+        flareSolverrUrl = "http://flaresolverr.lan";
         flareSolverrTimeout = 60; # seconds.
         flareSolverrSessionName = "suwayomi";
         flareSolverrSessionTtl = 15; # minutes.
@@ -59,7 +59,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "manga.local".locations."/".proxyPass = proxyPass;
+      "manga.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups.Media.services."Suwayomi Manga Reader".settings = {
     description = "Manga reader and downloader with support for multiple sources.";
@@ -68,7 +68,7 @@ in
     # widget broke
     # widget = {
     #   type = "suwayomi";
-    #   url = "http://manga.local";
+    #   url = "http://manga.lan";
     #   category = 1; # 1 = Manga (First Tab Only)
     # };
   };

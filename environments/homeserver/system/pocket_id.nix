@@ -31,7 +31,7 @@ in
       PUID = "900"; # pocket-id user
       PGID = "900"; # pocket-id group
       ANALYTICS_DISABLED = "true"; # disable analytics
-      SMTP_HOST = "mail.local";
+      SMTP_HOST = "mail.lan";
       SMTP_PORT = "1025";
     };
   };

@@ -37,7 +37,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "bazarr.local".locations."/".proxyPass = proxyPass;
+      "bazarr.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Bazarr.settings = {
     description = "Subtitle downloader and manager for the servarr stack";
@@ -46,7 +46,7 @@ in
     # The widget broke
     # widget = {
     #   type = "bazarr";
-    #   url = "http://bazarr.local";
+    #   url = "http://bazarr.lan";
     #   key = "{{HOMEPAGE_VAR_BAZARR_API_KEY}}";
     # };
   };

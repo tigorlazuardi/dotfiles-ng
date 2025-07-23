@@ -51,6 +51,6 @@ in
           "return 403;";
         locations."/".proxyPass = "http://unix:${address}";
       };
-      "ntfy.local".locations."/".proxyPass = "http://unix:${address}";
+      "ntfy.lan".locations."/".proxyPass = "http://unix:${address}";
     };
 }

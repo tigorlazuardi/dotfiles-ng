@@ -34,7 +34,7 @@ in
       };
       locations."/".proxyPass = "http://unix:${config.services.anubis.instances.forgejo.settings.BIND}";
     };
-    "git.local" = {
+    "git.lan" = {
       locations."/".proxyPass = "http://unix:${config.services.anubis.instances.forgejo.settings.BIND}";
     };
   };
@@ -46,7 +46,7 @@ in
       icon = "forgejo.svg";
       widget = {
         type = "gitea";
-        url = "http://git.local";
+        url = "http://git.lan";
         key = "{{HOMEPAGE_VAR_FORGEJO_TOKEN}}";
       };
     };

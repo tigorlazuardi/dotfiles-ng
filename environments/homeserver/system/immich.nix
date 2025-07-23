@@ -149,7 +149,7 @@ in
             };
           };
       };
-      "immich.local".locations."/".proxyPass = "http://unix:${address}";
+      "immich.lan".locations."/".proxyPass = "http://unix:${address}";
     };
   services.homepage-dashboard.groups.Media.services.Immich.settings = {
     description = "Family Photos and Videos Server";
@@ -157,7 +157,7 @@ in
     icon = "immich.svg";
     widget = {
       type = "immich";
-      url = "http://immich.local";
+      url = "http://immich.lan";
       key = "{{HOMEPAGE_VAR_IMMICH_API_KEY}}";
       version = 2;
     };

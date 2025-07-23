@@ -18,6 +18,6 @@
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "mail.local".locations."/".proxyPass = proxyPass;
+      "mail.lan".locations."/".proxyPass = proxyPass;
     };
 }

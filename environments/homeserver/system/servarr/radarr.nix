@@ -66,7 +66,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "radarr.local".locations."/".proxyPass = proxyPass;
+      "radarr.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Radarr.settings = {
     description = "Movie fetcher and downloader";
@@ -74,7 +74,7 @@ in
     href = "http://${domain}";
     widget = {
       type = "radarr";
-      url = "http://radarr.local";
+      url = "http://radarr.lan";
       key = "{{HOMEPAGE_VAR_RADARR_API_KEY}}";
     };
   };

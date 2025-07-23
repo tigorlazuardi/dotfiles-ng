@@ -63,7 +63,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "qbittorrent.local".locations."/".proxyPass = proxyPass;
+      "qbittorrent.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.QBittorrent.settings = {
     description = "Torrent downloader";
@@ -71,7 +71,7 @@ in
     url = "https://qbittorrent.tigor.web.id";
     widget = {
       type = "qbittorrent";
-      url = "http://qbittorrent.local";
+      url = "http://qbittorrent.lan";
       enableLeechProgress = true;
     };
   };

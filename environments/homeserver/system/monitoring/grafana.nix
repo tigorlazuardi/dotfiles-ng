@@ -79,7 +79,7 @@ in
         "/api".proxyPass = "http://unix:${config.systemd.socketActivations.grafana.address}";
       };
     };
-    "grafana.local" = {
+    "grafana.lan" = {
       locations."/" = {
         proxyPass = "http://unix:${config.systemd.socketActivations.grafana.address}";
       };
@@ -91,7 +91,7 @@ in
     description = "Front End for the collected metrics, logs, and traces";
     widget = {
       type = "grafana";
-      url = "http://grafana.local";
+      url = "http://grafana.lan";
       username = "{{HOMEPAGE_VAR_GRAFANA_ADMIN_USER}}";
       password = "{{HOMEPAGE_VAR_GRAFANA_ADMIN_PASSWORD}}";
     };

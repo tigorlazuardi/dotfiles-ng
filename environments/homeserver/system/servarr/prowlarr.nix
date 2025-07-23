@@ -62,7 +62,7 @@ in
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "prowlarr.local".locations."/".proxyPass = proxyPass;
+      "prowlarr.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Prowlarr.settings = {
     description = "Indexer manager for the servarr stack";
@@ -71,7 +71,7 @@ in
     user = "${toString uid}:${toString gid}";
     widget = {
       type = "prowlarr";
-      url = "http://prowlarr.local";
+      url = "http://prowlarr.lan";
       key = "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}";
     };
   };

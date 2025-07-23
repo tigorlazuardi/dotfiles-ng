@@ -141,7 +141,7 @@
             tinyauth.locations = [ "/" ];
             locations."/".proxyPass = "http://unix:${address}";
           };
-          "db.local".locations."/".proxyPass = "http://unix:${address}";
+          "db.lan".locations."/".proxyPass = "http://unix:${address}";
         };
     };
 }

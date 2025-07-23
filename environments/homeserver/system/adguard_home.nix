@@ -4,6 +4,9 @@
   ...
 }:
 {
+  networking.nameservers = [ "192.168.100.5" ];
+  networking.useDHCP = false;
+  services.resolved.fallbackDns = [ ];
   services.adguardhome = {
     enable = true;
     openFirewall = true;
@@ -92,7 +95,7 @@
         tinyauth.locations = [ "/" ];
         locations."/".proxyPass = proxyPass;
       };
-      "adguard.local".locations."/".proxyPass = proxyPass;
+      "adguard.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups.Networking.services."AdGuard Home".settings = {
     description = "DNS server for local domains with ad blocking capabilities.";
@@ -100,7 +103,7 @@
     icon = "adguard-home.svg";
     widget = {
       type = "adguard";
-      url = "http://adguard.local";
+      url = "http://adguard.lan";
       username = "";
       password = "";
     };

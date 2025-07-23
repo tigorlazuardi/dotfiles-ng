@@ -18,11 +18,11 @@ in
       tinyauth.locations = [ "/" ];
       locations."/".proxyPass = "http://${guiListenAddress}";
     };
-    "alloy.local".locations."/".proxyPass = "http://${guiListenAddress}";
-    "otel.local" = {
+    "alloy.lan".locations."/".proxyPass = "http://${guiListenAddress}";
+    "otel.lan" = {
       locations."/".proxyPass = "http://${otelcolHTTPListenAddress}";
     };
-    "grpc.otel.local" = {
+    "grpc.otel.lan" = {
       locations."/".proxyPass = "http://${otelcolGRPCListenAddress}";
     };
   };
