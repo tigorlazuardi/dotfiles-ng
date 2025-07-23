@@ -11,4 +11,9 @@
   };
   services.nginx.virtualHosts."flaresolverr.lan".locations."/".proxyPass =
     "http://unix:${config.systemd.socketActivations.podman-flaresolverr.address}";
+
+  services.homepage-dashboard.groups.Utilities.services.Flaresolverr.settings = {
+    description = "Service to bypass Cloudflare anti-bot protection";
+    icon = "flaresolverr.svg";
+  };
 }
