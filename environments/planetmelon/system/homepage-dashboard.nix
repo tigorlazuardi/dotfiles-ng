@@ -58,6 +58,17 @@ let
         }
       ];
     }
+    {
+      Tools = [
+        {
+          "WebTyler" = {
+            description = "Tools to automatically generate tiles from a single tile";
+            href = "https://wareya.github.io/webtyler/";
+            icon = "/icons/webtyler.png";
+          };
+        }
+      ];
+    }
   ];
   bookmarks = [ ];
   hulyIcon = pkgs.fetchurl {
@@ -67,6 +78,10 @@ let
   penpotIcon = pkgs.fetchurl {
     url = "https://avatars.githubusercontent.com/u/30179644?s=200&v=4";
     hash = "sha256-F26kOuiQeh8iivkb7wOvMhGsnbfoVZf4z+LzUssZ2rk=";
+  };
+  webtylerIcon = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/wareya/webtyler/refs/heads/main/etc/grass4x4plus.png";
+    hash = "sha256-bGzQZtQjZyXhk66fmjCPn08FdM1IJH/G/ndldiOccE0=";
   };
   favicon =
     # Source: https://pictogrammers.com/library/mdi/icon/fruit-watermelon/
@@ -96,6 +111,7 @@ in
         "fruit-watermelon.svg" = favicon;
         "huly.svg" = hulyIcon;
         "penpot.png" = penpotIcon;
+        "webtyler.png" = webtylerIcon;
       };
       cpIcons = lib.concatMapAttrsStringSep "\n" (
         name: value: "cp ${value} ${volume}/icons/${name} || true"
