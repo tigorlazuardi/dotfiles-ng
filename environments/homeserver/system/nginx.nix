@@ -33,14 +33,6 @@
               #
               # Certs must be defined in config.security.acme.certs to work.
               useACMEHost = mkDefault "tigor.web.id";
-              extraConfig =
-                mkDefault
-                  #nginx
-                  ''
-                    if ($block_empty_user_agent) {
-                      return 444;
-                    }
-                  '';
             };
           }
         );
@@ -139,10 +131,6 @@
               default "error";
             }
 
-            map $http_user_agent $block_empty_user_agent {
-              "" 1;
-              default 0;
-            }
 
             access_log /var/log/nginx/access.log json if=$status_200_299;
             access_log /var/log/nginx/access_redirect.log json if=$status_300_399;
