@@ -43,6 +43,6 @@ in
   services.homepage-dashboard.groups.Utilities.services.Memos.settings = {
     description = "Cross-platform note-taking app";
     icon = "memos.png";
-    url = "https://${domain}";
+    href = "https://${domain}";
   };
 }

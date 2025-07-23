@@ -34,6 +34,6 @@ in
   services.homepage-dashboard.groups.Utilities.services."Nix Binary Cache Server".settings = {
     description = "Caches builds from the Nix community and other machine in the fleet for faster builds";
     icon = "nixos.svg";
-    url = "https://${domain}";
+    href = "https://${domain}";
   };
 }
