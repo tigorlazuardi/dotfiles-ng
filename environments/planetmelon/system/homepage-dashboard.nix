@@ -26,6 +26,12 @@ let
         };
       }
       { "Organization" = { }; }
+      {
+        "Tools" = {
+          style = "row";
+          columns = 2;
+        };
+      }
     ];
   };
   services = [
@@ -61,6 +67,13 @@ let
     {
       Tools = [
         {
+          "Kenney" = {
+            description = "Kenney Assets for Game Development";
+            href = "https://kenney.nl/assets";
+            icon = "/icons/kenney.png";
+          };
+        }
+        {
           "WebTyler" = {
             description = "Tools to automatically generate tiles from a single tile";
             href = "https://wareya.github.io/webtyler/";
@@ -82,6 +95,10 @@ let
   webtylerIcon = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/wareya/webtyler/refs/heads/main/etc/grass4x4plus.png";
     hash = "sha256-bGzQZtQjZyXhk66fmjCPn08FdM1IJH/G/ndldiOccE0=";
+  };
+  kenneyIcon = pkgs.fetchurl {
+    url = "https://kenney.nl/data/img/logo.png";
+    hash = "sha256-fLSczuvNw8SWbvx/uEsxpTg6RlSdyVhHQQI0GWdjZpA=";
   };
   favicon =
     # Source: https://pictogrammers.com/library/mdi/icon/fruit-watermelon/
@@ -112,6 +129,7 @@ in
         "huly.svg" = hulyIcon;
         "penpot.png" = penpotIcon;
         "webtyler.png" = webtylerIcon;
+        "kenney.png" = kenneyIcon;
       };
       cpIcons = lib.concatMapAttrsStringSep "\n" (
         name: value: "cp ${value} ${volume}/icons/${name} || true"
