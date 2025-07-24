@@ -6,17 +6,17 @@
   ...
 }:
 {
-  imports =
-    [
-      ../../environments/core/system
-    ]
-    ++ (with inputs.nixos-hardware.nixosModules; [
-      common-cpu-amd
-      common-gpu-amd
-      common-pc
-      common-pc-ssd
-    ]);
+  imports = [
+    ../../environments/core/system
+  ]
+  ++ (with inputs.nixos-hardware.nixosModules; [
+    common-cpu-amd
+    common-gpu-amd
+    common-pc
+    common-pc-ssd
+  ]);
   # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.resumeDevice = "/dev/disk/by-label/swap";
   boot.loader = {
     efi = {
       efiSysMountPoint = "/boot";
