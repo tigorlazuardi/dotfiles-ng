@@ -1,39 +1,36 @@
 { config, ... }:
 let
   domain = "ntfy.tigor.web.id";
+  baseDir = "/var/lib/private/ntfy-sh";
 in
 {
   services.ntfy-sh = {
     enable = true;
-    settings =
-      let
-        baseDir = "/var/lib/private/ntfy-sh";
-      in
-      {
-        base-url = "https://${domain}";
-        listen-http = "127.0.0.1:9999";
-        behind-proxy = true;
-        cache-file = "${baseDir}/cache.db";
-        cache-startup-queries = # sql
-          ''
-            PRAGMA journal_mode = WAL;
-            PRAGMA synchronous = normal;
-            PRAGMA temp_store = memory;
-            PRAGMA busy_timeout = 15000;
-            VACUUM;
-          '';
-        cache-duration = "24h";
-        cache-batch-size = 100;
-        cache-batch-timeout = "200ms";
+    settings = {
+      base-url = "https://${domain}";
+      listen-http = "127.0.0.1:9999";
+      behind-proxy = true;
+      cache-file = "${baseDir}/cache.db";
+      cache-startup-queries = # sql
+        ''
+          PRAGMA journal_mode = WAL;
+          PRAGMA synchronous = normal;
+          PRAGMA temp_store = memory;
+          PRAGMA busy_timeout = 15000;
+          VACUUM;
+        '';
+      cache-duration = "24h";
+      cache-batch-size = 100;
+      cache-batch-timeout = "200ms";
 
-        auth-file = "${baseDir}/auth.db";
-        auth-default-access = "deny-all";
+      auth-file = "${baseDir}/auth.db";
+      auth-default-access = "deny-all";
 
-        attachment-cache-dir = "${baseDir}/attachments";
-        attachment-expiry-duration = "24h";
+      attachment-cache-dir = "${baseDir}/attachments";
+      attachment-expiry-duration = "24h";
 
-        enable-metrics = true;
-      };
+      enable-metrics = true;
+    };
   };
   systemd.socketActivations.ntfy-sh = {
     host = "127.0.0.1";
@@ -53,4 +50,14 @@ in
       };
       "ntfy.lan".locations."/".proxyPass = "http://unix:${address}";
     };
+  services.db-gate.connections.ntfy_caches = {
+    label = "NTFY - Cache";
+    engine = "sqlite@dbgate-plugin-sqlite";
+    url = "${baseDir}/cache.db";
+  };
+  services.db-gate.connections.ntfy_auth = {
+    label = "NTFY - Users";
+    engine = "sqlite@dbgate-plugin-sqlite";
+    url = "${baseDir}/auth.db";
+  };
 }
