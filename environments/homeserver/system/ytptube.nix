@@ -2,10 +2,13 @@
   config,
   pkgs,
   user,
+  lib,
   ...
 }:
 let
   volume = "/wolf/mediaserver/ytptube";
+  domain = "ytptube.tigor.web.id";
+  inherit (lib.meta) getExe;
   settings = {
     windowsfilenames = true;
     writesubtitles = true;
@@ -82,7 +85,7 @@ in
     mkdir -p ${volume} /var/lib/ytptube
     chown -R 905:905 ${volume} /var/lib/ytptube
   '';
-  services.nginx.virtualHosts."ytptube.tigor.web.id" = {
+  services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     tinyauth.locations = [ "/" ];
     locations."/".proxyPass = "http://unix:${config.systemd.socketActivations.podman-ytptube.address}";
@@ -97,4 +100,48 @@ in
     engine = "sqlite@dbgate-plugin-sqlite";
     url = "/var/lib/ytptube/ytptube.db";
   };
+  services.ntfy-sh.middlewares = [
+    {
+      topic = "ytptube-raw";
+      command = ''${
+        getExe (
+          with pkgs;
+          writeShellScriptBin "ytptube-command-handler" ''
+            echo "$1"
+            title=$(echo $1 | ${jq}/bin/jq -r '.data.title')
+            folder=$(echo $1 | ${jq}/bin/jq -r '.data.folder')
+            thumbnail=$(echo $1 | ${jq}/bin/jq -r '.data.extras.thumbnail')
+            url="$(echo $1 | ${jq}/bin/jq -r '.data.url')"
+
+            data=$(${jq}/bin/jq -n \
+              --arg title "$title" \
+              --arg folder "$folder" \
+              --arg thumbnail "$thumbnail" \
+              --arg url "$url" \
+              '{
+                topic: "ytptube",
+                message: $title,
+                title: "Download Completed: " + $folder,
+                attach: $thumbnail,
+                icon: "https://raw.githubusercontent.com/arabcoders/ytptube/refs/heads/master/ui/public/favicon.ico",
+                click: "https://ytptube.tigor.web.id",
+                tags: [$folder],
+                actions: [
+                  {
+                    action: "view",
+                    label: "Source",
+                    url: $url
+                  }
+                ]
+              }'
+            )
+
+            ${curl}/bin/curl https://${config.services.ntfy-sh.domain} \
+              -H "Authorization: Basic $NTFY_USER_BASE64" \
+              -d "$data"
+          ''
+        )
+      } "$message"'';
+    }
+  ];
 }
