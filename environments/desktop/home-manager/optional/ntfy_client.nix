@@ -6,6 +6,7 @@
 }:
 let
   host = "https://ntfy.tigor.web.id";
+  tmpdir = "/tmp/ntfy_client/ytptube";
   inherit (lib.meta) getExe;
   settings = {
     default-host = host;
@@ -26,9 +27,7 @@ let
           getExe (
             with pkgs;
             writeShellScriptBin "ytptube-command-handler" ''
-              echo "$1"
-              title=$(echo $1 | ${jq}/bin/jq -r '.data.title')
-              folder=$(echo $1 | ${jq}/bin/jq -r '.data.folder')
+              echo "$3"
 
               ${libnotify}/bin/notify-send \
                 --app-name="YTPTube" \
@@ -38,11 +37,10 @@ let
                     hash = "sha256-qvrSD81jC+RshJJqnulQqkVFP4eYM/Q4fXBDDg1jg1Q=";
                   }
                 }" \
-                "Download Completed: $folder" \
-                "$title"
+                "$1" "$2"
             ''
           )
-        } "$message"'';
+        } "$title" "$message" "$raw"'';
       }
     ];
   };
@@ -63,6 +61,8 @@ in
     };
     Service = {
       Type = "simple";
+      ExecStartPre = "mkdir -p ${tmpdir}";
+      ExecStartPost = "rm -rf ${tmpdir}";
       ExecStart = "${pkgs.ntfy-sh}/bin/ntfy subscribe --from-config --config ${yaml.generate "config.yml" settings}";
       EnvironmentFile = [
         config.sops.secrets."ntfy/client.env".path
