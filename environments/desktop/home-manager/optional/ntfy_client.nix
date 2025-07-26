@@ -28,6 +28,7 @@ let
           appname="NTFY - $topic"
 
           ret_val=$(${libnotify}/bin/notify-send \
+            --expire-time=5000 \
             --action="topic=Topic" \
             --app-name="$appname" \
             --icon="${ntfy-icon}" \
@@ -57,6 +58,7 @@ let
               sourceUrl=$(echo "$3" | ${jq}/bin/jq -r '.actions[] | select(.action == "view") | .url')
 
               ret_val=$(${libnotify}/bin/notify-send \
+                --expire-time=5000 \
                 --action="source=Source" \
                 --action="ytptube=YTPTube" \
                 --action="topic=Topic" \
