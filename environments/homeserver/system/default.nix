@@ -17,6 +17,7 @@
     ./mailhog.nix
     ./memos.nix
     ./musicbrainz.nix
+    ./n8n.nix
     ./navidrome.nix
     ./nginx.nix
     ./nix-serve.nix
