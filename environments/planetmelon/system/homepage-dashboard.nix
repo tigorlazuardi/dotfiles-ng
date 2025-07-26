@@ -17,12 +17,12 @@ let
     #   # image = "https://i.redd.it/kfzvgz40ltge1.jpeg";
     #   blur = "sm";
     # };
-    favicon = "/images/fruit-watermelon.svg";
+    favicon = "/icons/fruit-watermelon.svg";
     layout = [
       {
         "Services" = {
           style = "row";
-          columns = 1;
+          columns = 2;
         };
       }
       { "Organization" = { }; }
@@ -84,6 +84,23 @@ let
     }
   ];
   bookmarks = [ ];
+  widgets = [
+    {
+      greeting = {
+        text_size = "2xl";
+        text = "Planet Melon";
+      };
+    }
+    {
+      datetime = {
+        text_size = "xl";
+        format.timeStyle = "long";
+      };
+    }
+    {
+      logo.icon = "/icons/fruit-watermelon.svg";
+    }
+  ];
   hulyIcon = pkgs.fetchurl {
     url = "https://docs.huly.io/_astro/huly-logo-bw.Dw8a0Ist_ZSPpJP.svg";
     hash = "sha256-RbM6aeMphp3UAR3RbswY6rfc9A4+Bt3RDpD5SqEmeUE=";
@@ -138,6 +155,7 @@ in
         "${volume}/config/settings.yaml"
         "${volume}/config/services.yaml"
         "${volume}/config/bookmarks.yaml"
+        "${volume}/config/widgets.yaml"
       ];
     in
     {
@@ -147,6 +165,7 @@ in
         cp ${format.generate "settings.yaml" settings} ${volume}/config/settings.yaml
         cp ${format.generate "services.yaml" services} ${volume}/config/services.yaml
         cp ${format.generate "bookmarks.yaml" bookmarks} ${volume}/config/bookmarks.yaml
+        cp ${format.generate "widgets.yaml" widgets} ${volume}/config/widgets.yaml
         ${cpIcons}
         chown -R 0:0 ${volume}
         chmod -R 700 ${volume}
