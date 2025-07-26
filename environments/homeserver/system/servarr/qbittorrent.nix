@@ -16,6 +16,7 @@ in
       PGID = toString gid;
       TZ = "Asia/Jakarta";
       TORRENTING_PORT = "6882";
+      UMASK = "002";
     };
     volumes = [
       "${configVolume}:/config"

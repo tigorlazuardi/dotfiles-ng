@@ -25,7 +25,12 @@ in
     image = "docker.io/linuxserver/qbittorrent:latest";
     ip = "10.88.2.2";
     httpPort = 8080;
-    user = "${toString uid}:${toString gid}";
+    environment = {
+      UMASK = "002";
+      PUID = toString uid;
+      PGID = toString gid;
+      TZ = "Asia/Jakarta";
+    };
     volumes = [
       "${volume}/config:/config"
       "${volume}/downloads:/downloads"
@@ -37,9 +42,6 @@ in
     ports = [
       "6881:6881"
       "6881:6881/udp"
-    ];
-    extraOptions = [
-      "--umask=0002"
     ];
   };
   system.activationScripts.qbittorrent = # sh
