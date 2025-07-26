@@ -27,10 +27,14 @@ let
           message=$(echo "$1" | ${jq}/bin/jq -r '.message')
           appname="NTFY - $topic"
 
-          ${libnotify}/bin/notify-send \
+          ret_val=$(${libnotify}/bin/notify-send \
+            --action="topic=Topic" \
             --app-name="$appname" \
             --icon="${ntfy-icon}" \
-            "$title" "$message"
+            "$title" "$message")
+          case $ret_val in
+            "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
+          esac
         ''
       )} "$raw"'';
     subscribe = [
@@ -50,8 +54,12 @@ let
             with pkgs;
             writeShellScriptBin "ytptube-command-handler" ''
               echo "$3"
+              sourceUrl=$(echo "$3" | ${jq}/bin/jq -r '.actions[] | select(.action == "view") | .url')
 
-              ${libnotify}/bin/notify-send \
+              ret_val=$(${libnotify}/bin/notify-send \
+                --action="source=Source" \
+                --action="ytptube=YTPTube" \
+                --action="topic=Topic" \
                 --app-name="YTPTube" \
                 --icon="${
                   fetchurl {
@@ -59,7 +67,12 @@ let
                     hash = "sha256-qvrSD81jC+RshJJqnulQqkVFP4eYM/Q4fXBDDg1jg1Q=";
                   }
                 }" \
-                "$1" "$2"
+                "$1" "$2")
+              case $ret_val in
+                "source") ${xdg-utils}/bin/xdg-open "$sourceUrl" ;;
+                "ytptube") ${xdg-utils}/bin/xdg-open "https://ytptube.tigor.web.id" ;;
+                "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/ytptube" ;;
+              esac
             ''
           )
         } "$title" "$message" "$raw"'';
