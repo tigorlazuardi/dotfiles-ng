@@ -6,6 +6,7 @@
     ./adguard_home.nix
     ./anubis.nix
     ./db-gate.nix
+    ./dex.nix
     ./flaresolverr.nix
     # ./forgejo.nix
     ./homepage-dashboard.nix

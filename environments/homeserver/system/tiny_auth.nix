@@ -1,6 +1,7 @@
 { config, lib, ... }:
 let
   inherit (config.virtualisation.oci-containers.containers.tiny-auth) ip httpPort;
+  domain = "auth.tigor.web.id";
 in
 {
   options =
@@ -107,24 +108,50 @@ in
         "tinyauth/main/users" = opts;
         "tinyauth/main/pocket_id/client_id" = opts;
         "tinyauth/main/pocket_id/client_secret" = opts;
+        "tinyauth/dex/id" = opts;
+        "tinyauth/dex/secret" = opts;
       };
-    sops.templates."tinyauth/main/env".content = # sh
+    services.dex.settings.staticClients = [
+      {
+        id = config.sops.placeholder."tinyauth/dex/id";
+        secret = config.sops.placeholder."tinyauth/dex/secret";
+        name = "Tiny Auth";
+        redirectURIs = [
+          "https://${domain}/api/oauth/callback/generic"
+        ];
+      }
+    ];
+    sops.templates."tinyauth/main/env".content =
+      let
+        inherit (config.services.dex) issuer;
+      in
+      # sh
       ''
-        GENERIC_CLIENT_ID=${config.sops.placeholder."tinyauth/main/pocket_id/client_id"}
-        GENERIC_CLIENT_SECRET=${config.sops.placeholder."tinyauth/main/pocket_id/client_secret"}
-        GENERIC_AUTH_URL=https://id.tigor.web.id/authorize
-        GENERIC_TOKEN_URL=https://id.tigor.web.id/api/oidc/token
-        GENERIC_USER_URL=https://id.tigor.web.id/api/oidc/userinfo
+        GENERIC_CLIENT_ID=${config.sops.placeholder."tinyauth/dex/id"}
+        GENERIC_CLIENT_SECRET=${config.sops.placeholder."tinyauth/dex/secret"}
+        GENERIC_AUTH_URL=${issuer}/auth
+        GENERIC_TOKEN_URL=${issuer}/token
+        GENERIC_USER_URL=${issuer}/userinfo
         GENERIC_SCOPES=openid email profile groups
-        GENERIC_NAME=Pocket ID
+        GENERIC_NAME=Dex
         OAUTH_AUTO_REDIRECT=generic
       '';
+    # ''
+    #   GENERIC_CLIENT_ID=${config.sops.placeholder."tinyauth/main/pocket_id/client_id"}
+    #   GENERIC_CLIENT_SECRET=${config.sops.placeholder."tinyauth/main/pocket_id/client_secret"}
+    #   GENERIC_AUTH_URL=https://id.tigor.web.id/authorize
+    #   GENERIC_TOKEN_URL=https://id.tigor.web.id/api/oidc/token
+    #   GENERIC_USER_URL=https://id.tigor.web.id/api/oidc/userinfo
+    #   GENERIC_SCOPES=openid email profile groups
+    #   GENERIC_NAME=Pocket ID
+    #   OAUTH_AUTO_REDIRECT=generic
+    # '';
     virtualisation.oci-containers.containers.tiny-auth = {
       image = "ghcr.io/steveiliop56/tinyauth:v3";
       ip = "10.88.0.2";
       httpPort = 3000;
       environment = {
-        APP_URL = "https://auth.tigor.web.id";
+        APP_URL = "https://${domain}";
         APP_TITLE = "Homeserver";
         USERS_FILE = "/users";
         SECRET_FILE = "/secret";
@@ -142,14 +169,14 @@ in
     };
 
     services.anubis.instances.podman-tinyauth.settings.TARGET = "http://${ip}:${toString httpPort}";
-    services.nginx.virtualHosts."auth.tigor.web.id" = {
+    services.nginx.virtualHosts."${domain}" = {
       forceSSL = true;
       locations."/".proxyPass =
         "http://unix:${config.services.anubis.instances.podman-tinyauth.settings.BIND}";
     };
 
     services.homepage-dashboard.groups.Security.services."Tiny Auth".settings = {
-      href = "https://auth.tigor.web.id";
+      href = "https://${domain}";
       description = "Lightweight Single Sign On Service with OIDC Support. Protects all the exposed services from unauthorized access";
       icon = "tinyauth.svg";
     };
