@@ -118,6 +118,11 @@ in
     };
     services.nginx.virtualHosts."${domain}" = {
       forceSSL = true;
+      locations."= /robots.txt".extraConfig = # nginx
+        ''
+          add_header Content-Type text/plain;
+          return 200 "User-agent: *\nDisallow: /\n";
+        '';
       locations."/".proxyPass = "http://${ip}:${toString httpPort}";
     };
   };
