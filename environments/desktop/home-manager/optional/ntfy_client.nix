@@ -7,10 +7,32 @@
 let
   host = "https://ntfy.tigor.web.id";
   tmpdir = "/tmp/ntfy_client/ytptube";
+  ntfy-icon = pkgs.fetchurl {
+    url = "https://docs.ntfy.sh/static/img/ntfy.png";
+    hash = "sha256-JZvuRep9UKGgJXZ2vTOa6PtBStws281YfDDDe8S+/kU=";
+  };
   inherit (lib.meta) getExe;
   settings = {
     default-host = host;
-    default-command = ''${pkgs.libnotify}/bin/notify-send "$message"'';
+    default-command =
+      with pkgs;
+      ''${getExe (
+        writeShellScriptBin "ntfy-default-command" ''
+          echo "$1"
+          topic=$(echo "$1" | ${jq}/bin/jq -r '.topic')
+          title=$(echo "$1" | ${jq}/bin/jq -r '.title')
+          if [ -z "$title" ] || [ "$title" = "null" ]; then
+            title="$topic"
+          fi
+          message=$(echo "$1" | ${jq}/bin/jq -r '.message')
+          appname="NTFY - $topic"
+
+          ${libnotify}/bin/notify-send \
+            --app-name="$appname" \
+            --icon="${ntfy-icon}" \
+            "$title" "$message"
+        ''
+      )} "$raw"'';
     subscribe = [
       {
         topic = "jellyfin";
@@ -59,10 +81,10 @@ in
       PartOf = After;
       Description = [ "Subscribes to NTFY Notifications" ];
     };
-    Service = {
+    Service = with pkgs; {
       Type = "simple";
-      ExecStartPre = "mkdir -p ${tmpdir}";
-      ExecStartPost = "rm -rf ${tmpdir}";
+      ExecStartPre = "${coreutils}/bin/mkdir -p ${tmpdir}";
+      ExecStartPost = "${coreutils}/bin/rm -rf ${tmpdir}";
       ExecStart = "${pkgs.ntfy-sh}/bin/ntfy subscribe --from-config --config ${yaml.generate "config.yml" settings}";
       EnvironmentFile = [
         config.sops.secrets."ntfy/client.env".path
