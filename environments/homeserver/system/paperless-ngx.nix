@@ -81,4 +81,9 @@ in
     locations."/".proxyPass =
       "http://unix:${config.systemd.socketActivations.podman-paperless-ngx.address}";
   };
+  services.homepage-dashboard.groups.Media.services."Paperless NGX".settings = {
+    description = "Document storage and management system";
+    href = "https://${domain}";
+    icon = "paperless-ngx.svg";
+  };
 }

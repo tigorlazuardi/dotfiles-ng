@@ -125,5 +125,14 @@ in
         '';
       locations."/".proxyPass = "http://${ip}:${toString httpPort}";
     };
+    services.homepage-dashboard.extraIcons."dex.png" = pkgs.fetchurl {
+      url = "https://dexidp.io/img/logos/dex-glyph-color.png";
+      hash = "sha256-CE2LWPm1FtlY89dPPCenpaKQHEicfyDGtFp1ZLs8/38=";
+    };
+    services.homepage-dashboard.groups.Security.services.Dex.settings = {
+      href = issuer;
+      description = "OIDC Provider that proxies to other OAuth2/OIDC Providers like GitHub and Pocket ID";
+      icon = "/icons/dex.png";
+    };
   };
 }

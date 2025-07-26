@@ -177,7 +177,7 @@ in
 
     services.homepage-dashboard.groups.Security.services."Tiny Auth".settings = {
       href = "https://${domain}";
-      description = "Lightweight Single Sign On Service with OIDC Support. Protects all the exposed services from unauthorized access";
+      description = "Connect NGINX to Dex for applications that do not support OIDC natively";
       icon = "tinyauth.svg";
     };
   };

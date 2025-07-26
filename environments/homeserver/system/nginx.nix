@@ -303,5 +303,10 @@
               forward_to = [loki.write.default.receiver]
             }
           '';
+      services.homepage-dashboard.groups.Networking.services.NGINX.settings = {
+        description = "Reverse Proxy and TLS termination for all services";
+        href = "https://tigor.web.id";
+        icon = "nginx.svg";
+      };
     };
 }

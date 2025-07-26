@@ -131,14 +131,14 @@ in
             Security = {
               settings = {
                 style = "row";
-                columns = 2;
+                columns = 3;
               };
               sortIndex = 100;
             };
             Networking = {
               settings = {
                 style = "row";
-                columns = 3;
+                columns = 2;
               };
               sortIndex = 250;
             };
@@ -152,7 +152,7 @@ in
             Media = {
               settings = {
                 style = "row";
-                columns = 4;
+                columns = 3;
               };
               sortIndex = 900;
             };
