@@ -18,7 +18,6 @@ in
   sops.templates."paperless.env".content = ''
     PAPERLESS_ADMIN_USER=${config.sops.placeholder."paperless/admin/username"}
     PAPERLESS_ADMIN_PASSWORD=${config.sops.placeholder."paperless/admin/password"}
-    PAPERLESS_AUTO_LOGIN_USERNAME=${config.sops.placeholder."paperless/admin/username"}
     PAPERLESS_SECRET_KEY=${config.sops.placeholder."paperless/secret"}
   '';
   virtualisation.oci-containers.containers.paperless-ngx = {
@@ -75,11 +74,14 @@ in
     '';
     unitConfig.StopWhenUnneeded = true;
   };
+  services.anubis.instances.paperless-ngx.settings.TARGET =
+    "unix://${config.systemd.socketActivations.podman-paperless-ngx.address}";
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
-    tinyauth.locations = [ "/" ];
-    locations."/".proxyPass =
+    locations."/api".proxyPass =
       "http://unix:${config.systemd.socketActivations.podman-paperless-ngx.address}";
+    locations."/".proxyPass =
+      "http://unix:${config.services.anubis.instances.paperless-ngx.settings.BIND}";
   };
   services.homepage-dashboard.groups.Media.services."Paperless NGX".settings = {
     description = "Document storage and management system";
