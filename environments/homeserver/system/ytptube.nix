@@ -124,6 +124,11 @@ in
             else
               json=$(echo "$1" | ${jq}/bin/jq -r '.message')
             fi
+            is_live=$(echo "$json" | ${jq}/bin/jq -r '.data.is_live')
+            if [ "$is_live" == "true" ]; then
+              echo "Live stream detected, skipping notification."
+              exit 0
+            fi
             title=$(echo "$json" | ${jq}/bin/jq -r '.data.title')
             folder=$(echo "$json" | ${jq}/bin/jq -r '.data.folder')
             thumbnail=$(echo "$json" | ${jq}/bin/jq -r '.data.extras.thumbnail')
