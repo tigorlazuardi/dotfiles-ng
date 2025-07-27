@@ -51,7 +51,7 @@ in
         image = "docker.io/penpotapp/frontend:latest";
         volumes = [ "${dataDir}/data/assets:/opt/data/assets" ];
         environment = penpotEnv;
-        ip = "10.88.10.10";
+        ip = "10.88.20.10";
         httpPort = 8080;
         socketActivation = {
           enable = true;
@@ -63,7 +63,7 @@ in
         volumes = [
           "${dataDir}/data/assets:/opt/data/assets"
         ];
-        ip = "10.88.10.11";
+        ip = "10.88.20.11";
         environmentFiles = [
           config.sops.templates."planetmelon/penpot.oidc.env".path
         ];
@@ -72,11 +72,11 @@ in
       "${name}-exporter" = {
         image = "docker.io/penpotapp/exporter:latest";
         environment = penpotEnv;
-        ip = "10.88.10.12";
+        ip = "10.88.20.12";
       };
       "${name}-postgres" = {
         image = "docker.io/postgres:15";
-        ip = "10.88.10.13";
+        ip = "10.88.20.13";
         podman.sdnotify = "healthy"; # Only notifies 'ready' to systemd when service healthcheck passes.
         extraOptions = [
           ''--health-cmd=pg_isready -U penpot''
@@ -95,7 +95,7 @@ in
       };
       "${name}-valkey" = {
         image = "docker.io/valkey/valkey:8.1";
-        ip = "10.88.10.14";
+        ip = "10.88.20.14";
         volumes = [
           "${dataDir}/valkey:/data"
         ];
