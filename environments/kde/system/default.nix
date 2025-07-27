@@ -24,6 +24,9 @@
     haruna # Open source video player built with Qt/QML and libmpv
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
+    naps2
+    kdePackages.skanlite
+    krita
 
     # KDE Ark extra support for various archive formats that is not included by default
     unrar # Allows ARK to extract RAR files, but not create them

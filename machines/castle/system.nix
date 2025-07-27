@@ -42,9 +42,11 @@
   };
   hardware.sane = {
     enable = true;
-    brscan4.enable = true; # Brother Scanner
+    brscan4.enable = true;
     extraBackends = with pkgs; [ sane-airscan ];
   };
+  services.avahi.enable = true;
+  services.avahi.nssmdns = true;
   users.users.${user.name}.extraGroups = [
     "scanner" # For sane scanner access
     "lp" # For printer access
