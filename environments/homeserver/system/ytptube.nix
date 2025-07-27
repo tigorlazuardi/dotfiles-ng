@@ -90,6 +90,9 @@ in
     tinyauth.locations = [ "/" ];
     locations."/".proxyPass = "http://unix:${config.systemd.socketActivations.podman-ytptube.address}";
   };
+  services.nginx.virtualHosts."ytptube.lan" = {
+    locations."/".proxyPass = "http://unix:${config.systemd.socketActivations.podman-ytptube.address}";
+  };
   services.homepage-dashboard.groups."Media Collectors".services.Ytptube.settings = {
     description = "Youtube Video Downloader";
     href = "https://ytptube.tigor.web.id";
