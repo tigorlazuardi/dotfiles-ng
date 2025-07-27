@@ -78,7 +78,7 @@ in
     httpPort = 8081;
     socketActivation = {
       enable = true;
-      idleTimeout = "30m";
+      idleTimeout = "1h";
     };
   };
   system.activationScripts.ytptube = ''
