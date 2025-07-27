@@ -1,4 +1,4 @@
-{ config, user, ... }:
+{ user, ... }:
 {
   imports = [
     ../../environments/core/system
@@ -7,6 +7,7 @@
     ../../environments/grandboard/system
 
     ./hardware.nix
+    ./printing.nix
     ./system.nix
     ./openssh.nix
   ];
