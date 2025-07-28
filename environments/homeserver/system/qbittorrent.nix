@@ -152,6 +152,7 @@ in
                 topic: "qbittorrent-start",
                 title: "Torrent started: \($category)",
                 message: $torrentName,
+                icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/qbittorrent.svg",
                 tags: $tags
               }')
 
@@ -188,6 +189,7 @@ in
                 topic: "qbittorrent-finish",
                 title: "Torrent finished: \($category)",
                 message: $body,
+                icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/qbittorrent.svg",
                 tags: $tags
               }')
 
