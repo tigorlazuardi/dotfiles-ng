@@ -1,60 +1,41 @@
 {
   config,
-  user,
   ...
 }:
 let
   volume = "/nas/jdownloader";
   domain = "jdownloader.tigor.web.id";
-  inherit (config.users.users.jdownloader) uid;
-  inherit (config.users.groups.jdownloader) gid;
 in
 {
-  users = {
-    users.jdownloader = {
-      isSystemUser = true;
-      uid = 901;
-      group = "jdownloader";
-    };
-    users.${user.name}.extraGroups = [
-      "jdownloader"
-    ];
-    groups.jdownloader.gid = 901;
-  };
 
-  virtualisation.oci-containers.containers.jdownloader =
-    let
-      inherit (config.users.users.jdownloader) uid;
-      inherit (config.users.groups.jdownloader) gid;
-    in
-    {
-      image = "docker.io/jlesage/jdownloader-2:latest";
-      hostname = "jdownloader";
-      ip = "10.88.2.1";
-      httpPort = 5800;
-      # user must be root in order to run JDownloader
-      socketActivation = {
-        enable = true;
-        idleTimeout = "1h";
-      };
-      volumes = [
-        "/var/lib/jdownloader:/config:rw"
-        "${volume}:/output:rw"
-      ];
-      environment = {
-        USER_ID = toString uid;
-        GROUP_ID = toString gid;
-        UMASK = "0002";
-        TZ = "Asia/Jakarta";
-        KEEP_APP_RUNNING = "1";
-        WEB_FILE_MANAGER = "1";
-      };
+  virtualisation.oci-containers.containers.jdownloader = {
+    image = "docker.io/jlesage/jdownloader-2:latest";
+    hostname = "jdownloader";
+    ip = "10.88.2.1";
+    httpPort = 5800;
+    # user must be root in order to run JDownloader
+    socketActivation = {
+      enable = true;
+      idleTimeout = "1h";
     };
+    volumes = [
+      "/var/lib/jdownloader:/config:rw"
+      "${volume}:/output:rw"
+    ];
+    environment = {
+      USER_ID = "1000";
+      GROUP_ID = "1000";
+      UMASK = "0002";
+      TZ = "Asia/Jakarta";
+      KEEP_APP_RUNNING = "1";
+      WEB_FILE_MANAGER = "1";
+    };
+  };
   systemd.services.podman-jdownloader = {
     serviceConfig.StateDirectory = "jdownloader";
     preStart = ''
       mkdir -p ${volume}
-      chown -R ${toString uid}:${toString gid} ${volume} /var/lib/jdownloader
+      chown -R 1000:1000 ${volume} /var/lib/jdownloader
     '';
   };
   services.nginx.virtualHosts."${domain}" = {
