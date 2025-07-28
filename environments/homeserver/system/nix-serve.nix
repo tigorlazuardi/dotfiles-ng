@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   domain = "nix.tigor.web.id";
 in
@@ -12,6 +17,7 @@ in
     # nix.tigor.web.id:18Jg7EtxhZX8fE+VYyxHNcJb8Faw4gFKV+QB47mWtOw=
     secretKeyFile = config.sops.secrets."nix-serve/private_key".path;
   };
+  programs.nh.clean.dates = lib.mkForce "monthly"; # Since we host a binary cache, we want to keep the cache longer.
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     locations."= /robots.txt".extraConfig = # nginx
