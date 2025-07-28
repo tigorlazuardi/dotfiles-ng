@@ -12,7 +12,7 @@
     ../../environments/desktop/system/optional/vial.nix
 
     ./hardware.nix
-    ./system.nix
+    ./system
   ];
 
   home-manager.users.${user.name} = {

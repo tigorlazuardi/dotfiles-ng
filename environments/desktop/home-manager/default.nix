@@ -7,7 +7,6 @@
     ./neovide.nix
     ./spotify.nix
     ./stylix.nix
-    ./syncthing.nix
     ./vivaldi.nix
     ./whatsapp.nix
   ];
