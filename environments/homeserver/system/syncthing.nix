@@ -28,9 +28,9 @@ in
         password = "";
       };
       devices = {
-        windows = {
-          name = "Windows";
-          id = "FSTIYS6-REFXIJX-KPLYC4L-QSZO46L-RV3VTPZ-VWVTE7O-Y663OZN-RTKP3QI";
+        castle = {
+          name = "Castle";
+          id = "ETGJJ3B-EMC7VUG-L575EES-QQGR554-6KGUS2L-JOCIYFL-FNM24WE-QSSN7AP";
         };
         work-laptop = {
           name = "Work Laptop";
@@ -39,6 +39,16 @@ in
         oppo-find-x8 = {
           name = "Oppo Find X8";
           id = "SAYTPBV-HYUWZS7-U25B53S-D6BJFSH-Q5E3PUT-ZO53LBB-QJ255QK-HJTNDAQ";
+        };
+      };
+      folders = {
+        "Redmage/Windows" = {
+          id = "Redmage/Windows";
+          label = "Redmage Windows";
+          path = "/nas/redmage/images/windows";
+          devices = [
+            "castle"
+          ];
         };
       };
     };
