@@ -1,6 +1,12 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (config.systemd.socketActivations.podman-whatsapp) address;
+  inherit (config.virtualisation.oci-containers.containers.whatsapp) ip httpPort;
+  proxyPass = "http://${ip}:${toString httpPort}";
   volume = "/var/lib/whatsapp";
 in
 {
@@ -11,10 +17,6 @@ in
   # Docs: https://github.com/chrishubert/whatsapp-api/blob/master/docker-compose.yml
   virtualisation.oci-containers.containers.whatsapp = {
     image = "docker.io/chrishubert/whatsapp-web-api:latest";
-    socketActivation = {
-      enable = true;
-      idleTimeout = "15m";
-    };
     ip = "10.88.0.6";
     httpPort = 3000;
     environment = {
@@ -36,9 +38,20 @@ in
   systemd.services.podman-whatsapp.preStart = ''
     mkdir -p ${volume}/sessions
   '';
+  systemd.services.podman-whatsapp.serviceConfig.ExecStartPost = [
+    (with pkgs; "${waitport}/bin/waitport 600 ${ip} ${toString httpPort}")
+    (
+      with pkgs;
+      (lib.meta.getExe (
+        writeShellScriptBin "start-whatsapp-session" ''
+          ${curl}/bin/curl --silent --show-error -H "X-Api-Key: whatsapp" http://whatsapp.lan/session/start/tigor
+        ''
+      ))
+    )
+  ];
   services.nginx.virtualHosts = {
     # For local access, e.g. by different services.
-    "whatsapp.lan".locations."/".proxyPass = "http://unix:${address}";
+    "whatsapp.lan".locations."/".proxyPass = proxyPass;
     # For interactive access.
     "whatsapp.tigor.web.id" = {
       forceSSL = true;
@@ -47,7 +60,7 @@ in
         ''
           return 301 /api-docs;
         '';
-      locations."/".proxyPass = "http://unix:${address}";
+      locations."/".proxyPass = proxyPass;
     };
   };
 }
