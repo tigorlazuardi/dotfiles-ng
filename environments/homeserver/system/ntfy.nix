@@ -38,7 +38,7 @@ in
                 command = mkOption {
                   type = types.str;
                   description = "The command to execute when a message is received on the topic.";
-                  default = "${pkgs.libnotify}/bin/notify-send '$message'";
+                  default = with pkgs; ''${coreutils}/bin/echo "$raw"'';
                 };
               };
             }

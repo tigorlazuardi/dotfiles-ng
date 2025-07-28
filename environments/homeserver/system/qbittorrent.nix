@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   user,
   ...
 }:
@@ -25,7 +26,6 @@ let
     pkgs.writeScriptBin "notify-${event}" # sh
       ''
         #!/usr/bin/env bash
-        size=$(echo "$8" | numfmt --to=iec)
         data=$(jq -n \
           --compact-output \
           --arg torrentName "$1" \
@@ -40,7 +40,6 @@ let
           --arg infoHashV1 "''${10}" \
           --arg infoHashV2 "''${11}" \
           --arg torrentId "''${12}" \
-          --arg size "$size" \
           '{
             torrentName: $torrentName,
             category: $category,
@@ -53,8 +52,7 @@ let
             tracker: $tracker,
             infoHashV1: $infoHashV1,
             infoHashV2: $infoHashV2,
-            torrentId: $torrentId,
-            size: $size
+            torrentId: $torrentId
           }');
         curl -u $NTFY_USER --data "$data" "https://ntfy.tigor.web.id/qbittorrent-${event}-raw"
       '';
@@ -134,4 +132,68 @@ in
       enableLeechProgress = true;
     };
   };
+  services.ntfy-sh.middlewares = [
+    {
+      topic = "qbittorrent-start-raw";
+      command =
+        with pkgs;
+        ''${lib.getExe (
+          writeShellScriptBin "qbittorrent-start-raw-handler" ''
+            msg=$(echo "$1" | ${jq}/bin/jq -r '.message')
+            torrentName=$(echo "$msg" | ${jq}/bin/jq -r '.torrentName')
+            category=$(echo "$msg" | ${jq}/bin/jq -r '.category')
+            tags=$(echo "$msg" | ${jq}/bin/jq -r '.tags')
+            data=$(${jq}/bin/jq -n \
+              --compact-output \
+              --arg torrentName "$torrentName" \
+              --arg category "$category" \
+              --argjson tags "$(echo "$tags" | ${jq}/bin/jq -R 'split(",")')" \
+              '{
+                topic: "qbittorrent-start",
+                title: "Torrent started: \($category)",
+                message: $torrentName,
+                tags: $tags
+              }')
+
+            ${curl}/bin/curl -u $NTFY_USER --data "$data" 'https://${config.services.ntfy-sh.domain}'
+          ''
+        )} "$raw"'';
+    }
+    {
+      topic = "qbittorrent-finish-raw";
+      command =
+        with pkgs;
+        ''${lib.getExe (
+          writeShellScriptBin "qbittorrent-finish-raw-handler" ''
+            msg=$(echo "$1" | ${jq}/bin/jq -r '.message')
+            torrentName=$(echo "$msg" | ${jq}/bin/jq -r '.torrentName')
+            category=$(echo "$msg" | ${jq}/bin/jq -r '.category')
+            tags=$(echo "$msg" | ${jq}/bin/jq -r '.tags')
+            torrentSize=$(echo "$msg" | ${jq}/bin/jq -r '.torrentSize')
+            numFiles=$(echo "$msg" | ${jq}/bin/jq -r '.numFiles')
+            size=$(echo "$torrentSize" | numfmt --to=iec)
+            body=$(cat << EOF
+              $torrentName
+
+              Size  : $size
+              Files : $numFiles
+            EOF
+            )
+            data=$(${jq}/bin/jq -n \
+              --compact-output \
+              --arg category "$category" \
+              --arg body "$body" \
+              --argjson tags "$(echo "$tags" | ${jq}/bin/jq -R 'split(",")')" \
+              '{
+                topic: "qbittorrent-finish",
+                title: "Torrent finished: \($category)",
+                message: $body,
+                tags: $tags
+              }')
+
+            ${curl}/bin/curl -u $NTFY_USER --data "$data" 'https://${config.services.ntfy-sh.domain}'
+          ''
+        )} "$raw"'';
+    }
+  ];
 }
