@@ -1,7 +1,20 @@
-{ user, ... }:
+{ config, user, ... }:
 {
+  sops.secrets =
+    let
+      opts = {
+        owner = config.services.syncthing.user;
+        sopsFile = ../../../secrets/syncthing.yaml;
+      };
+    in
+    {
+      "syncthing/castle/key.pem" = opts;
+      "syncthing/castle/cert.pem" = opts;
+    };
   services.syncthing = {
     enable = true;
+    key = config.sops.secrets."syncthing/castle/key.pem".path;
+    cert = config.sops.secrets."syncthing/castle/cert.pem".path;
     user = user.name;
     configDir = "/home/${user.name}/.config/syncthing";
     dataDir = "/home/${user.name}/sync";
