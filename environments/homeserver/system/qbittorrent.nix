@@ -8,6 +8,58 @@ let
   volume = "/nas/torrents";
   inherit (config.users.groups.qbittorrent) gid;
   inherit (config.users.users.qbittorrent) uid;
+  # $1 = %N  | Torrent Name
+  # $2 = %L  | Category
+  # $3 = %G  | Tags
+  # $4 = %F  | Content Path
+  # $5 = %R  | Root Path
+  # $6 = %D  | Save Path
+  # $7 = %C  | Number of files
+  # $8 = %Z  | Torrent Size
+  # $9 = %T  | Current Tracker
+  # $10 = %I | Info Hash v1
+  # $11 = %J | Info Hash v2
+  # $12 = %K | Torrent ID
+  mkNotify =
+    event:
+    pkgs.writeScriptBin "notify-${event}" # sh
+      ''
+        #!/usr/bin/env bash
+        size=$(echo "$8" | numfmt --to=iec)
+        data=$(jq -n \
+          --compact-output \
+          --arg torrentName "$1" \
+          --arg category "$2" \
+          --arg tags "$3" \
+          --arg contentPath "$4" \
+          --arg rootPath "$5" \
+          --arg savePath "$6" \
+          --arg numFiles "$7" \
+          --arg torrentSize "$8" \
+          --arg tracker "$9" \
+          --arg infoHashV1 "''${10}" \
+          --arg infoHashV2 "''${11}" \
+          --arg torrentId "''${12}" \
+          --arg size "$size" \
+          '{
+            torrentName: $torrentName,
+            category: $category,
+            tags: $tags,
+            contentPath: $contentPath,
+            rootPath: $rootPath,
+            savePath: $savePath,
+            numFiles: $numFiles,
+            torrentSize: $torrentSize,
+            tracker: $tracker,
+            infoHashV1: $infoHashV1,
+            infoHashV2: $infoHashV2,
+            torrentId: $torrentId,
+            size: $size
+          }');
+        curl -u $NTFY_USER --data "$data" "https://ntfy.tigor.web.id/qbittorrent-${event}-raw"
+      '';
+  notify-start = mkNotify "start";
+  notify-finish = mkNotify "finish";
 in
 {
   users = {
@@ -31,7 +83,12 @@ in
       PGID = toString gid;
       TZ = "Asia/Jakarta";
     };
+    environmentFiles = [
+      config.sops.templates."ntfy/client.env".path
+    ];
     volumes = [
+      "${notify-start}/bin/notify-start:/usr/bin/notify-start"
+      "${notify-finish}/bin/notify-finish:/usr/bin/notify-finish"
       "${volume}/config:/config"
       "${volume}/downloads:/downloads"
       "${volume}/progress:/progress"
