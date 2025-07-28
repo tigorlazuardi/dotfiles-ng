@@ -33,6 +33,7 @@
     ./suwayomi.nix
     ./syncthing.nix
     ./tiny_auth.nix
+    ./whatsapp.nix
     ./wireguard.nix
     ./ytptube.nix
   ];
