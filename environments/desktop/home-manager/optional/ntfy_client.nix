@@ -24,6 +24,16 @@ let
           if [ -z "$title" ] || [ "$title" = "null" ]; then
             title="$topic"
           fi
+          icon="${ntfy-icon}"
+          gotIcon=$(echo "$1" | ${jq}/bin/jq -r '.icon')
+          if [ -n "gotIcon" ] && [ "$gotIcon" != "null" ]; then
+            filename=''${gotIcon##*/}
+            file="${tmpdir}/$filename"
+            if [ ! -f "$file" ]; then
+              ${curl}/bin/curl -o "$file" "$gotIcon"
+            fi
+            icon="$file"
+          fi
           message=$(echo "$1" | ${jq}/bin/jq -r '.message')
           appname="NTFY - $topic"
 
@@ -31,16 +41,22 @@ let
             --expire-time=5000 \
             --action="topic=Topic" \
             --app-name="$appname" \
-            --icon="${ntfy-icon}" \
+            --icon="$icon" \
             "$title" "$message")
           case $ret_val in
-            "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
+            "topic" ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
           esac
         ''
       )} "$raw"'';
     subscribe = [
       {
         topic = "jellyfin";
+      }
+      {
+        topic = "qbittorrent-start";
+      }
+      {
+        topic = "qbittorrent-finish";
       }
       {
         topic = "servarr";
