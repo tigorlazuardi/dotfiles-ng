@@ -43,4 +43,7 @@ in
     icon = "nixos.svg";
     href = "https://${domain}";
   };
+  services.adguardhome.settings.user_rules = [
+    "192.168.100.5 ssh-serve.tigor.web.id"
+  ];
 }
