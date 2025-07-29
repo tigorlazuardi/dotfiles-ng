@@ -21,7 +21,7 @@ in
     volumes = [
       "${configVolume}:/config"
       "${mediaVolume}:/data/torrents"
-      "${pkgs.vuetorrent}/share/vuetorrent:/webui/vuetorrent:ro"
+      "${pkgs.vuetorrent}/share/vuetorrent:/webui:ro"
     ];
     ports = [
       "6882:6882"
