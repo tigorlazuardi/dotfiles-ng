@@ -1,4 +1,4 @@
-{ user, ... }:
+{ user, pkgs, ... }:
 {
   programs.nh = {
     enable = true;
@@ -20,5 +20,23 @@
         }
       ];
     }
+  ];
+
+  environment.systemPackages = with pkgs; [
+    (writeShellScriptBin "update" ''
+      nh os switch -- --accept-flake-config
+      nix copy --to ssh://nix-ssh@ssh-serve.tigor.web.id --all || true
+    '')
+    (writeShellScriptBin "superupdate" ''
+      nh os switch --update -- --accept-flake-config
+      nix copy --to ssh://nix-ssh@ssh-serve.tigor.web.id --all || true
+    '')
+    (writeShellScriptBin "uptest" ''
+      nh os test -- --accept-flake-config
+      nix copy --to ssh://nix-ssh@ssh-serve.tigor.web.id --all || true
+    '')
+    (writeShellScriptBin "dry" ''
+      sudo nixos-rebuild dry-activate --flake /home/${user.name}/dotfiles
+    '')
   ];
 }

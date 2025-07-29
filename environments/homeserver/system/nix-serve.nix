@@ -35,6 +35,7 @@ in
     keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO1aSG3/1vrgEPgK038tZ8+ipz3gZqr9hRT0JUteJXY tigor@fort"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIPQzsIv7DPww62CbhdGddTLTErsJzpfowxRIYBR1P+9 tigor@castle"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAUHbe0nQ679L57k9HTIEgJJM28yXuDW4Sa3E6lP1OYN homeserver@homeserver"
     ];
   };
   services.homepage-dashboard.groups.Utilities.services."Nix Binary Cache Server".settings = {
