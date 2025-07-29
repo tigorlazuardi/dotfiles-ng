@@ -11,6 +11,10 @@ let
     url = "https://docs.ntfy.sh/static/img/ntfy.png";
     hash = "sha256-JZvuRep9UKGgJXZ2vTOa6PtBStws281YfDDDe8S+/kU=";
   };
+  qbittorrent-icon = pkgs.fetchurl {
+    url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/qbittorrent.svg";
+    hash = "sha256-3GpeIIea03tuk2fMyRQ/35A1H0DrCMIAzX0AP/GxwnU=";
+  };
   inherit (lib.meta) getExe;
   mkCommand =
     name: script:
@@ -37,16 +41,16 @@ let
         fi
         message=$(echo "$1" | ${jq}/bin/jq -r '.message')
         ret_val=$(${libnotify}/bin/notify-send \
-          --action="topic=Topic" \
           ${lib.concatMapAttrsStringSep "\n" (name: value: ''--action="${name}=${value.label}" \'') actions}
+          --action="topic=Topic" \
           --app-name="${name}" \
           --icon="${icon}" \
           "$title" "$message")
 
-          case $ret_val in
-            "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
-            ${lib.concatMapAttrsStringSep "\n" (name: value: ''"${name}") ${value.command} ;;'') actions}
-          esac
+        case $ret_val in
+          "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
+          ${lib.concatMapAttrsStringSep "\n" (name: value: ''"${name}") ${value.command} ;;'') actions}
+        esac
       ''
     );
   settings = {
@@ -99,9 +103,25 @@ let
       }
       {
         topic = "qbittorrent-start";
+        command = mkNotifySendCommand {
+          name = "QBittorrent";
+          icon = qbittorrent-icon;
+          actions.open = {
+            label = "Open QBittorrent";
+            command = "${pkgs.xdg-utils}/bin/xdg-open https://qbittorrent.tigor.web.id";
+          };
+        };
       }
       {
         topic = "qbittorrent-finish";
+        command = mkNotifySendCommand {
+          name = "QBittorrent";
+          icon = qbittorrent-icon;
+          actions.open = {
+            label = "Open QBittorrent";
+            command = "${pkgs.xdg-utils}/bin/xdg-open https://qbittorrent.tigor.web.id";
+          };
+        };
       }
       {
         topic = "servarr";
@@ -111,32 +131,17 @@ let
       }
       {
         topic = "ytptube";
-        command =
-          with pkgs;
-          mkCommand "ytptube" # sh
-            ''
-              message=$(echo "$1" | ${jq}/bin/jq -r '.message')
-              title=$(echo "$1" | ${jq}/bin/jq -r '.title')
-              sourceUrl=$(echo "$message" | ${jq}/bin/jq -r '.actions[] | select(.action == "view") | .url')
-
-              ret_val=$(${libnotify}/bin/notify-send \
-                --action="source=Source" \
-                --action="ytptube=YTPTube" \
-                --action="topic=Topic" \
-                --app-name="YTPTube" \
-                --icon="${
-                  fetchurl {
-                    url = "https://raw.githubusercontent.com/arabcoders/ytptube/refs/heads/master/ui/public/favicon.ico";
-                    hash = "sha256-qvrSD81jC+RshJJqnulQqkVFP4eYM/Q4fXBDDg1jg1Q=";
-                  }
-                }" \
-                "$title" "$message")
-              case $ret_val in
-                "source") ${xdg-utils}/bin/xdg-open "$sourceUrl" ;;
-                "ytptube") ${xdg-utils}/bin/xdg-open "https://ytptube.tigor.web.id" ;;
-                "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/ytptube" ;;
-              esac
-            '';
+        command-b = mkNotifySendCommand {
+          name = "YTPTube";
+          icon = pkgs.fetchurl {
+            url = "https://raw.githubusercontent.com/arabcoders/ytptube/refs/heads/master/ui/public/favicon.ico";
+            hash = "sha256-qvrSD81jC+RshJJqnulQqkVFP4eYM/Q4fXBDDg1jg1Q=";
+          };
+          actions.open = {
+            label = "Open YTPTube";
+            command = "${pkgs.xdg-utils}/bin/xdg-open https://ytptube.tigor.web.id";
+          };
+        };
       }
     ];
   };
