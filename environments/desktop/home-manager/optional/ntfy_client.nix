@@ -15,10 +15,12 @@ let
   mkCommand =
     name: script:
     with pkgs;
-    ''${writeShellScriptBin "${name}-wrapped" ''
-      echo "$1"
-      ${systemd}/bin/systemd-run --user --no-block --collect ${getExe (writeShellScriptBin name script)} "$1";
-    ''} "$raw"'';
+    ''${getExe (
+      writeShellScriptBin "${name}-wrapped" ''
+        echo "$1"
+        ${systemd}/bin/systemd-run --user --no-block --collect ${getExe (writeShellScriptBin name script)} "$1";
+      ''
+    )} "$raw"'';
   settings = {
     default-host = host;
     default-command =
