@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   inherit (config.users.users.servarr) uid;
   inherit (config.users.groups.servarr) gid;
@@ -21,6 +21,7 @@ in
     volumes = [
       "${configVolume}:/config"
       "${mediaVolume}:/data/torrents"
+      "${pkgs.vuetorrent}/share/vuetorrent:/webui/vuetorrent:ro"
     ];
     ports = [
       "6882:6882"
