@@ -139,6 +139,7 @@ in
         with pkgs;
         ''${lib.getExe (
           writeShellScriptBin "qbittorrent-start-raw-handler" ''
+            echo "$1"
             msg=$(echo "$1" | ${jq}/bin/jq -r '.message')
             torrentName=$(echo "$msg" | ${jq}/bin/jq -r '.torrentName')
             category=$(echo "$msg" | ${jq}/bin/jq -r '.category')
@@ -166,6 +167,7 @@ in
         with pkgs;
         ''${lib.getExe (
           writeShellScriptBin "qbittorrent-finish-raw-handler" ''
+            echo "$1"
             msg=$(echo "$1" | ${jq}/bin/jq -r '.message')
             torrentName=$(echo "$msg" | ${jq}/bin/jq -r '.torrentName')
             category=$(echo "$msg" | ${jq}/bin/jq -r '.category')
