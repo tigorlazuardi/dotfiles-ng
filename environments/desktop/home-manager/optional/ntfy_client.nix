@@ -44,7 +44,7 @@ let
             --icon="$icon" \
             "$title" "$message")
           case $ret_val in
-            "topic" ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
+            "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
           esac
         ''
       )} "$raw"'';
