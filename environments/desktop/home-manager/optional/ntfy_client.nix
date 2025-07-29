@@ -12,13 +12,19 @@ let
     hash = "sha256-JZvuRep9UKGgJXZ2vTOa6PtBStws281YfDDDe8S+/kU=";
   };
   inherit (lib.meta) getExe;
+  mkCommand =
+    name: script:
+    with pkgs;
+    ''${writeShellScriptBin "${name}-wrapped" ''
+      echo "$1"
+      ${systemd}/bin/systemd-run --user --no-block --collect ${getExe (writeShellScriptBin name script)} "$1";
+    ''} "$raw"'';
   settings = {
     default-host = host;
     default-command =
       with pkgs;
-      ''${getExe (
-        writeShellScriptBin "ntfy-default-command" ''
-          echo "$1"
+      mkCommand "default-command" # sh
+        ''
           topic=$(echo "$1" | ${jq}/bin/jq -r '.topic')
           title=$(echo "$1" | ${jq}/bin/jq -r '.title')
           if [ -z "$title" ] || [ "$title" = "null" ]; then
@@ -38,7 +44,6 @@ let
           appname="NTFY - $topic"
 
           ret_val=$(${libnotify}/bin/notify-send \
-            --expire-time=5000 \
             --action="topic=Topic" \
             --app-name="$appname" \
             --icon="$icon" \
@@ -46,8 +51,7 @@ let
           case $ret_val in
             "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
           esac
-        ''
-      )} "$raw"'';
+        '';
     subscribe = [
       {
         topic = "jellyfin";
@@ -66,15 +70,15 @@ let
       }
       {
         topic = "ytptube";
-        command = ''${
-          getExe (
-            with pkgs;
-            writeShellScriptBin "ytptube-command-handler" ''
-              echo "$3"
-              sourceUrl=$(echo "$3" | ${jq}/bin/jq -r '.actions[] | select(.action == "view") | .url')
+        command =
+          with pkgs;
+          mkCommand "ytptube" # sh
+            ''
+              message=$(echo "$1" | ${jq}/bin/jq -r '.message')
+              title=$(echo "$1" | ${jq}/bin/jq -r '.title')
+              sourceUrl=$(echo "$message" | ${jq}/bin/jq -r '.actions[] | select(.action == "view") | .url')
 
               ret_val=$(${libnotify}/bin/notify-send \
-                --expire-time=5000 \
                 --action="source=Source" \
                 --action="ytptube=YTPTube" \
                 --action="topic=Topic" \
@@ -85,15 +89,13 @@ let
                     hash = "sha256-qvrSD81jC+RshJJqnulQqkVFP4eYM/Q4fXBDDg1jg1Q=";
                   }
                 }" \
-                "$1" "$2")
+                "$title" "$message")
               case $ret_val in
                 "source") ${xdg-utils}/bin/xdg-open "$sourceUrl" ;;
                 "ytptube") ${xdg-utils}/bin/xdg-open "https://ytptube.tigor.web.id" ;;
                 "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/ytptube" ;;
               esac
-            ''
-          )
-        } "$title" "$message" "$raw"'';
+            '';
       }
     ];
   };
