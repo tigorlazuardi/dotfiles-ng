@@ -16,11 +16,39 @@ let
     name: script:
     with pkgs;
     ''${getExe (
-      writeShellScriptBin "${name}-wrapped" ''
+      writeShellScriptBin "ntfy-${name}-wrapped" ''
         echo "$1"
-        ${systemd}/bin/systemd-run --user --no-block --collect ${getExe (writeShellScriptBin name script)} "$1";
+        ${systemd}/bin/systemd-run --user --no-block --collect ${getExe (writeShellScriptBin "ntfy-${name}" script)} "$1";
       ''
     )} "$raw"'';
+  mkNotifySendCommand =
+    {
+      name,
+      icon ? ntfy-icon,
+      actions ? { },
+    }:
+    mkCommand name (
+      with pkgs; # sh
+      ''
+        topic=$(echo "$1" | ${jq}/bin/jq -r '.topic')
+        title=$(echo "$1" | ${jq}/bin/jq -r '.title')
+        if [ -z "$title" ] || [ "$title" = "null" ]; then
+          title="$topic"
+        fi
+        message=$(echo "$1" | ${jq}/bin/jq -r '.message')
+        ret_val=$(${libnotify}/bin/notify-send \
+          --action="topic=Topic" \
+          ${lib.concatMapAttrsStringSep "\n" (name: value: ''--action="${name}=${value.label}" \'') actions}
+          --app-name="${name}" \
+          --icon="${icon}" \
+          "$title" "$message")
+
+          case $ret_val in
+            "topic") ${xdg-utils}/bin/xdg-open "https://ntfy.tigor.web.id/$topic" ;;
+            ${lib.concatMapAttrsStringSep "\n" (name: value: ''"${name}") ${value.command} ;;'') actions}
+          esac
+      ''
+    );
   settings = {
     default-host = host;
     default-command =
@@ -57,6 +85,17 @@ let
     subscribe = [
       {
         topic = "jellyfin";
+        command = mkNotifySendCommand {
+          name = "Jellyfin";
+          icon = pkgs.fetchurl {
+            url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/jellyfin.svg";
+            hash = "sha256-f1PPCD27MRnsjFrL2AScUDMidhfkYVQPcFkawQkSQwY=";
+          };
+          actions.open = {
+            label = "Open Jellyfin";
+            command = "${pkgs.xdg-utils}/bin/xdg-open https://jellyfin.tigor.web.id";
+          };
+        };
       }
       {
         topic = "qbittorrent-start";
