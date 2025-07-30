@@ -111,6 +111,7 @@
       };
       hgst = {
         type = "disk";
+        # 1TB Spinning disk. For storing backups.
         device = "/dev/disk/by-id/ata-HGST_HTS721010A9E630_JR10004M3NZVHF";
         content = {
           type = "gpt";
@@ -121,7 +122,51 @@
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
-                  "/root".mountpoint = "/kyo";
+                  "/root".mountpoint = "/hgst";
+                  # For snapper.
+                  "/root/.snapshots" = { };
+                };
+              };
+            };
+          };
+        };
+      };
+      vgen = {
+        type = "disk";
+        # 512GB SATA SSD.
+        device = "/dev/disk/by-id/ata-V-GEN05SM23AR512INT_512GB_VGAR2023053000068434";
+        content = {
+          type = "gpt";
+          partitions = {
+            root = {
+              size = "100%";
+              content = {
+                type = "btrfs";
+                extraArgs = [ "-f" ]; # Override existing partition
+                subvolumes = {
+                  "/root".mountpoint = "/hgst";
+                  # For snapper.
+                  "/root/.snapshots" = { };
+                };
+              };
+            };
+          };
+        };
+      };
+      wdc = {
+        type = "disk";
+        # 500GB SATA SSD.
+        device = "/dev/disk/by-id/ata-WDC_WDS500G2B0A-00SM50_19432C802119";
+        content = {
+          type = "gpt";
+          partitions = {
+            root = {
+              size = "100%";
+              content = {
+                type = "btrfs";
+                extraArgs = [ "-f" ]; # Override existing partition
+                subvolumes = {
+                  "/root".mountpoint = "/hgst";
                   # For snapper.
                   "/root/.snapshots" = { };
                 };
