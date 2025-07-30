@@ -10,7 +10,6 @@
           partitions = {
             ESP = {
               priority = 1;
-              name = "ESP";
               size = "1G";
               type = "EF00";
               content = {
@@ -21,9 +20,14 @@
               };
             };
             sops = {
-              size = "1G";
+              size = "256M";
               name = "sops";
               priority = 2;
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpunt = "/sops";
+              };
             };
             root = {
               size = "-20G";
