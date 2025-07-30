@@ -11,8 +11,7 @@
             ESP = {
               priority = 1;
               name = "ESP";
-              start = "1M";
-              end = "1G";
+              size = "1G";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -28,7 +27,10 @@
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
                   "/home" = {
-                    mountOptions = [ "compress=zstd" ];
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
                     mountpoint = "/home";
                   };
                   # For snapper.
@@ -41,7 +43,13 @@
                     ];
                   };
                   # We do have to persist /var/lib so programs can store state there between boot.
-                  "/varlib".mountpoint = "/var/lib";
+                  "/varlib" = {
+                    mountpoint = "/var/lib";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                  };
                   # For snapper.
                   "/varlib/.snapshots" = { };
                   # Just in case we need to debug stuffs between boot.
@@ -55,7 +63,7 @@
                 };
               };
             };
-            swappy = {
+            swap = {
               size = "100%";
               content = {
                 type = "swap";
@@ -79,7 +87,13 @@
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
-                  "/root".mountpoint = "/adata";
+                  "/root" = {
+                    mountpoint = "/adata";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                  };
                   # For snapper.
                   "/root/.snapshots" = { };
                 };
@@ -100,7 +114,13 @@
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
-                  "/root".mountpoint = "/kyo";
+                  "/root" = {
+                    mountpoint = "/kyo";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                  };
                   # For snapper.
                   "/root/.snapshots" = { };
                 };
@@ -122,7 +142,13 @@
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
-                  "/root".mountpoint = "/hgst";
+                  "/root" = {
+                    mountpoint = "/hgst";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                  };
                   # For snapper.
                   "/root/.snapshots" = { };
                 };
@@ -144,7 +170,13 @@
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
-                  "/root".mountpoint = "/hgst";
+                  "/root" = {
+                    mountpoint = "/hgst";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                  };
                   # For snapper.
                   "/root/.snapshots" = { };
                 };
@@ -166,7 +198,13 @@
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
-                  "/root".mountpoint = "/hgst";
+                  "/root" = {
+                    mountpoint = "/wdc";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                  };
                   # For snapper.
                   "/root/.snapshots" = { };
                 };
