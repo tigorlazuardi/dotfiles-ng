@@ -91,7 +91,11 @@ in
             cfg = config.systemd.socketActivations."${name}";
           in
           nameValuePair name {
-            serviceConfig.ExecStartPost = optional cfg.wait.enable cfg.wait.command;
+            serviceConfig = lib.mkIf cfg.wait.enable {
+              ExecStartPost = [ cfg.wait.command ];
+              # This will help dealing with services that are stuck at "activating" state.
+              TimeoutStartSec = cfg.wait.startTimeout;
+            };
             unitConfig.StopWhenUnneeded = true;
             wantedBy = lib.mkForce [ ]; # enfore the service can only be activated by socket activation.
           }
