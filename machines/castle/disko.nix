@@ -20,6 +20,11 @@
                 mountOptions = [ "umask=0077" ];
               };
             };
+            sops = {
+              size = "1G";
+              name = "sops";
+              priority = 2;
+            };
             root = {
               size = "-20G";
               content = {
