@@ -47,7 +47,7 @@ let
           };
           startTimeout = mkOption {
             type = types.ints.positive;
-            default = 60;
+            default = 30;
             description = "The time in seconds to wait for the service's port to be ready before giving up";
           };
           command = mkOption {
@@ -94,7 +94,7 @@ in
             serviceConfig = lib.mkIf cfg.wait.enable {
               ExecStartPost = [ cfg.wait.command ];
               # This will help dealing with services that are stuck at "activating" state.
-              TimeoutStartSec = cfg.wait.startTimeout;
+              TimeoutStartSec = lib.mkForce cfg.wait.startTimeout;
             };
             unitConfig.StopWhenUnneeded = true;
             wantedBy = lib.mkForce [ ]; # enfore the service can only be activated by socket activation.
