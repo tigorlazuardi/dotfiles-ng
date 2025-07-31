@@ -10,7 +10,7 @@
   ];
   home.packages = with pkgs; [ sops ];
   sops = {
-    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    age.keyFile = "/sops/keys.txt";
     defaultSopsFormat = "yaml";
   };
 }
