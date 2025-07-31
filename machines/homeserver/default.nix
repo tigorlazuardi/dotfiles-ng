@@ -15,6 +15,8 @@
     imports = [
       ../../environments/core/home-manager
       ../../environments/homeserver/home-manager
+
+      ./home-manager.nix
     ];
   };
   networking.hostName = "homeserver";
