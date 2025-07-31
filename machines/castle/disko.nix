@@ -239,4 +239,14 @@
   };
   # Sops are needed to be mounted at boot for decryption of secrets.
   fileSystems."/sops".neededForBoot = true;
+  systemd.services.sops-drive-permission = {
+    description = "Ensure permissions for sops drive on mount are correct";
+    script = ''
+      # Force permissions to be main user only.
+      chown -R 1000:1000 /sops
+      # Make sure only the main user can read/write/execute to the sops drive.
+      chmod -R 700 /sops
+    '';
+    wantedBy = [ "sops.mount" ];
+  };
 }
