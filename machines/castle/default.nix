@@ -12,6 +12,7 @@
     ../../environments/desktop/system/optional/vial.nix
 
     ./hardware.nix
+    ./disko.nix
     ./system
   ];
 

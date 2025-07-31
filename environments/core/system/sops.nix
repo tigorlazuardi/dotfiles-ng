@@ -9,7 +9,8 @@
   ];
   sops = {
     defaultSopsFormat = "yaml";
-    age.keyFile = "/home/${user.name}/.config/sops/age/keys.txt";
+    age.keyFile = "/sops/keys.txt";
+    # age.keyFile = "/home/${user.name}/.config/sops/age/keys.txt";
   };
 
   # Decrypt sop secrets at boot time after the system finishes activating (after runlevels rescue (level 2))

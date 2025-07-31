@@ -1,4 +1,8 @@
+{inputs ,...}:
 {
+  imports = [
+    inputs.disko.nixosModules.disko
+  ];
   disko.devices = {
     disk = {
       os = {
@@ -26,15 +30,19 @@
               content = {
                 type = "filesystem";
                 format = "ext4";
-                mountpunt = "/sops";
+                mountpoint = "/sops";
               };
             };
             root = {
-              size = "-20G";
+              end = "-20G";
               content = {
                 type = "btrfs";
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
+                  "/root" = {
+                    mountOptions = ["noatime"];
+                    mountpoint = "/";
+                  };
                   "/home" = {
                     mountOptions = [
                       "compress=zstd"
@@ -99,6 +107,7 @@
                   "/root" = {
                     mountpoint = "/adata";
                     mountOptions = [
+                      "nofail"
                       "compress=zstd"
                       "noatime"
                     ];
@@ -126,6 +135,7 @@
                   "/root" = {
                     mountpoint = "/kyo";
                     mountOptions = [
+                      "nofail"
                       "compress=zstd"
                       "noatime"
                     ];
@@ -154,6 +164,7 @@
                   "/root" = {
                     mountpoint = "/hgst";
                     mountOptions = [
+                      "nofail"
                       "compress=zstd"
                       "noatime"
                     ];
@@ -180,8 +191,9 @@
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
                   "/root" = {
-                    mountpoint = "/hgst";
+                    mountpoint = "/vgen";
                     mountOptions = [
+                      "nofail"
                       "compress=zstd"
                       "noatime"
                     ];
@@ -210,6 +222,7 @@
                   "/root" = {
                     mountpoint = "/wdc";
                     mountOptions = [
+                      "nofail"
                       "compress=zstd"
                       "noatime"
                     ];
@@ -221,15 +234,6 @@
             };
           };
         };
-      };
-    };
-    # Impermanence. Root will be wiped on reboot.
-    #
-    # Ensure to mount directories that need to persist on above.
-    nodev = {
-      "/" = {
-        fsType = "tmpfs";
-        mountOptions = [ "size=256M" ];
       };
     };
   };

@@ -16,7 +16,6 @@
     common-pc-ssd
   ]);
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.resumeDevice = "/dev/disk/by-label/swap";
   boot.loader = {
     efi = {
       efiSysMountPoint = "/boot";

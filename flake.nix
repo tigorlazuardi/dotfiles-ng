@@ -34,6 +34,10 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     stylix.url = "github:danth/stylix";
     nixvim.url = "github:nix-community/nixvim";
+    disko = {
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     snacks-nvim = {
       url = "github:folke/snacks.nvim";
       flake = false;
