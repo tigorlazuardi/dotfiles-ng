@@ -4,6 +4,7 @@
     # currently all devices will use nixvim as editor in terminal.
     ../../nixvim/home-manager
 
+    ./apprise.nix
     ./bluetooth.nix
     ./direnv.nix
     ./fish.nix

@@ -4,7 +4,6 @@
 }:
 {
   imports = [
-    ./apprise.nix
     ./editor.nix
     ./fonts.nix
     ./home-manager.nix
