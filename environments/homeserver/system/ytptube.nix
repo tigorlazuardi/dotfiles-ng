@@ -177,12 +177,13 @@ in
             folder=$(echo "$json" | ${jq}/bin/jq -r '.data.folder')
             thumbnail=$(echo "$json" | ${jq}/bin/jq -r '.data.extras.thumbnail')
             url="$(echo "$json" | ${jq}/bin/jq -r '.data.url')"
+            body=$(printf "Title  : %s\nFolder : %s\nURL    : %s" "$title" "$folder" "$url")
 
             endpoint=$(cat ${config.sops.secrets."apprise/discord/ytptube".path})
 
             ${apprise}/bin/apprise \
               -t "Download Completed: $folder" \
-              -b "Title  : $title\nFolder : $folder\nURL    : $url" \
+              -b "$body" \
               -a "$thumbnail" \
               "$endpoint"
           ''
