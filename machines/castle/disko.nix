@@ -1,4 +1,4 @@
-{inputs ,...}:
+{ inputs, ... }:
 {
   imports = [
     inputs.disko.nixosModules.disko
@@ -40,7 +40,7 @@
                 extraArgs = [ "-f" ]; # Override existing partition
                 subvolumes = {
                   "/root" = {
-                    mountOptions = ["noatime"];
+                    mountOptions = [ "noatime" ];
                     mountpoint = "/";
                   };
                   "/home" = {
@@ -237,4 +237,6 @@
       };
     };
   };
+  # Sops are needed to be mounted at boot for decryption of secrets.
+  fileSystems."/sops".neededForBoot = true;
 }
