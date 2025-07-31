@@ -31,6 +31,8 @@
       ../../environments/desktop/home-manager/optional/feishin.nix
       ../../environments/desktop/home-manager/optional/ntfy_client.nix
 
+      ../../environments/kde/home-manager.nix
+
       ./home-manager.nix
     ];
   };
