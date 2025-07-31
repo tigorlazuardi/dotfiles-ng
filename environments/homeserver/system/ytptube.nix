@@ -50,6 +50,7 @@ in
     environment = {
       TZ = "Asia/Jakarta";
       YTP_MAX_WORKERS = "4";
+      YTP_OUTPUT_TEMPLATE = "%(title).100s.%(ext)s";
     };
     extraOptions = [
       "--umask=0002"
