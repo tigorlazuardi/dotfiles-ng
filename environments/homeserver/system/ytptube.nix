@@ -18,8 +18,9 @@ let
     "--write-info-json"
     "--write-subs"
     "--write-thumbnail"
-    "--match-filters=!is_live"
   ];
+  inherit (config.virtualisation.oci-containers.containers.ytptube) ip httpPort;
+  proxyPass = "http://${ip}:${toString httpPort}";
 in
 {
   sops.secrets."apprise/discord/ytptube" = {
@@ -57,10 +58,6 @@ in
     ];
     ip = "10.88.2.5";
     httpPort = 8081;
-    socketActivation = {
-      enable = true;
-      idleTimeout = "1h";
-    };
   };
   systemd.services.podman-ytptube.preStart =
     with lib;
@@ -77,10 +74,10 @@ in
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     tinyauth.locations = [ "/" ];
-    locations."/".proxyPass = "http://unix:${config.systemd.socketActivations.podman-ytptube.address}";
+    locations."/".proxyPass = proxyPass;
   };
   services.nginx.virtualHosts."ytptube.lan" = {
-    locations."/".proxyPass = "http://unix:${config.systemd.socketActivations.podman-ytptube.address}";
+    locations."/".proxyPass = proxyPass;
   };
   services.homepage-dashboard.groups."Media Collectors".services.Ytptube.settings = {
     description = "Youtube Video Downloader";
