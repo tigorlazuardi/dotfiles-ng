@@ -112,5 +112,36 @@
           ];
         }
       ];
+      # Ensure images are pulled for socket activated containers.
+      systemd.services = mapAttrs' (
+        name: value:
+        nameValuePair "podman-${name}-ensure-image" {
+          preStart = ''${pkgs.waitport}/bin/waitport 600 docker.io 443'';
+          script =
+            let
+              inherit (pkgs) podman;
+            in
+            # sh
+            ''
+              set -e
+              if ! ${podman}/bin/podman image exists ${value.image}; then
+                ${podman}/bin/podman pull ${value.image};
+              fi
+            '';
+          unitConfig = {
+            StartLimitIntervalSec = "1h";
+            StartLimitBurst = 5;
+          };
+          serviceConfig = {
+            RemainAfterExit = true;
+            Restart = "on-failure";
+            RestartSec = 5;
+            RestartSteps = 5;
+            RestartMaxDelaySec = 30;
+          };
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+        }
+      ) socketActivatedContainers;
     };
 }
