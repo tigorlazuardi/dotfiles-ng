@@ -1,6 +1,8 @@
 { pkgs, ... }:
 {
   imports = [
+    ./audio.nix
+    ./clipboard.nix
     ./wallpaper-slideshow.nix
     ./bangs-search.nix
     ./dash-to-dock.nix
@@ -17,6 +19,7 @@
     grand-theft-focus
     keep-awake
     notification-counter
+
     # Just Perfection GNOME Shell Extension must not be used with Stylix enabled.
     # It causes system freeze on login.
     #
@@ -25,6 +28,7 @@
     # Tools to help debug GNOME Shell extension configurations.
     pkgs.dconf-editor
     pkgs.refine
+    pkgs.gnome-tweaks
   ];
   dconf = {
     enable = true;
@@ -43,6 +47,7 @@
           grand-theft-focus.extensionUuid
           keep-awake.extensionUuid
           notification-counter.extensionUuid
+          quick-settings-audio-panel.extensionUuid
         ];
       };
     };

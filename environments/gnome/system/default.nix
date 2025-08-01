@@ -6,4 +6,11 @@
 
   environment.shells = with pkgs; [ fish ];
   programs.dconf.enable = true;
+  programs.kdeconnect = {
+    enable = true;
+    package = pkgs.gnomeExtensions.gsconnect;
+  };
+  environment.systemPackages = with pkgs; [
+    wl-clipboard
+  ];
 }
