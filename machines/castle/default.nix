@@ -6,7 +6,9 @@
     ../../environments/bareksa/system
 
     # We will use KDE Plasma 6 as the desktop environment
-    ../../environments/kde/system
+    # ../../environments/kde/system
+    ../../environments/desktop/system
+    ../../environments/gnome/system
     ../../environments/game/system
 
     ../../environments/desktop/system/optional/vial.nix
@@ -26,6 +28,8 @@
       ../../environments/game/home-manager
       ../../environments/game-development/home-manager
       ../../environments/nixvim/home-manager
+
+      ../../environments/gnome/home-manager
 
       ../../environments/desktop/home-manager/optional/obs-studio.nix
       ../../environments/desktop/home-manager/optional/feishin.nix
