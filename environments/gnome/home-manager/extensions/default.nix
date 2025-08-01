@@ -3,6 +3,7 @@
   imports = [
     ./wallpaper-slideshow.nix
     ./bangs-search.nix
+    ./dash-to-dock.nix
   ];
   home.packages = with pkgs.gnomeExtensions; [
     appindicator
@@ -11,10 +12,15 @@
     user-themes
     removable-drive-menu
     extension-list
+    system-monitor
+    # Just Perfection GNOME Shell Extension must not be used with Stylix enabled.
+    # It causes system freeze on login.
+    #
     # just-perfection
-    # system-monitor
 
+    # Tools to help debug GNOME Shell extension configurations.
     pkgs.dconf-editor
+    pkgs.refine
   ];
   dconf = {
     enable = true;
@@ -28,8 +34,7 @@
           wireguard-vpn-extension.extensionUuid
           removable-drive-menu.extensionUuid
           extension-list.extensionUuid
-          # just-perfection.extensionUuid
-          # system-monitor.extensionUuid
+          system-monitor.extensionUuid
         ];
         favorite-apps = [
           "org.gnome.Console.desktop"
