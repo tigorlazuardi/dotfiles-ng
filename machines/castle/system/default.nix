@@ -47,7 +47,7 @@
     extraBackends = with pkgs; [ sane-airscan ];
   };
   services.avahi.enable = true;
-  services.avahi.nssmdns = true;
+  services.avahi.nssmdns4 = true;
   users.users.${user.name}.extraGroups = [
     "scanner" # For sane scanner access
     "lp" # For printer access

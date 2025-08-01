@@ -25,5 +25,11 @@
         nix build --impure --expr "with import <nixpkgs> {}; callPackage $1 {}"
       ''
     )
+    (writeShellScriptBin "json2nix" # sh
+      ''
+        set -e
+        nix eval --impure --expr "builtins.fromJSON (builtins.readFile \"$1\")"
+      ''
+    )
   ];
 }
