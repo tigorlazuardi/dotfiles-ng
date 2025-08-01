@@ -13,6 +13,10 @@
     removable-drive-menu
     extension-list
     system-monitor
+    gsconnect
+    grand-theft-focus
+    keep-awake
+    notification-counter
     # Just Perfection GNOME Shell Extension must not be used with Stylix enabled.
     # It causes system freeze on login.
     #
@@ -35,9 +39,10 @@
           removable-drive-menu.extensionUuid
           extension-list.extensionUuid
           system-monitor.extensionUuid
-        ];
-        favorite-apps = [
-          "org.gnome.Console.desktop"
+          gsconnect.extensionUuid
+          grand-theft-focus.extensionUuid
+          keep-awake.extensionUuid
+          notification-counter.extensionUuid
         ];
       };
     };

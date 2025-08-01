@@ -13,6 +13,8 @@
         # Dodge Windows
         dock-fixed = false;
         custom-theme-shrink = true;
+        # Disable taking over Super 0 - 9
+        hot-keys = false;
       };
     };
   };
