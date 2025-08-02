@@ -1,4 +1,9 @@
-{ config, inputs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 {
   imports = [
     inputs.walker.homeManagerModules.default
@@ -36,7 +41,7 @@
           url = "https://www.youtube.com/results?search_query=%TERM%";
         }
       ];
-      terimnal = "${config.programs.ghostty.package}/bin/ghostty";
+      terminal = "${lib.meta.getExe config.programs.ghostty.package}";
       keys = {
         next = [
           "down"
