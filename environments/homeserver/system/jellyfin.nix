@@ -52,4 +52,7 @@ in
           forward_to = [prometheus.remote_write.mimir.receiver]
         }
       '';
+  dconf.settings."org/gnome/shell".favorite-apps = [
+    "com.github.iwalton3.jellyfin-media-player.desktop"
+  ];
 }

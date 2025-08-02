@@ -22,4 +22,7 @@
       ''
         sed -e 's#Exec=.*#Exec=${getExe script}#' ${pkgs.wasistlos}/share/applications/com.github.xeco23.WasIstLos.desktop > $out
       '';
+  dconf.settings."org/gnome/shell".favorite-apps = [
+    "com.github.xeco23.WasIstLos.desktop"
+  ];
 }

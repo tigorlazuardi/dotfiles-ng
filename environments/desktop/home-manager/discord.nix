@@ -30,4 +30,7 @@ in
     exec = "hyprctl dispatch focuswindow vesktop";
     run-on = "action";
   };
+  dconf.settings."org/gnome/shell".favorite-apps = [
+    "vesktop.desktop"
+  ];
 }

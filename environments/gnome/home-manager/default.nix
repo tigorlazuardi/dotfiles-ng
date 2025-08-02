@@ -8,7 +8,6 @@
   dconf.settings = {
     "org/gnome/shell" = {
       favorite-apps = [
-        "org.gnome.Console.desktop"
         "org.gnome.Calendar.desktop"
         "org.gnome.Geary.desktop"
       ]
