@@ -2,6 +2,7 @@
   imports = [
     ./chromium.nix
     ./discord.nix
+    ./ghostty.nix
     ./jellyfin.nix
     ./mpv.nix
     ./neovide.nix

@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ config, inputs, ... }:
 {
   imports = [
     inputs.walker.homeManagerModules.default
@@ -9,7 +9,41 @@
     runAsService = true;
 
     config = {
-      builtins.websearch.prefix = "g:";
+      builtins.websearch.entries = [
+        {
+          name = "Google";
+          url = "https://www.google.com/search?q=%TERM%";
+          prefix = "g ";
+        }
+        {
+          name = "Noogle";
+          prefix = "lib ";
+          url = "https://noogle.dev/q?term=%TERM%";
+        }
+        {
+          name = "Nixpkgs";
+          prefix = "p ";
+          url = "https://search.nixos.org/packages?channel=unstable&query=%TERM%";
+        }
+        {
+          name = "Nix Options";
+          prefix = "o ";
+          url = "https://search.nixos.org/options?channel=unstable&query=%TERM%";
+        }
+      ];
+      terimnal = "${config.programs.ghostty.package}/bin/ghostty";
+      keys = {
+        next = [
+          "down"
+          "ctrl j"
+          "ctrl n"
+        ];
+        prev = [
+          "up"
+          "ctrl k"
+          "ctrl p"
+        ];
+      };
     };
   };
 

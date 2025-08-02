@@ -30,7 +30,7 @@ in
             if osConfig.services.desktopManager.plasma6.enable then
               "${getExe pkgs.kdePackages.konsole} --separate --hide-menubar --hide-tabbar -e ${getExe script}"
             else
-              "${getExe pkgs.foot} ${getExe script}";
+              ''${getExe config.programs.ghostty.package} --title="Bareksa VPN" -e ${getExe script}'';
           Type = "Application";
           Icon = pkgs.fetchurl {
             url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/openvpn.png";
