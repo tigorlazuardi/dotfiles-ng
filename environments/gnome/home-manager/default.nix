@@ -19,6 +19,10 @@
       # Focus follows mouse
       focus-mode = "mouse";
       button-layout = "appmenu:minimize,maximize,close";
+      num-workspaces = 10;
+    };
+    "org/gnome/mutter" = {
+      dynamic-workspaces = false;
     };
   };
 }

@@ -2,10 +2,11 @@
 {
   imports = [
     ./audio.nix
-    ./clipboard.nix
-    ./wallpaper-slideshow.nix
     ./bangs-search.nix
+    ./clipboard.nix
     ./dash-to-dock.nix
+    ./wallpaper-slideshow.nix
+    ./workspace.nix
   ];
   home.packages = with pkgs.gnomeExtensions; [
     appindicator
