@@ -11,6 +11,26 @@
     format = "json";
     path = "${config.home.homeDirectory}/.claude/settings.json";
   };
+  xdg.desktopEntries.claude-code = {
+    name = "Claude Code";
+    genericName = "AI Chat Assistant";
+    exec = "${lib.meta.getExe config.programs.chromium.package} -app-id=claude-code --app=https://claude.ai";
+    icon = "${pkgs.fetchurl {
+      url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/claude-ai.svg";
+      hash = "sha256-ZZ7WgNBMvsOmLiMWj5S275pfmrOvtnQSCbLOe7h552s=";
+    }}";
+    categories = [
+      "Development"
+      "Utility"
+    ];
+  };
+  programs.walker.config.builtins.websearch.entries = [
+    {
+      name = "Claude Code";
+      url = "https://claude.ai/new?q=%TERM%";
+      prefix = "c ";
+    }
+  ];
   home.packages = with pkgs; [
     claude-code
   ];
