@@ -10,6 +10,7 @@
       switch-to-application-7 = [ ];
       switch-to-application-8 = [ ];
       switch-to-application-9 = [ ];
+      maximize = [ "<Super>space" ];
     };
     "org/gnome/desktop/wm/keybindings" = {
       switch-to-workspace-1 = [ "<Super>1" ];
@@ -33,6 +34,9 @@
       move-to-workspace-8 = [ "<Shift><Super>8" ];
       move-to-workspace-9 = [ "<Shift><Super>9" ];
       move-to-workspace-10 = [ "<Shift><Super>10" ];
+      switch-input-source = [ ];
+      switch-input-source-backward = [ ];
+      close = [ "<Super>q" ];
     };
   };
 }

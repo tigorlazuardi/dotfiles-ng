@@ -36,6 +36,11 @@
           url = "https://search.nixos.org/options?channel=unstable&query=%TERM%";
         }
         {
+          name = "Home Manager Options";
+          prefix = "hm ";
+          url = "https://home-manager-options.extranix.com/?release=master&query=%TERM%";
+        }
+        {
           name = "YouTube";
           prefix = "yt ";
           url = "https://www.youtube.com/results?search_query=%TERM%";
@@ -58,13 +63,13 @@
   };
 
   dconf.settings = {
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/walker" = {
       name = "Walker";
-      command = "walker";
+      command = "${config.programs.walker.package}/bin/walker";
       binding = "<Super>d";
     };
     "org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = [
-      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/walker/"
     ];
   };
 }
