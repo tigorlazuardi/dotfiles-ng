@@ -28,7 +28,7 @@ in
     {
       host = Address;
       port = Port;
-      idleTimeout = "30s";
+      idleTimeout = "1h";
     };
   services.nginx.virtualHosts = {
     "${domain}" = {
