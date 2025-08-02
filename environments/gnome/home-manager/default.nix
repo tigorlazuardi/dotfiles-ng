@@ -1,8 +1,13 @@
-{ lib, osConfig, ... }:
+{
+  lib,
+  osConfig,
+  ...
+}:
 {
   imports = [
     ./extensions
     ./keymaps.nix
+    ./nemo.nix
   ];
 
   dconf.settings = {

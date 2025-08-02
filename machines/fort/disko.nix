@@ -97,4 +97,6 @@
       };
     };
   };
+  # Sops are needed to be mounted at boot for decryption of secrets.
+  fileSystems."/sops".neededForBoot = true;
 }

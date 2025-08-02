@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cssFile =
@@ -76,5 +81,41 @@ in
       ];
     };
   };
-  dconf.settings."org/gnome/shell".favorite-apps = [ "com.mitchellh.ghostty.desktop" ];
+  dconf.settings = {
+    "org/gnome/desktop/default-applications/terminal" = {
+      exec = "${pkgs.ghostty}/bin/ghostty";
+      exec-arg = "-e";
+    };
+    "org/gnome/shell".favorite-apps = [ "com.mitchellh.ghostty.desktop" ];
+  };
+  home.file =
+    let
+      background-filename = "ghostty-context-menu-background.nemo_action";
+      dir-handler = "ghostty-context-menu-dir.nemo_action";
+    in
+    {
+      # Schema: https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action
+      ".local/share/nemo/actions/${background-filename}".source =
+        (pkgs.formats.ini { }).generate background-filename
+          {
+            "Nemo Action" = {
+              Name = "Open in Ghostty Terminal";
+              Comment = "Open Ghostty on current directory";
+              Exec = ''${lib.meta.getExe config.programs.ghostty.package} --working-directory="%P"'';
+              Icon-Name = "com.mitchellh.ghostty";
+              Selection = "none";
+              Extensions = "none;";
+            };
+          };
+      ".local/share/nemo/actions/${dir-handler}".source = (pkgs.formats.ini { }).generate dir-handler {
+        "Nemo Action" = {
+          Name = "Open in Ghostty Terminal";
+          Comment = "Open Ghostty on selected directory";
+          Exec = ''${lib.meta.getExe config.programs.ghostty.package} --working-directory="%F"'';
+          Icon-Name = "com.mitchellh.ghostty";
+          Selection = "single";
+          Extensions = "dir";
+        };
+      };
+    };
 }
