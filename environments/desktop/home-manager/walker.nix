@@ -30,6 +30,11 @@
           prefix = "o ";
           url = "https://search.nixos.org/options?channel=unstable&query=%TERM%";
         }
+        {
+          name = "YouTube";
+          prefix = "yt ";
+          url = "https://www.youtube.com/results?search_query=%TERM%";
+        }
       ];
       terimnal = "${config.programs.ghostty.package}/bin/ghostty";
       keys = {
