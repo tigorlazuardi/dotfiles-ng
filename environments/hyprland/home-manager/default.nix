@@ -5,9 +5,6 @@
   ...
 }:
 {
-  imports = [
-    ./ghostty.nix
-  ];
   options.wayland.windowManager.hyprland =
     let
       inherit (lib) mkOption types;
