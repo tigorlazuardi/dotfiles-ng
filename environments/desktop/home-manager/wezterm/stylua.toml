@@ -1,0 +1,6 @@
+indent_type = "Spaces"
+indent_width = 2
+column_width = 80
+call_parentheses = "None"
+quote_style = "ForceDouble"
+collapse_simple_statement = "FunctionOnly"

@@ -82,6 +82,7 @@
       url = "github:marlonrichert/zsh-autocomplete";
       flake = false;
     };
+    walker.url = "github:abenz1267/walker";
   };
   outputs = inputs: import ./machines inputs;
 }

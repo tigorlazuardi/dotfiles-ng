@@ -8,6 +8,9 @@
     ./spotify.nix
     ./stylix.nix
     ./vivaldi.nix
+    ./walker.nix
     ./whatsapp.nix
+
+    ./wezterm
   ];
 }
