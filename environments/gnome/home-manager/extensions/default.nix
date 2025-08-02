@@ -2,7 +2,6 @@
 {
   imports = [
     ./audio.nix
-    ./bangs-search.nix
     ./clipboard.nix
     ./dash-to-dock.nix
     ./wallpaper-slideshow.nix
