@@ -31,5 +31,10 @@
     "org/gnome/mutter" = {
       dynamic-workspaces = false;
     };
+    # 0.5 value is an additional value to the default speed.
+    #
+    # With 0.5 value, I can move the pointer edge to edge of the screen in a single
+    # finger swipe without having to lift my finger.
+    "org/gnome/desktop/peripherals/touchpad".speed = 0.5;
   };
 }
