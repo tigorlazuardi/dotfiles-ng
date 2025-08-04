@@ -8,6 +8,8 @@
     ./extensions
     ./keymaps.nix
     ./nemo.nix
+
+    ../../desktop/home-manager
   ];
 
   dconf.settings = {

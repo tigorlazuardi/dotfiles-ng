@@ -1,5 +1,8 @@
 { pkgs, ... }:
 {
+  imports = [
+    ../../desktop/system
+  ];
   services.desktopManager.gnome.enable = true;
   services.displayManager.gdm.enable = true;
   services.udev.packages = [ pkgs.gnome-settings-daemon ];
