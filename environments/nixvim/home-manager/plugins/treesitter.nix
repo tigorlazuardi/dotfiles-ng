@@ -168,7 +168,7 @@
       ];
     };
     treesitter-textobjects = {
-      enable = false;
+      enable = true;
       move = {
         enable = true;
         gotoNextStart = {

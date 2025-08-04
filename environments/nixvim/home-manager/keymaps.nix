@@ -173,41 +173,45 @@
         (map [ "n" ] "<F2>" "<cmd>lua vim.lsp.buf.rename()<cr>" {
           desc = "Rename Symbol";
         })
-        (map [ "n" ] "]]" {
-          __raw = ''
-            function()
-              local severityError = { severity = vim.diagnostic.severity.ERROR }
-              if vim.diagnostic.get_next_pos(severityError) then
-                vim.diagnostic.goto_next(severityError) 
-                return
-              end
-              local severityWarning = { severity = vim.diagnostic.severity.WARNING } 
-              if vim.diagnostic.get_next_pos(severityWarning) then
-                vim.diagnostic.goto_next(severityWarning) 
-                return
-              end
-            end
-          '';
-        } { desc = "Next Diagnostic (Error/Warning)"; })
-        (map [ "n" ] "[[" {
-          __raw = ''
-            function()
-              local severityError = { severity = vim.diagnostic.severity.ERROR }
-              if vim.diagnostic.get_prev_pos(severityError) then
-                vim.diagnostic.goto_prev(severityError) 
-                return
-              end
-              local severityWarning = { severity = vim.diagnostic.severity.WARNING } 
-              if vim.diagnostic.get_prev_pos(severityWarning) then
-                vim.diagnostic.goto_prev(severityWarning) 
-                return
-              end
-            end
-          '';
-        } { desc = "Previous Diagnostic (Error/Warning)"; })
         (map [ "n" ] "<tab>" "<cmd>b#<cr>" {
           desc = "Switch to Last Buffer";
         })
       ];
+    autoCmd = [
+      {
+        event = "DiagnosticChanged";
+        group = "DiagnosticChangedKeys";
+        callback.__raw = ''
+          function(args)
+            local buf = args.buf
+            vim.keymap.set("n", "]]", function()
+                local severityError = { severity = vim.diagnostic.severity.ERROR }
+                if vim.diagnostic.get_next_pos(severityError) then
+                  vim.diagnostic.goto_next(severityError) 
+                  return
+                end
+                local severityWarning = { severity = vim.diagnostic.severity.WARNING } 
+                if vim.diagnostic.get_next_pos(severityWarning) then
+                  vim.diagnostic.goto_next(severityWarning) 
+                  return
+                end
+            end, { buffer = buf, desc = "Next Diagnostic (Error/Warning)" })
+            vim.keymap.set("n", "[[", function()
+                local severityError = { severity = vim.diagnostic.severity.ERROR }
+                if vim.diagnostic.get_prev_pos(severityError) then
+                  vim.diagnostic.goto_prev(severityError) 
+                  return
+                end
+                local severityWarning = { severity = vim.diagnostic.severity.WARNING } 
+                if vim.diagnostic.get_prev_pos(severityWarning) then
+                  vim.diagnostic.goto_prev(severityWarning) 
+                  return
+                end
+            end, { buffer = buf, desc = "Previous Diagnostic (Error/Warning)" })
+          end
+        '';
+      }
+    ];
+    autoGroups."DiagnosticChangedKeys".clear = true;
   };
 }
