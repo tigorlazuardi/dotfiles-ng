@@ -10,7 +10,7 @@
     ../../environments/gnome/system
 
     ./hardware.nix
-    ./system.nix
+    ./system
   ];
 
   home-manager.users.${user.name} = {

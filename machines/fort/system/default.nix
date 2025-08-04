@@ -4,15 +4,16 @@
   ...
 }:
 {
-  imports =
-    [
-      ../../environments/core/system
-    ]
-    ++ (with inputs.nixos-hardware.nixosModules; [
-      common-cpu-intel
-      common-pc
-      common-pc-ssd
-    ]);
+  imports = [
+    ./syncthing.nix
+
+    ../../../environments/core/system
+  ]
+  ++ (with inputs.nixos-hardware.nixosModules; [
+    common-cpu-intel
+    common-pc
+    common-pc-ssd
+  ]);
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
