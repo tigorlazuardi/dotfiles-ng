@@ -8,6 +8,7 @@
       vim.keymap.del("n", "gri")
       vim.keymap.del("n", "gO")
       vim.keymap.del("i", "<c-s>")
+      vim.keymap.del("n", "grt")
     '';
     keymaps =
       let

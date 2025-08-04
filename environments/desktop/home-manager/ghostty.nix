@@ -45,7 +45,8 @@ in
   programs.ghostty = {
     enable = true;
     settings = {
-      font-family = "Hack Nerd Font Mono";
+      # font-family = "Hack Nerd Font Mono";
+      font-family = "JetBrainsMono Nerd Font";
       font-size = 11;
       copy-on-select = "clipboard";
       linux-cgroup = "always";
