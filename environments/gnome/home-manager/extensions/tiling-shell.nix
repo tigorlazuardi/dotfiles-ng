@@ -183,16 +183,21 @@ in
     };
     "org/gnome/settings-daemon/plugins/media-keys".screensaver = [ ]; # This is Lock Screen shortcut;
     "org/gnome/shell/extensions/tilingshell" = {
+      enable-autotiling = true;
       inner-gaps = lib.hm.gvariant.mkUint32 2; # 2px inner gaps
       outer-gaps = lib.hm.gvariant.mkUint32 0; # 2px outer gaps
-      focus-windows-up = [ "<Super>k" ];
-      focus-windows-down = [ "<Super>j" ];
-      focus-windows-left = [ "<Super>h" ];
-      focus-windows-right = [ "<Super>l" ];
-      move-windows-up = [ "<Shift><Super>k" ];
-      move-windows-down = [ "<Shift><Super>j" ];
-      move-windows-left = [ "<Shift><Super>h" ];
-      move-windows-right = [ "<Shift><Super>l" ];
+      focus-window-up = [ "<Super>k" ];
+      focus-window-down = [ "<Super>j" ];
+      focus-window-left = [ "<Super>h" ];
+      focus-window-right = [ "<Super>l" ];
+      move-window-up = [ "<Control><Super>k" ];
+      move-window-down = [ "<Control><Super>j" ];
+      move-window-left = [ "<Control><Super>h" ];
+      move-window-right = [ "<Control><Super>l" ];
+      span-window-up = [ "<Shift><Super>k" ];
+      span-window-down = [ "<Shift><Super>j" ];
+      span-window-left = [ "<Shift><Super>h" ];
+      span-window-right = [ "<Shift><Super>l" ];
       layouts-json = builtins.toJSON layouts;
     };
   };
