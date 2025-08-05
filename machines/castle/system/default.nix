@@ -23,11 +23,14 @@
       efiSysMountPoint = "/boot";
       canTouchEfiVariables = true;
     };
-    grub = {
+    systemd-boot = {
       enable = true;
-      efiSupport = true;
-      useOSProber = true;
-      device = "nodev"; # used nodev because of efi support
+      extraFiles = {
+        # Disable the boot menu unless the user holds down a key
+        "loader/loader.conf" = pkgs.writeText "loader.conf" ''
+          timeout 0
+        '';
+      };
     };
   };
 
