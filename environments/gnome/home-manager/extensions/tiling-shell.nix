@@ -1,5 +1,10 @@
 { pkgs, lib, ... }:
 let
+  # Run bash command:
+  #
+  # dconf read /org/gnome/shell/extensions/tilingshell/layouts-json | td -d "'" | json2nix
+  #
+  # to generate the nix value from json string. Note that json2nix is located from utils.nix, not from web.
   layouts = [
     {
       # Big Center, 2 Small Left, 2 Small Right
