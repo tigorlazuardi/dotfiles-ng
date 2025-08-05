@@ -1,0 +1,194 @@
+{ pkgs, lib, ... }:
+let
+  layouts = [
+    {
+      # Big Center, 2 Small Left, 2 Small Right
+      id = "Layout 1";
+      tiles = [
+        {
+          groups = [
+            1
+            2
+          ];
+          height = 0.5;
+          width = 0.22;
+          x = 0;
+          y = 0;
+        }
+        {
+          groups = [
+            1
+            2
+          ];
+          height = 0.5;
+          width = 0.22;
+          x = 0;
+          y = 0.5;
+        }
+        {
+          groups = [
+            2
+            3
+          ];
+          height = 1;
+          width = 0.56;
+          x = 0.22;
+          y = 0;
+        }
+        {
+          groups = [
+            3
+            4
+          ];
+          height = 0.5;
+          width = 0.22;
+          x = 0.78;
+          y = 0;
+        }
+        {
+          groups = [
+            3
+            4
+          ];
+          height = 0.5;
+          width = 0.22;
+          x = 0.78;
+          y = 0.5;
+        }
+      ];
+    }
+    {
+      # Big Center, Small Left and Right
+      id = "Layout 2";
+      tiles = [
+        {
+          groups = [ 1 ];
+          height = 1;
+          width = 0.22;
+          x = 0;
+          y = 0;
+        }
+        {
+          groups = [
+            1
+            2
+          ];
+          height = 1;
+          width = 0.56;
+          x = 0.22;
+          y = 0;
+        }
+        {
+          groups = [ 2 ];
+          height = 1;
+          width = 0.22;
+          x = 0.78;
+          y = 0;
+        }
+      ];
+    }
+    {
+      # Big Right, Small Left
+      id = "Layout 3";
+      tiles = [
+        {
+          groups = [ 1 ];
+          height = 1;
+          width = 0.33;
+          x = 0;
+          y = 0;
+        }
+        {
+          groups = [ 1 ];
+          height = 1;
+          width = 0.67;
+          x = 0.33;
+          y = 0;
+        }
+      ];
+    }
+    {
+      # Big Left, Small Right
+      id = "Layout 4";
+      tiles = [
+        {
+          groups = [ 1 ];
+          height = 1;
+          width = 0.67;
+          x = 0;
+          y = 0;
+        }
+        {
+          groups = [ 1 ];
+          height = 1;
+          width = 0.33;
+          x = 0.67;
+          y = 0;
+        }
+      ];
+    }
+    {
+      # Big Left, 2 Right
+      id = "15761932";
+      tiles = [
+        {
+          groups = [ 1 ];
+          height = 1;
+          width = 0.62;
+          x = 0;
+          y = 0;
+        }
+        {
+          groups = [
+            2
+            1
+          ];
+          height = 0.5;
+          width = 0.38;
+          x = 0.62;
+          y = 0;
+        }
+        {
+          groups = [
+            2
+            1
+          ];
+          height = 0.5;
+          width = 0.38;
+          x = 0.62;
+          y = 0.5;
+        }
+      ];
+    }
+  ];
+in
+{
+
+  home.packages = with pkgs.gnomeExtensions; [
+    tiling-shell
+  ];
+  dconf.settings = {
+    "org/gnome/shell" = {
+      enabled-extensions = with pkgs.gnomeExtensions; [
+        tiling-shell.extensionUuid
+      ];
+    };
+    "org/gnome/desktop/wm/keybindings" = {
+      minimize = [ ];
+    };
+    "org/gnome/settings-daemon/plugins/media-keys".screensaver = [ ]; # This is Lock Screen shortcut;
+    "org/gnome/shell/extensions/tilingshell" = {
+      inner-gaps = lib.hm.gvariant.mkUint32 2; # 2px inner gaps
+      outer-gaps = lib.hm.gvariant.mkUint32 0; # 2px outer gaps
+      focus-windows-up = [ "<Super>k" ];
+      focus-windows-down = [ "<Super>j" ];
+      focus-windows-left = [ "<Super>h" ];
+      focus-windows-right = [ "<Super>l" ];
+      move-windows-up = [ "<Shift><Super>k" ];
+      move-windows-down = [ "<Shift><Super>j" ];
+      move-windows-left = [ "<Shift><Super>h" ];
+      move-windows-right = [ "<Shift><Super>l" ];
+      layouts-json = builtins.toJSON layouts;
+    };
+  };
+}

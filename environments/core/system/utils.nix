@@ -28,7 +28,14 @@
     (writeShellScriptBin "json2nix" # sh
       ''
         set -e
-        nix eval --impure --expr "builtins.fromJSON (builtins.readFile \"$1\")"
+        if [ -t 0 ]; then
+          # No stdin input, use file argument
+          nix eval --impure --expr "builtins.fromJSON (builtins.readFile \"$1\")"
+        else
+          # Read from stdin
+          IFS= read text
+          nix eval --impure --expr "builtins.fromJSON '''$text'''"
+        fi
       ''
     )
   ];
