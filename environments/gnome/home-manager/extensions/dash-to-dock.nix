@@ -15,6 +15,13 @@
         custom-theme-shrink = true;
         # Disable taking over Super 0 - 9
         hot-keys = false;
+        # Disable the very not accurate notification badge
+        show-icons-emblems = false;
+        # Let stylix handle the theme
+        apply-custom-theme = true;
+        # Single click focus. Double click to "Expose" the select window view limited
+        # to the selected application.
+        click-action = "focus-or-appspread";
       };
     };
   };
