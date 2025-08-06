@@ -1,6 +1,6 @@
 {
+  config,
   inputs,
-  user,
   ...
 }:
 {
@@ -10,8 +10,9 @@
   sops = {
     defaultSopsFormat = "yaml";
     age.keyFile = "/sops/keys.txt";
-    # age.keyFile = "/home/${user.name}/.config/sops/age/keys.txt";
   };
+  # Ensure the sops cli knows where to find the age key file
+  environment.sessionVariables.SOPS_AGE_KEY_FILE = config.sops.age.keyFile;
 
   # Decrypt sop secrets at boot time after the system finishes activating (after runlevels rescue (level 2))
   #
