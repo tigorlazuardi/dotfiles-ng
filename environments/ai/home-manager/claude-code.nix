@@ -1,10 +1,15 @@
 {
+  inputs,
   config,
   pkgs,
   lib,
   ...
 }:
 {
+  imports = [
+    # Needed to access programs.walker options.
+    inputs.walker.homeManagerModules.default
+  ];
   sops.secrets."claude-code/settings.json" = {
     sopsFile = ../../../secrets/claude-code.json;
     key = "";

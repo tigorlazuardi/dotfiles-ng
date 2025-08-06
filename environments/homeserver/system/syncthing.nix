@@ -48,6 +48,7 @@ in
           path = "/nas/redmage/images/windows";
           devices = [
             "castle"
+            "work-laptop"
           ];
         };
       };

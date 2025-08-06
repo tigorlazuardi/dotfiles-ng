@@ -15,7 +15,7 @@ let
     "--no-write-auto-subs"
     "--no-write-comments "
     "--write-description"
-    "--write-info-json"
+    # "--write-info-json"
     "--write-subs"
     "--write-thumbnail"
   ];
