@@ -183,7 +183,7 @@ in
     };
     "org/gnome/settings-daemon/plugins/media-keys".screensaver = [ ]; # This is Lock Screen shortcut;
     "org/gnome/shell/extensions/tilingshell" = {
-      enable-autotiling = true;
+      # enable-autotiling = true;
       inner-gaps = lib.hm.gvariant.mkUint32 2; # 2px inner gaps
       outer-gaps = lib.hm.gvariant.mkUint32 0; # 2px outer gaps
       focus-window-up = [ "<Super>k" ];

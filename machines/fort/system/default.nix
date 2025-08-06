@@ -14,7 +14,15 @@
     common-pc
     common-pc-ssd
   ]);
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    extraFiles = {
+      # Disable the boot menu unless the user holds down a key
+      "loader/loader.conf" = pkgs.writeText "loader.conf" ''
+        timeout 0
+      '';
+    };
+  };
   boot.loader.efi.canTouchEfiVariables = true;
 
   hardware.bluetooth = {
