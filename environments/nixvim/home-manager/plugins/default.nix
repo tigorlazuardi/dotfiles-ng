@@ -10,7 +10,6 @@
 
     ./arrow.nix
     ./blink.nix
-    ./bufresize.nix
     # ./dadbod.nix # dadbod breaks all the time, so we disable it for now
     ./flash.nix
     ./fugitive.nix
@@ -23,6 +22,7 @@
     ./persistence.nix
     ./protobuf.nix
     ./rose-pine.nix
+    ./smart-splits.nix
     ./snacks.nix
     ./telescope.nix
     ./tiny-inline-diagnostics.nix
