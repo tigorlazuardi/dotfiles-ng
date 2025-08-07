@@ -1,6 +1,10 @@
 { config, ... }:
 {
-  sops.secrets."bareksa/db-gate/env".sopsFile = ../../../secrets/bareksa.yaml;
+  sops.secrets."bareksa/db-gate/env" = {
+    sopsFile = ../../../secrets/bareksa/db-gate.env;
+    key = "";
+    format = "dotenv";
+  };
   virtualisation.oci-containers.containers.bareksa-db-gate = {
     image = "docker.io/dbgate/dbgate:latest";
     volumes = [
