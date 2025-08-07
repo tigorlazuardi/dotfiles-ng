@@ -3,6 +3,7 @@
   imports = [
     # currently all devices will use nixvim as editor in terminal.
     ../../nixvim/home-manager
+    ../../../modules/home-manager.nix
 
     ./apprise.nix
     ./bluetooth.nix
