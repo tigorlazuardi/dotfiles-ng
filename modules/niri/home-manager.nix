@@ -33,6 +33,7 @@ in
     };
   };
   config = mkIf config.programs.niri.enable {
+    programs.niri.settings.environment.ELECTRON_OZONE_PLATFORM_HINT = "auto";
     xdg.configFile."niri/config.kdl".text = format config.programs.niri.settings;
     xdg.configFile."xdg-desktop-portal/niri-portals.conf" =
       mkIf (config.programs.niri.portalConfig != { })
