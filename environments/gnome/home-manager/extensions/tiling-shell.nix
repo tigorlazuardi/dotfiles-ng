@@ -93,74 +93,72 @@ let
       ];
     }
     {
-      # Big Right, Small Left
-      id = "Layout 3";
+      id = "Big Right, Small Left";
       tiles = [
         {
           groups = [ 1 ];
           height = 1;
-          width = 0.33;
+          width = 0.4;
           x = 0;
           y = 0;
         }
         {
           groups = [ 1 ];
           height = 1;
-          width = 0.67;
-          x = 0.33;
+          width = 0.6;
+          x = 0.4;
           y = 0;
         }
       ];
     }
     {
-      # Big Left, Small Right
-      id = "Layout 4";
+      id = "Big Left, Small Right";
       tiles = [
         {
           groups = [ 1 ];
           height = 1;
-          width = 0.67;
+          width = 0.6;
           x = 0;
           y = 0;
         }
         {
           groups = [ 1 ];
           height = 1;
-          width = 0.33;
-          x = 0.67;
+          width = 0.4;
+          x = 0.6;
           y = 0;
         }
       ];
     }
     {
       # Big Left, 2 Right
-      id = "15761932";
+      id = "Big Left, 2 Right";
       tiles = [
         {
           groups = [ 1 ];
           height = 1;
-          width = 0.62;
+          width = 0.6;
           x = 0;
           y = 0;
         }
         {
           groups = [
-            2
             1
+            2
           ];
           height = 0.5;
-          width = 0.38;
-          x = 0.62;
+          width = 0.4;
+          x = 0.6;
           y = 0;
         }
         {
           groups = [
-            2
             1
+            2
           ];
           height = 0.5;
-          width = 0.38;
-          x = 0.62;
+          width = 0.4;
+          x = 0.6;
           y = 0.5;
         }
       ];
