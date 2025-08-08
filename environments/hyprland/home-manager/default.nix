@@ -10,6 +10,7 @@
     ./wpaperd.nix
     ./walker.nix
     ../../gnome/home-manager/nemo.nix
+    ../../window-manager/home-manager/alacritty.nix
   ];
   home.packages = with pkgs; [
     wl-clipboard
@@ -41,6 +42,7 @@
         workspace_swipe_create_new = false;
       };
       bind = with lib; [
+        "$mod, Return, exec, ${meta.getExe pkgs.alacritty}"
         "$mod, B, exec, ${meta.getExe config.programs.vivaldi.package}"
         "$mod, E, exec, ${meta.getExe' pkgs.nemo-with-extensions "nemo"}"
       ];
