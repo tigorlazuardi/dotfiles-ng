@@ -17,14 +17,16 @@ in
       ".config/discord/settings.json".source = (pkgs.formats.json { }).generate "settings.json" {
         SKIP_HOST_UPDATE = true;
       };
-      ".config/autostart/vesktop.desktop".source =
-        (pkgs.runCommand "discord-autostart" { }) # sh
-          ''
-            sed -e 's#Exec=.*#Exec=${getExe script} %U#' ${pkgs.vesktop}/share/applications/vesktop.desktop > $out
-          '';
     };
   };
-  wayland.windowManager.hyprland.settings.exec-once = [ script ];
+  xdg.autostart.entries = [
+    ((pkgs.runCommand "discord.desktop" { }) # sh
+      ''
+        sed -e 's#Exec=.*#Exec=${getExe script} %U#' ${pkgs.vesktop}/share/applications/vesktop.desktop > $out
+      ''
+    )
+  ];
+
   services.swaync.settings.scripts._10-discord = {
     app-name = "[Vv]esktop";
     exec = "hyprctl dispatch focuswindow vesktop";

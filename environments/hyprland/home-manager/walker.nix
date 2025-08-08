@@ -4,11 +4,10 @@ with lib;
   imports = [
     ../../desktop/home-manager/walker.nix
   ];
-  programs.walker.runAsService = mkForce false;
+  systemd.user.services.walker.Install.WantedBy = mkForce [
+    "hyprland.target"
+  ];
   wayland.windowManager.hyprland.settings = {
-    exec-once = [
-      "${meta.getExe config.programs.walker.package} --gapplication-service"
-    ];
     bind = [
       "$mod, D, exec, ${meta.getExe config.programs.walker.package}"
     ];

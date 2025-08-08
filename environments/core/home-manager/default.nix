@@ -17,6 +17,11 @@
     ./zoxide.nix
   ];
 
+  xdg.autostart = {
+    enable = true;
+    # readOnly = true;
+  };
+
   home = {
     username = user.name;
     homeDirectory = "/home/${user.name}";
