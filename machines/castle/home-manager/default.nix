@@ -1,6 +1,8 @@
 { config, ... }:
 {
-
+  imports = [
+    ./niri.nix
+  ];
   sops.secrets = {
     "ssh/castle/private_key" = {
       sopsFile = ../../secrets/ssh.yaml;

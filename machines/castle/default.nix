@@ -13,6 +13,8 @@
 
     ../../environments/desktop/system/optional/vial.nix
 
+    ../../environments/niri/system.nix
+
     ./hardware.nix
     ./disko.nix
     ./system
@@ -35,7 +37,9 @@
       ../../environments/desktop/home-manager/optional/feishin.nix
       ../../environments/desktop/home-manager/optional/ntfy_client.nix
 
-      ./home-manager.nix
+      ../../environments/niri/home-manager
+
+      ./home-manager
     ];
   };
 
