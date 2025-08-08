@@ -24,6 +24,4 @@
       "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/vivaldi/"
     ];
   };
-
-  programs.niri.settings.binds."Mod+b".spawn = lib.meta.getExe config.programs.vivaldi.package;
 }
