@@ -23,6 +23,20 @@ in
       # We will synchronize to wether set the configuration or not with system level config.
       default = osConfig.programs.niri.enable;
     };
+    extraConfigPre = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        This is useful to set repeating top level keys such as window-rules.
+      '';
+    };
+    extraConfigPost = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        This is useful to set repeating top level keys such as window-rules.
+      '';
+    };
     settings = mkOption {
       inherit type;
       default = { };
@@ -33,8 +47,16 @@ in
     };
   };
   config = mkIf config.programs.niri.enable {
-    programs.niri.settings.environment.ELECTRON_OZONE_PLATFORM_HINT = "auto";
-    xdg.configFile."niri/config.kdl".text = format config.programs.niri.settings;
+    xdg.configFile."niri/config.kdl".source =
+      pkgs.runCommand "config.kdl" { } # sh
+        ''
+          cat << EOF > $out
+          ${config.programs.niri.extraConfigPre}
+          ${format config.programs.niri.settings}
+          ${config.programs.niri.extraConfigPost}
+          EOF
+          ${pkgs.niri}/bin/niri validate --config $out
+        '';
     xdg.configFile."xdg-desktop-portal/niri-portals.conf" =
       mkIf (config.programs.niri.portalConfig != { })
         {

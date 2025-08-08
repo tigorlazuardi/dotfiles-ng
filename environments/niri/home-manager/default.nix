@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -12,30 +13,44 @@
 
     ./wpaperd.nix
   ];
-  programs.niri = {
-    settings = {
-      input.keyboard.xkb.layout = "us";
-    };
-    # Disable nautilus, and prefer to use Nemo as the file manager.
-    portalConfig.preferred."org.freedesktop.impl.portal.FileChooser" = "gtk;";
-  };
   # We will use the GNOME Polkit agent for Root ccess authorizations.
   services.polkit-gnome.enable = true;
 
-  programs.niri.settings.binds = {
-    "Mod+d".spawn = lib.meta.getExe config.programs.walker.package;
-    "Mod+b".spawn = lib.meta.getExe config.programs.vivaldi.package;
-    "Mod+Return".spawn = lib.meta.getExe config.programs.ghostty.package;
-  };
-
-  programs.niri.settings._children = [
-    {
-      window-rule = {
-        _children = [
-          { match._props.app-id = ''^wasistlos$''; }
-        ];
-        block-out-from = "screencast";
+  programs.niri = {
+    # Disable nautilus, and prefer to use Nemo as the file manager.
+    portalConfig.preferred."org.freedesktop.impl.portal.FileChooser" = "gtk;";
+    settings = {
+      input.keyboard.xkb.layout = "us";
+      environment = {
+        ELECTRON_OZONE_PLATFORM_HINT = "auto";
+        DISPLAY = ":0"; # This is required for XWayland applications.
       };
-    }
-  ];
+      binds = {
+        "Mod+e" = {
+          _props.repeat = false;
+          spawn = lib.meta.getExe' pkgs.nemo-with-extensions "nemo";
+        };
+        "Mod+d" = {
+          _props.repeat = false;
+          spawn = lib.meta.getExe config.programs.walker.package;
+        };
+        "Mod+b" = {
+          _props.repeat = false;
+          spawn = lib.meta.getExe config.programs.vivaldi.package;
+        };
+        "Mod+Return" = {
+          _props.repeat = false;
+          spawn = lib.meta.getExe config.programs.ghostty.package;
+        };
+        "Mod+h".focus-column-left = { };
+        "Mod+l".focus-column-right = { };
+        "Mod+k".focus-window-or-workspace-up = { };
+        "Mod+j".focus-window-or-workspace-down = { };
+        "Mod+q".close-window = { };
+        "Mod+WheelScrollUp".focus-column-left = { };
+        "Mod+WheelScrollDown".focus-column-right = { };
+      };
+      prefer-no-csd = { };
+    };
+  };
 }

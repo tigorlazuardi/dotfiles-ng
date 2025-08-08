@@ -25,4 +25,12 @@
   dconf.settings."org/gnome/shell".favorite-apps = [
     "com.github.xeco23.WasIstLos.desktop"
   ];
+
+  programs.niri.extraConfigPre = # kdl
+    ''
+      window-rule {
+        match app-id=r#"^wasistlos$"#
+        block-out-from "screencast"
+      }
+    '';
 }
