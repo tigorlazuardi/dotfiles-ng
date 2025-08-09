@@ -1,5 +1,7 @@
 {
   pkgs,
+  user,
+  config,
   ...
 }:
 {
@@ -19,6 +21,14 @@
     services.avahi.enable = true;
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     programs.hyprlock.enable = true;
-    services.displayManager.gdm.enable = true;
+    services.greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          user = user.name;
+          command = "${config.programs.hyprland.package}/bin/Hyprland --config ${pkgs.writeText "hyprland-greetd.conf" config.programs.hyprland.greetdConfig}";
+        };
+      };
+    };
   };
 }
