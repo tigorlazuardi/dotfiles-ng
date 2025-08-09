@@ -7,6 +7,7 @@
       colors.alpha = lib.mkForce 0.9;
       security.osc52 = "enabled";
       cursor.blink = true;
+      main.selection-target = "both";
     };
   };
 }
