@@ -73,4 +73,7 @@
     ];
   };
 
+  systemd.user.services.walker.Unit.X-Restart-Triggers = [
+    "${config.xdg.configFile."walker/config.toml".source}"
+  ];
 }

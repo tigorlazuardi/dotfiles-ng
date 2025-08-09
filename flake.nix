@@ -83,6 +83,10 @@
       flake = false;
     };
     walker.url = "github:abenz1267/walker";
+    caelestia = {
+      url = "github:caelestia-dots/cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = inputs: import ./machines inputs;
 }
