@@ -4,6 +4,8 @@
 }:
 {
   imports = [
+    ../../../modules/system.nix
+
     ./editor.nix
     ./fonts.nix
     ./home-manager.nix

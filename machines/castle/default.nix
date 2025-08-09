@@ -2,16 +2,15 @@
 {
   imports = [
     ../../environments/core/system
-    # ../../environments/core/system/optional/post-build-hook.nix
     ../../environments/bareksa/system
 
-    # We will use KDE Plasma 6 as the desktop environment
-    # ../../environments/kde/system
     ../../environments/desktop/system
-    ../../environments/gnome/system
+    # ../../environments/gnome/system
     ../../environments/game/system
 
     ../../environments/desktop/system/optional/vial.nix
+
+    ../../environments/hyprland/system.nix
 
     ./hardware.nix
     ./disko.nix
@@ -29,7 +28,9 @@
       ../../environments/game-development/home-manager
       ../../environments/nixvim/home-manager
 
-      ../../environments/gnome/home-manager
+      # ../../environments/gnome/home-manager
+
+      ../../environments/hyprland/home-manager
 
       ../../environments/desktop/home-manager/optional/obs-studio.nix
       ../../environments/desktop/home-manager/optional/feishin.nix
