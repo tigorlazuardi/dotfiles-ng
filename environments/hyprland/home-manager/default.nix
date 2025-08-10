@@ -25,6 +25,7 @@
     wl-clipboard
     font-manager
     hyprland-qt-support
+    brightnessctl
   ];
   services.hyprpolkitagent.enable = config.wayland.windowManager.hyprland.enable;
   wayland.windowManager.hyprland = {

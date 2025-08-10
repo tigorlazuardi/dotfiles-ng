@@ -12,7 +12,6 @@ let
     nameValuePair
     listToAttrs
     attrNames
-    optional
     ;
   socketActivationType = types.submodule (
     { config, name, ... }:
@@ -136,6 +135,9 @@ in
         }
       ) names
     );
+    systemd.sleep.extraConfig = ''
+      HibernateDelaySec=15m
+    '';
     security.sudo.extraRules = [
       {
         users = [ user.name ];
