@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -9,6 +10,9 @@ let
   quickShellTarget = "${homedir}/.config/quickshell";
 in
 {
+  home.packages = with pkgs; [
+    quickshell
+  ];
   # These options below are used to create a live configuration link to
   # this directory from-and-to quickshell's configuration.
   home.activation.symlinkQuickShell =
