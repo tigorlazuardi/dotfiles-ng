@@ -45,6 +45,11 @@
           prefix = "yt ";
           url = "https://www.youtube.com/results?search_query=%TERM%";
         }
+        {
+          name = "Claude";
+          prefix = "c ";
+          url = "https://claude.ai/search?q=%TERM%";
+        }
       ];
       terminal = "${lib.meta.getExe config.programs.ghostty.package}";
       keys = {

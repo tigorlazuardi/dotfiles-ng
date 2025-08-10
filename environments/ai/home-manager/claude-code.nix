@@ -1,15 +1,10 @@
 {
-  inputs,
   config,
   pkgs,
   lib,
   ...
 }:
 {
-  imports = [
-    # Needed to access programs.walker options.
-    inputs.walker.homeManagerModules.default
-  ];
   sops.secrets."claude-code/settings.json" = {
     sopsFile = ../../../secrets/claude-code.json;
     key = "";
@@ -29,13 +24,6 @@
       "Utility"
     ];
   };
-  programs.walker.config.builtins.websearch.entries = [
-    {
-      name = "Claude Code";
-      url = "https://claude.ai/new?q=%TERM%";
-      prefix = "c ";
-    }
-  ];
   home.packages = with pkgs; [
     claude-code
   ];
