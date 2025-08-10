@@ -3,6 +3,7 @@
     ./dex.nix
     ./homepage-dashboard.nix
     ./huly.nix
+    ./mitmproxy.nix
     ./nginx.nix
     ./penpot.nix
   ];
