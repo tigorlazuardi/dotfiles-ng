@@ -8,7 +8,7 @@
 {
   imports = [
     # ./avizo.nix
-    ./caelestia.nix
+    # ./caelestia.nix
     ./hyprcursor.nix
     ./hypridle.nix
     ./hyprlock.nix
