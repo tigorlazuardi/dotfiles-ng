@@ -82,6 +82,8 @@
     ];
   };
 
+  networking.enableIPv6 = false;
+
   fileSystems."/wolf" = {
     device = "//192.168.100.5/wolf";
     fsType = "cifs";
