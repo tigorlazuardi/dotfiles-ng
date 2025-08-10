@@ -12,6 +12,7 @@
     ./hyprcursor.nix
     ./hypridle.nix
     ./hyprlock.nix
+    ./hyprshot.nix
     ./wpaperd.nix
     ./walker.nix
     # ./hyprpanel.nix
