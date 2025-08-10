@@ -17,6 +17,7 @@
     ./nix.nix
     ./null-ls.nix
     ./nvim-docs-view.nix
+    ./qml.nix
     ./svelte.nix
     ./tiny-code-action.nix
     ./typescript.nix

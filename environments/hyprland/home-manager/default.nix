@@ -20,6 +20,7 @@
     ../../gnome/home-manager/nemo.nix
     ../../window-manager/home-manager/alacritty.nix
     ../../window-manager/home-manager/foot.nix
+    ../../window-manager/home-manager/quickshell
   ];
   home.packages = with pkgs; [
     wl-clipboard
