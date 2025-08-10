@@ -16,7 +16,7 @@ with lib;
   };
   wayland.windowManager.hyprland.settings = {
     bind = [
-      "$mod, D, exec, pkill walker || ${meta.getExe config.programs.walker.package}"
+      "$mod, D, exec, ${meta.getExe config.programs.walker.package}"
     ];
   };
 }
