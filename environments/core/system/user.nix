@@ -38,6 +38,7 @@
         extraGroups = [ "wheel" ];
         group = user.name;
         uid = 1000;
+        autoSubUidGidRange = true;
       };
     };
   };
