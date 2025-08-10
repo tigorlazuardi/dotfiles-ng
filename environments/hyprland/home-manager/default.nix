@@ -58,6 +58,15 @@
           "$mod, B, exec, ${meta.getExe config.programs.vivaldi.package}"
           "$mod, E, exec, ${meta.getExe' pkgs.nemo-with-extensions "nemo"}"
           "SUPER_SHIFT, Delete, exec, uwsm stop"
+          "SUPER, space, fullscreen, 0"
+          "SUPER, H, movefocus, l"
+          "SUPER, J, movefocus, d"
+          "SUPER, K, movefocus, u"
+          "SUPER, L, movefocus, r"
+          "SHIFT_SUPER, H, swapwindow, l"
+          "SHIFT_SUPER, J, swapwindow, d"
+          "SHIFT_SUPER, K, swapwindow, u"
+          "SHIFT_SUPER, L, swapwindow, r"
         ]
         ++ (
           let
@@ -86,6 +95,7 @@
               [
                 "$mod,${i},moveworkspacetomonitor,${i} current"
                 "$mod,${i},workspace,${i}"
+                "SUPER_SHIFT,${i},movetoworkspacesilent,${i}"
               ]
             ) index;
             workspaces = lib.flatten workspacesTuples;
