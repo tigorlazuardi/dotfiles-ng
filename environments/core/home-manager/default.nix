@@ -25,7 +25,7 @@
   xdg = {
     enable = true;
     autostart.enable = true;
-    mimeApps.enable = true;
+    # mimeApps.enable = true;
     portal.enable = lib.mkDefault true;
     userDirs = {
       enable = true;
