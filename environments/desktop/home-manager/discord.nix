@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   inherit (lib.meta) getExe;
   script =
@@ -19,13 +24,18 @@ in
       };
     };
   };
-  xdg.autostart.entries = [
-    ((pkgs.runCommand "discord.desktop" { }) # sh
-      ''
-        sed -e 's#Exec=.*#Exec=${getExe script} %U#' ${pkgs.vesktop}/share/applications/vesktop.desktop > $out
-      ''
-    )
-  ];
+
+  systemd.user.services.discord = {
+    Unit = {
+      Description = "Discord autostart service";
+      After = [ config.wayland.systemd.target ];
+      PartOf = [ config.wayland.systemd.target ];
+    };
+    Service = {
+      ExecStart = "${getExe script}";
+    };
+    Install.WantedBy = [ config.wayland.systemd.target ];
+  };
 
   services.swaync.settings.scripts._10-discord = {
     app-name = "[Vv]esktop";
