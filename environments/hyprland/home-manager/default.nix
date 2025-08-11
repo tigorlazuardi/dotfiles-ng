@@ -22,6 +22,7 @@
     ../../window-manager/home-manager/alacritty.nix
     ../../window-manager/home-manager/foot.nix
     ../../window-manager/home-manager/quickshell
+    ../../window-manager/home-manager/waybar
   ];
   home.packages = with pkgs; [
     wl-clipboard
