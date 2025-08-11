@@ -133,7 +133,7 @@
             StartLimitBurst = 5;
           };
           serviceConfig = {
-            Type = "oneshot";
+            Type = "simple";
             RemainAfterExit = true;
             Restart = "on-failure";
             RestartSec = 5;
