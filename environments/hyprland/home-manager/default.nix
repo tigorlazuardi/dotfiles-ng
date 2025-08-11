@@ -14,6 +14,7 @@
     ./hypridle.nix
     ./hyprlock.nix
     ./hyprshot.nix
+    ./network.nix
     ./wpaperd.nix
     ./walker.nix
     # ./hyprpanel.nix
