@@ -103,6 +103,12 @@
         "$mod, mouse:272, movewindow" # Move window with left mouse button + Super
         "$mod, mouse:273, resizewindow" # Resize window with right mouse button + Super
       ];
+      binde = [
+        "SUPER CTRL, H, resizeactive, -10 0"
+        "SUPER CTRL, J, resizeactive, 0 10"
+        "SUPER CTRL, K, resizeactive, 0 -10"
+        "SUPER CTRL, L, resizeactive, 10 0"
+      ];
     };
   };
 }
