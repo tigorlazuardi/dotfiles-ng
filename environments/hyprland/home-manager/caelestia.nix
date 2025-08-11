@@ -12,9 +12,16 @@ let
 in
 {
   options = {
-    programs.caelestia.settings = mkOption {
-      type = format.type;
-      default = { };
+    programs.caelestia = {
+      enable = mkOption {
+        type = types.bool;
+        default = config.wayland.windowManager.hyprland.enable;
+        description = "Enable the Caelestia desktop shell";
+      };
+      settings = mkOption {
+        type = format.type;
+        default = { };
+      };
     };
   };
   config = {
@@ -27,16 +34,15 @@ in
     systemd.user.services.caelestia-shell = {
       Unit = {
         Description = "Desktop shell for Caelestia dots";
-        After = [ "graphical-session.target" ];
-        PartOf = [ "graphical-session.target" ];
-        Requisite = [ "graphical-session.target" ];
+        After = [ config.wayland.systemd.target ];
+        PartOf = [ config.wayland.systemd.target ];
         X-Restart-Triggers = [ "${config.xdg.configFile."caelestia/shell.json".source}" ];
       };
       Service = {
         ExecStart = "${caelestiaPackage}/bin/caelestia shell";
         Restart = "on-failure";
       };
-      Install.WantedBy = [ "hyprland-session.target" ];
+      Install.WantedBy = [ config.wayland.systemd.target ];
     };
 
     programs.caelestia.settings = {
