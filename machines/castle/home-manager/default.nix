@@ -1,6 +1,7 @@
 { config, ... }:
 {
   imports = [
+    ./hyprland.nix
     ./niri.nix
   ];
   sops.secrets = {

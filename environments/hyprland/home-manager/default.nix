@@ -46,8 +46,8 @@
         ", highres@highrr, auto, 1"
       ];
       general = {
-        gaps_in = 2;
-        gaps_out = 2;
+        gaps_in = lib.mkDefault 0;
+        gaps_out = lib.mkDefault 0;
         layout = "master";
         resize_on_border = true;
       };
