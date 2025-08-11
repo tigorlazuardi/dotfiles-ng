@@ -2,6 +2,7 @@
   config,
   inputs,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -64,6 +65,25 @@
           "ctrl p"
         ];
       };
+      plugins = [
+        (
+          let
+            pactl = lib.meta.getExe' pkgs.pulseaudio "pactl";
+            jq = lib.meta.getExe pkgs.jq;
+          in
+          {
+            name = "audio";
+            placeholder = "Select Audio Output";
+            show_icon_when_single = true;
+            src = # sh
+              "${pactl} -f json list sinks | ${jq} -r '.[].description'";
+            cmd = # sh
+              ''
+                ${pactl} -f json list sinks | ${jq} -r '.[] | select(.description == "%RESULT%") | .name' | xargs -0I{} ${pactl} set-default-sink {};
+              '';
+          }
+        )
+      ];
     };
   };
 
