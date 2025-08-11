@@ -115,8 +115,9 @@
               '';
               opts = {
                 prefix_min_len = 3;
-                context_size = 5;
-                max_filesize = "200K";
+                backend.ripgrep = {
+                  max_filesize = "200K";
+                };
                 project_root_marker = [
                   ".git"
                   "go.mod"
