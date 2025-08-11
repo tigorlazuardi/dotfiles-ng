@@ -1,4 +1,9 @@
-{ user, osConfig, ... }:
+{
+  user,
+  osConfig,
+  lib,
+  ...
+}:
 {
   imports = [
     # currently all devices will use nixvim as editor in terminal.
@@ -17,9 +22,15 @@
     ./zoxide.nix
   ];
 
-  xdg.autostart = {
+  xdg = {
     enable = true;
-    # readOnly = true;
+    autostart.enable = true;
+    mimeApps.enable = true;
+    portal.enable = lib.mkDefault true;
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
   };
 
   home = {
