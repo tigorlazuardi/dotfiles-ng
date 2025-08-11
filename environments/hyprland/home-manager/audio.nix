@@ -15,13 +15,13 @@ in
     playerctl
   ];
 
-  systemd.user.services.pasystray = {
-    Unit.Description = "System Tray Panel for Pulse Audio";
-    Service = {
-      ExecStart = "${pkgs.pasystray}/bin/pasystray";
-    };
-    Install.WantedBy = [ config.wayland.systemd.target ];
-  };
+  # systemd.user.services.pasystray = {
+  #   Unit.Description = "System Tray Panel for Pulse Audio";
+  #   Service = {
+  #     ExecStart = "${pkgs.pasystray}/bin/pasystray";
+  #   };
+  #   Install.WantedBy = [ config.wayland.systemd.target ];
+  # };
   wayland.windowManager.hyprland.settings.binde =
     let
       pamixer = meta.getExe pkgs.pamixer;
