@@ -53,6 +53,8 @@ in
         ];
         audio = [ "${pkgs.pavucontrol}/bin/pavucontrol" ];
       };
+      notifs.actionOnClick = true;
+      appearance.transparency.enabled = true;
     };
 
     xdg.configFile."caelestia/shell.json".source =
