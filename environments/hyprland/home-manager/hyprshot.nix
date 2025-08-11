@@ -21,6 +21,7 @@ in
     Service = {
       Type = "oneshot";
       ExecStart = "${pkgs.coreutils}/bin/mkdir -p ${screenshotDir}";
+      RemainAfterExit = true;
     };
     Install = {
       WantedBy = [ "hyprland-session.target" ];
