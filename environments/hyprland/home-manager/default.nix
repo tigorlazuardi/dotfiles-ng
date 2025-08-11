@@ -44,8 +44,8 @@
         ", highres@highrr, auto, 1"
       ];
       general = {
-        gaps_in = 0;
-        gaps_out = 0;
+        gaps_in = 2;
+        gaps_out = 2;
         layout = "master";
         resize_on_border = true;
       };
@@ -55,6 +55,11 @@
       gestures = {
         workspace_swipe = true;
         workspace_swipe_create_new = false;
+      };
+      misc = {
+        vrr = 0;
+        focus_on_activate = true;
+        enable_swallow = true;
       };
       bind =
         with lib;

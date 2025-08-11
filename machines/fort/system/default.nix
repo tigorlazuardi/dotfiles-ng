@@ -46,4 +46,16 @@
       libvdpau-va-gl
     ];
   };
+
+  powerManagement = {
+    powertop.enable = true;
+    cpuFreqGovernor = "powersave";
+  };
+
+  services.thermald.enable = true;
+
+  services.tuned = {
+    enable = true;
+    settings.dynamic_tuning = true;
+  };
 }
