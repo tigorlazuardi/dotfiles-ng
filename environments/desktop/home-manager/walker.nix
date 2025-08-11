@@ -78,9 +78,13 @@
             src = # sh
               "${pactl} -f json list sinks | ${jq} -r '.[].description'";
             cmd = # sh
-              ''
-                ${pactl} -f json list sinks | ${jq} -r '.[] | select(.description == "%RESULT%") | .name' | xargs -0I{} ${pactl} set-default-sink {};
-              '';
+              ''${lib.meta.getExe (
+                pkgs.writeShellScriptBin "walker-audio" ''
+                  selected=$(${pactl} -f json list sinks | ${jq} --arg result "$1" -r '.[] | select(.description == $result) | .name')
+                  echo "$selected"
+                  ${pactl} set-default-sink "$selected"
+                ''
+              )} "%RESULT%"'';
           }
         )
       ];
