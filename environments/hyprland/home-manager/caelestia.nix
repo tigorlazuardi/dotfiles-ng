@@ -60,5 +60,8 @@ in
     xdg.configFile."caelestia/shell.json".source =
       format.generate "caelestia-settings.json" config.programs.caelestia.settings;
 
+    wayland.windowManager.hyprland.settings.bind = [
+      "SUPER, Backspace, exec, caelestia shell drawers toggle session"
+    ];
   };
 }
