@@ -116,13 +116,13 @@
       systemd.services = mapAttrs' (
         name: value:
         nameValuePair "podman-${name}-ensure-image" {
-          preStart = ''${pkgs.waitport}/bin/waitport 600 docker.io 443'';
           script =
             let
               inherit (pkgs) podman;
             in
             # sh
             ''
+              ${pkgs.waitport}/bin/waitport 600 docker.io 443
               set -e
               if ! ${podman}/bin/podman image exists ${value.image}; then
                 ${podman}/bin/podman pull ${value.image};
@@ -133,6 +133,7 @@
             StartLimitBurst = 5;
           };
           serviceConfig = {
+            Type = "oneshot";
             RemainAfterExit = true;
             Restart = "on-failure";
             RestartSec = 5;
