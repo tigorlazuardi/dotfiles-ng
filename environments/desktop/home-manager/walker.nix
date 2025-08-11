@@ -15,6 +15,16 @@
     runAsService = true;
 
     config = {
+      builtins.applications.launch_prefix = "systemd-run --user ";
+      builtins.runner.launch_prefix =
+        let
+          foot =
+            if config.programs.foot.server.enable then
+              lib.meta.getExe' config.programs.foot.package "footclient"
+            else
+              lib.meta.getExe config.programs.foot.package;
+        in
+        "${foot} ";
       builtins.websearch.entries = [
         {
           name = "Google";
@@ -75,6 +85,7 @@
             name = "audio";
             placeholder = "Select Audio Output";
             show_icon_when_single = true;
+            # TODO: change this to Python script so better listing of audio sinks
             src = # sh
               "${pactl} -f json list sinks | ${jq} -r '.[].description'";
             cmd = # sh
