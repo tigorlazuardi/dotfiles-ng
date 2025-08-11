@@ -7,8 +7,9 @@
 }:
 {
   imports = [
+    ./audio.nix
     # ./avizo.nix
-    # ./caelestia.nix
+    ./caelestia.nix
     ./hyprcursor.nix
     ./hypridle.nix
     ./hyprlock.nix
@@ -39,6 +40,9 @@
     };
     settings = {
       "$mod" = "SUPER";
+      monitor = [
+        ", highres@highrr, auto, 1"
+      ];
       general = {
         gaps_in = 0;
         gaps_out = 0;
@@ -70,22 +74,6 @@
           "SHIFT_SUPER, K, swapwindow, u"
           "SHIFT_SUPER, L, swapwindow, r"
         ]
-        ++ (
-          let
-            pamixer = meta.getExe pkgs.pamixer;
-            playerctl = meta.getExe pkgs.playerctl;
-          in
-          [
-            ", XF86AudioRaisevolume, exec, ${pamixer} -i 5"
-            ", XF86AudioLowervolume, exec, ${pamixer} -d 5"
-            ", XF86AudioMute, exec, ${pamixer} -t"
-            ", XF86AudioMicMute, exec, ${pamixer} --default-source -m"
-            ", XF86AudioPlay, exec, ${playerctl} play-pause"
-            ", XF86AudioPause, exec, ${playerctl} play-pause"
-            ", XF86AudioNext, exec, ${playerctl} next"
-            ", XF86AudioPrev, exec, ${playerctl} previous"
-          ]
-        )
         ++ (
           let
             index = builtins.genList (i: i + 1) 9; # Generate 1-9

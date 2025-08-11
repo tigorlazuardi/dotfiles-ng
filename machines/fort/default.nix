@@ -4,10 +4,12 @@
     ../../environments/core/system
     ../../environments/bareksa/system
 
-    # We will use KDE Plasma 6 as the desktop environment
+    ../../environments/desktop/system
     # ../../environments/kde/system
     ../../environments/game/system
-    ../../environments/gnome/system
+    # ../../environments/gnome/system
+
+    ../../environments/hyprland/system.nix
 
     ./hardware.nix
     ./system
@@ -22,12 +24,14 @@
       ../../environments/nixvim/home-manager
       ../../environments/ai/home-manager
       ../../environments/game-development/home-manager
-      ../../environments/gnome/home-manager
+      # ../../environments/gnome/home-manager
 
       ../../environments/desktop/home-manager/optional/feishin.nix
       ../../environments/desktop/home-manager/optional/ntfy_client.nix
 
-      ./home-manager.nix
+      ../../environments/hyprland/home-manager
+
+      ./home-manager
     ];
   };
 

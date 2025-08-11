@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
@@ -11,6 +10,8 @@ with lib;
       type = types.lines;
       default = # hyprlang
         ''
+          monitor = , highres@highrr, auto, 1
+
           exec-once = ${config.programs.regreet.package}/bin/regreet; hyprctl dispatch exit
           misc {
             disable_hyprland_logo = true
