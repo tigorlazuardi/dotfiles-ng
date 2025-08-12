@@ -14,12 +14,11 @@
     ./hypridle.nix
     ./hyprlock.nix
     ./hyprshot.nix
+    ./nemo.nix
     ./network.nix
     ./wpaperd.nix
     ./walker.nix
     # ./hyprpanel.nix
-
-    ../../gnome/home-manager/nemo.nix
     ../../window-manager/home-manager/alacritty.nix
     ../../window-manager/home-manager/foot.nix
     ../../window-manager/home-manager/quickshell

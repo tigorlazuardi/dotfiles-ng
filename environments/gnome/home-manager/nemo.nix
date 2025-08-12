@@ -7,6 +7,7 @@
 
   home.packages = with pkgs; [
     nemo-with-extensions
+    file-roller
   ];
   dconf.settings = {
     "org/gnome/shell".favorite-apps = [
