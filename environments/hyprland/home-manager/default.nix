@@ -16,6 +16,7 @@
     ./hyprshot.nix
     ./nemo.nix
     ./network.nix
+    ./privacy.nix
     ./wpaperd.nix
     ./walker.nix
     # ./hyprpanel.nix
