@@ -43,7 +43,7 @@ with lib;
 
                 entries = []
                 for client in clients:
-                    class_name = client["class"]
+                    class_name = client["class"].lower()
                     icon_name = icon_mappings.get(class_name, class_name)
                     
                     # Entry schema: https://github.com/abenz1267/walker/wiki/Plugins
