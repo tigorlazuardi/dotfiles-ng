@@ -30,5 +30,6 @@
         };
       };
     };
+    programs.kdeconnect.enable = true;
   };
 }

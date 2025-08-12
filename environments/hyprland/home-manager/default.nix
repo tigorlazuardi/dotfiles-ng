@@ -14,6 +14,7 @@
     ./hypridle.nix
     ./hyprlock.nix
     ./hyprshot.nix
+    ./kdeconnect.nix
     ./nemo.nix
     ./network.nix
     ./privacy.nix
