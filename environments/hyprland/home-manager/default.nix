@@ -63,6 +63,17 @@
         focus_on_activate = true;
         enable_swallow = true;
       };
+      # Smart Gaps / No Gaps when only one window is open
+      workspace = [
+        "w[t1], gapsout:0, gapsin:0"
+        "f[1], gapsout:0, gapsin:0"
+        "w[tg1], gapsout:0, gapsin:0"
+      ];
+      windowrulev2 = [
+        "bordersize 0, floating:0, onworkspace:w[t1]"
+        "bordersize 0, floating:0, onworkspace:w[tg1]"
+        "bordersize 0, floating:0, onworkspace:f[1]"
+      ];
       bind =
         with lib;
         [
@@ -104,10 +115,10 @@
         "$mod, mouse:273, resizewindow" # Resize window with right mouse button + Super
       ];
       binde = [
-        "SUPER CTRL, H, resizeactive, -10 0"
-        "SUPER CTRL, J, resizeactive, 0 10"
-        "SUPER CTRL, K, resizeactive, 0 -10"
-        "SUPER CTRL, L, resizeactive, 10 0"
+        "SUPER CTRL, H, resizeactive, -20 0"
+        "SUPER CTRL, J, resizeactive, 0 20"
+        "SUPER CTRL, K, resizeactive, 0 -20"
+        "SUPER CTRL, L, resizeactive, 20 0"
       ];
     };
   };
