@@ -1,8 +1,8 @@
 // qmllint disable
 
-import Quickshell // for PanelWindow
-import QtQuick // for Text
-import Quickshell.Io // for Process
+import QtQuick
+import Quickshell
+import Quickshell.Io
 
 Scope {
     id: root
@@ -17,15 +17,15 @@ Scope {
 
             anchors {
                 top: true
-                left: true
+                right: true
                 bottom: true
             }
 
             implicitWidth: 50
+            color: "#80191724"  // Semi-transparent rose-pine base
 
-            ClockWidget {
-                anchors.centerIn: parent
-                time: root.time
+            BarLayout {
+                id: barLayout
             }
         }
     }
