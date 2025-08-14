@@ -27,7 +27,7 @@
     ./pocket_id.nix
     ./qbittorrent.nix
     # ./redmage.nix
-    ./router.nix
+    # ./router.nix
     ./samba.nix
     ./soulseek.nix
     ./stirling-pdf.nix
