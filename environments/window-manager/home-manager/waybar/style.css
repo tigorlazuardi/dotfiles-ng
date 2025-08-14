@@ -1,0 +1,86 @@
+/* styelint-disable */
+
+/* Base16 Rose Pine Color Palette */
+@define-color base #191724;
+@define-color surface #1f1d2e;
+@define-color overlay #26233a;
+@define-color muted #6e6a86;
+@define-color subtle #908caa;
+@define-color text #e0def4;
+@define-color love #eb6f92;
+@define-color gold #f6c177;
+@define-color rose #ebbcba;
+@define-color pine #31748f;
+@define-color foam #9ccfd8;
+@define-color iris #c4a7e7;
+@define-color highlightLow #21202e;
+@define-color highlightMed #403d52;
+@define-color highlightHigh #524f67;
+
+window#waybar {
+  background-color: alpha(@base, 0.75);
+  box-shadow: 0 0 10px alpha(@base, 0.5);
+}
+
+#workspaces {
+  background-color: alpha(@highlightLow, 0.5);
+  color: @text;
+  margin: 0.5rem 0.5rem 0px 0.5rem;
+  border-radius: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 1rem;
+}
+
+#workspaces button {
+  margin-top: 0.25rem;
+}
+
+#workspaces button:hover {
+  background-color: @highlightMed;
+  color: @text;
+}
+
+#workspaces button.visible {
+  margin-top: 0.5rem;
+  border-bottom-color: @iris;
+  border-bottom-width: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+#pulseaudio-slider {
+  min-height: 5rem;
+  min-width: 0px;
+}
+
+#pulseaudio {
+  margin-top: 0.8rem;
+  margin-right: 0.6rem; /* The icon is a bit misaligned */
+  font-size: 1rem;
+}
+
+#clock.hour {
+  margin-top: 0.8rem;
+}
+
+#clock.minute {
+  margin-top: 0.4rem;
+}
+
+#tray {
+  margin-top: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+#idle_inhibitor {
+  margin-top: 10px;
+  margin-right: 10px; /* The icon is a bit misaligned */
+}
+
+#idle_inhibitor.activated {
+  color: @love;
+}
+
+#custom-notification {
+  margin-top: 10px;
+  font-size: 1.4rem;
+}
