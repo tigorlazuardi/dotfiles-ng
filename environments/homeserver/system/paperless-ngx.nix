@@ -2,6 +2,11 @@
 let
   volume = "/wolf/paperless-ngx";
   domain = "docs.tigor.web.id";
+  inherit (config.virtualisation.oci-containers.containers.paperless-ngx)
+    ip
+    httpPort
+    ;
+  proxyPass = "http://${ip}:${toString httpPort}";
 in
 {
   sops.secrets =
@@ -24,10 +29,6 @@ in
     image = "ghcr.io/paperless-ngx/paperless-ngx:latest";
     ip = "10.88.1.10";
     httpPort = 8000;
-    socketActivation = {
-      enable = true;
-      idleTimeout = "15m";
-    };
     volumes = [
       "${volume}/data:/usr/src/paperless/data"
       "${volume}/media:/usr/src/paperless/media"
@@ -74,14 +75,9 @@ in
     '';
     unitConfig.StopWhenUnneeded = true;
   };
-  services.anubis.instances.paperless-ngx.settings.TARGET =
-    "unix://${config.systemd.socketActivations.podman-paperless-ngx.address}";
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
-    locations."/api".proxyPass =
-      "http://unix:${config.systemd.socketActivations.podman-paperless-ngx.address}";
-    locations."/".proxyPass =
-      "http://unix:${config.services.anubis.instances.paperless-ngx.settings.BIND}";
+    locations."/".proxyPass = proxyPass;
   };
   services.homepage-dashboard.groups.Media.services."Paperless NGX".settings = {
     description = "Document storage and management system";
