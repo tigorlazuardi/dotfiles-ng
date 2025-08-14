@@ -5,6 +5,7 @@
 
     ./adguard_home.nix
     ./anubis.nix
+    ./attic.nix
     ./db-gate.nix
     ./dex.nix
     ./flaresolverr.nix
