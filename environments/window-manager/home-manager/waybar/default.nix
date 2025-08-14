@@ -1,6 +1,15 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   programs.waybar.enable = false;
+  home.packages = with pkgs; [
+    brightnessctl
+    swaynotificationcenter
+  ];
   home.activation.symlinkWaybar =
     lib.hm.dag.entryAfter [ "writeBoundary" ] # sh
       ''
