@@ -1,6 +1,9 @@
 { config, ... }:
 let
   inherit (config.virtualisation.oci-containers.containers.pocket-id) ip httpPort;
+  volume = "/var/lib/pocket-id";
+  uid = toString config.users.users.pocket-id.uid;
+  gid = toString config.users.groups.pocket-id.gid;
 in
 {
   users = {
@@ -16,7 +19,7 @@ in
     ip = "10.88.0.3";
     httpPort = 1411;
     volumes = [
-      "/var/lib/pocket-id:/app/data"
+      "${volume}:/app/data"
     ];
     podman.sdnotify = "healthy";
     extraOptions = [
@@ -35,12 +38,14 @@ in
       SMTP_PORT = "1025";
     };
   };
+  systemd.services.podman-pocket-id.preStart = ''
+    mkdir -p ${volume}
+    chown -R ${uid}:${gid} ${volume}
+  '';
   systemd.services.podman-pocket-id.serviceConfig.StateDirectory = "pocket-id";
-  services.anubis.instances.podman-pocket-id.settings.TARGET = "http://${ip}:${toString httpPort}";
   services.nginx.virtualHosts."id.tigor.web.id" = {
     forceSSL = true;
-    locations."/".proxyPass =
-      "http://unix:${config.services.anubis.instances.podman-pocket-id.settings.BIND}";
+    locations."/".proxyPass = "http://${ip}:${toString httpPort}";
   };
   services.homepage-dashboard.groups.Security.services."Pocket-Id".settings = {
     href = "https://id.tigor.web.id";
