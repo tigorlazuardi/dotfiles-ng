@@ -5,12 +5,15 @@
   ...
 }:
 {
+  imports = [
+    # Waybar has dependency with swaync
+    ../swaync.nix
+  ];
   programs.waybar.enable = true;
   # We will use our own waybar configuration
   stylix.targets.waybar.enable = false;
   home.packages = with pkgs; [
     brightnessctl
-    swaynotificationcenter
   ];
   home.activation.symlinkWaybar =
     lib.hm.dag.entryAfter [ "writeBoundary" ] # sh
