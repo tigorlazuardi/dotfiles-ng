@@ -14,7 +14,7 @@
     ./jdownloader.nix
     ./jellyfin.nix
     ./jellyseerr.nix
-    ./mailhog.nix
+    # ./mailhog.nix
     ./memos.nix
     ./musicbrainz.nix
     ./n8n.nix
