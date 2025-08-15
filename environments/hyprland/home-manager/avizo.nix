@@ -2,6 +2,9 @@
 {
   services.avizo = {
     enable = true;
+    settings.default = {
+      time = 2;
+    };
   };
 
   wayland.windowManager.hyprland.settings.bind = [

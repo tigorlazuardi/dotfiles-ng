@@ -34,14 +34,16 @@ in
       brightnessctl = meta.getExe pkgs.brightnessctl;
     in
     [
-      ", XF86AudioRaisevolume, exec, ${pamixer} -i 5"
-      ", XF86AudioLowervolume, exec, ${pamixer} -d 5"
-      ", XF86AudioMute, exec, ${pamixer} -t"
-      ", XF86AudioMicMute, exec, ${pamixer} --default-source -m"
       ", XF86AudioPlay, exec, ${playerctl} play-pause"
       ", XF86AudioPause, exec, ${playerctl} play-pause"
       ", XF86AudioNext, exec, ${playerctl} next"
       ", XF86AudioPrev, exec, ${playerctl} previous"
+    ]
+    ++ lib.optionals (!config.services.avizo.enable) [
+      ", XF86AudioRaisevolume, exec, ${pamixer} -i 5"
+      ", XF86AudioLowervolume, exec, ${pamixer} -d 5"
+      ", XF86AudioMute, exec, ${pamixer} -t"
+      ", XF86AudioMicMute, exec, ${pamixer} --default-source -m"
       ", XF86MonBrightnessUp, exec, ${brightnessctl} set +5%"
       ", XF86MonBrightnessDown, exec, ${brightnessctl} set 5%-"
     ];
