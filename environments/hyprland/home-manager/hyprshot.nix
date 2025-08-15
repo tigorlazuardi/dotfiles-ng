@@ -10,11 +10,14 @@ let
   screenshotDir = "${config.home.homeDirectory}/Pictures/Screenshots";
 in
 {
+  home.packages = with pkgs; [
+    hyprpicker # Hyprshot can freeze the screen when taking screenshots when hyprpicker is in PATH.
+  ];
   wayland.windowManager.hyprland.settings.bind = [
-    ", Print, exec, ${hyprshot} -m region --raw --silent | ${satty} --filename - --output-filename ${screenshotDir}/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
-    "SHIFT, Print, exec, ${hyprshot} -m region -o ${screenshotDir}"
-    "SUPER, Print, exec, ${hyprshot} -m window --raw --silent | ${satty} --filename - --output-filename ${screenshotDir}/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
-    "SHIFT_SUPER, Print, exec, ${hyprshot} -m windo -o ${screenshotDir}"
+    ", Print, exec, ${hyprshot} --freeze --mode region --raw --silent | ${satty} --filename - --output-filename ${screenshotDir}/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
+    "SHIFT, Print, exec, ${hyprshot} --freeze --mode region -o ${screenshotDir}"
+    "SUPER, Print, exec, ${hyprshot} --freeze --mode window --raw --silent | ${satty} --filename - --output-filename ${screenshotDir}/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
+    "SHIFT_SUPER, Print, exec, ${hyprshot} --freeze --mode window -o ${screenshotDir}"
   ];
   systemd.user.services.create-screenshot-dir = {
     Unit.Description = "Create screenshot directory";
