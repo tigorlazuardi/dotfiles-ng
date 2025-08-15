@@ -19,16 +19,29 @@
 
 window#waybar {
   background-color: alpha(@base, 0.75);
-  box-shadow: 0 0 10px alpha(@base, 0.5);
 }
 
 #workspaces {
   background-color: alpha(@highlightLow, 0.5);
   color: @text;
-  margin: 0.5rem 0.5rem 0px 0.5rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
   border-radius: 1rem;
-  padding-top: 0.25rem;
+  padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+#workspaces button.visible {
+  margin-top: 0.5rem;
+  border-bottom-color: @iris;
+  border-bottom-width: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+#window {
+  padding-bottom: 2rem;
+  padding-top: 2rem;
 }
 
 #workspaces button {
@@ -40,47 +53,81 @@ window#waybar {
   color: @text;
 }
 
-#workspaces button.visible {
-  margin-top: 0.5rem;
-  border-bottom-color: @iris;
-  border-bottom-width: 0.25rem;
-  border-radius: 0.5rem;
-}
-
 #pulseaudio-slider {
   min-height: 5rem;
   min-width: 0px;
 }
 
 #pulseaudio {
-  margin-top: 0.8rem;
-  margin-right: 0.6rem; /* The icon is a bit misaligned */
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 0.66rem; /* The icon is a bit misaligned */
   font-size: 1rem;
 }
 
-#clock.hour {
-  margin-top: 0.8rem;
-}
-
-#clock.minute {
-  margin-top: 0.4rem;
+#pulseaudio:hover {
+  background-color: @gold;
+  color: @base;
 }
 
 #tray {
-  margin-top: 0.8rem;
+  margin-top: 1rem;
   margin-bottom: 1.2rem;
 }
 
 #idle_inhibitor {
-  margin-top: 10px;
-  margin-right: 10px; /* The icon is a bit misaligned */
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  padding-right: 0.66rem; /* The icon is a bit misaligned */
 }
 
 #idle_inhibitor.activated {
   color: @love;
 }
 
+#idle_inhibitor:hover {
+  background-color: @gold;
+  color: @base;
+}
+
 #custom-notification {
-  margin-top: 10px;
+  margin-top: 0.5rem;
   font-size: 1.4rem;
+}
+
+#clock.icon,
+#clock.hour,
+#clock.sep,
+#clock.minute {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+#clock.icon {
+  margin-top: 0.8rem;
+  font-size: 1.4rem;
+  padding-right: 0.25rem;
+  background-color: alpha(@iris, 0.5);
+  border-top-left-radius: 4rem;
+  border-top-right-radius: 4rem;
+  padding-top: 0.25rem;
+  color: @text;
+}
+
+#clock.hour,
+#clock.sep {
+  padding-top: 0.4rem;
+  font-size: 1.1rem;
+  background-color: alpha(@iris, 0.5);
+  color: @text;
+}
+
+#clock.minute {
+  padding-top: 0.4rem;
+  font-size: 1.1rem;
+  background-color: alpha(@iris, 0.5);
+  border-bottom-left-radius: 4rem;
+  border-bottom-right-radius: 4rem;
+  padding-bottom: 0.5rem;
+  color: @text;
 }

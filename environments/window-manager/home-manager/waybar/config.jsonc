@@ -11,7 +11,9 @@
     "pulseaudio/slider",
     "pulseaudio",
     "idle_inhibitor",
+    "clock#icon",
     "clock#hour",
+    "clock#sep",
     "clock#minute",
     "tray",
     "battery",
@@ -39,16 +41,26 @@
   },
   "hyprland/window": {
     "rotate": 270,
-    "format": "{title:.50}",
+    "format": "{title}",
     "icon": true,
+  },
+  "clock#icon": {
+    "interval": "999999999999",
+    "format": " 󰥔 ",
+    "tooltip-format": "{:%A, %B %d, %Y (%R)}",
   },
   "clock#hour": {
     "format": "{:%H}",
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "tooltip-format": "{:%A, %B %d, %Y (%R)}",
+  },
+  "clock#sep": {
+    "interval": "999999999999",
+    "format": " ",
+    "tooltip-format": "{:%A, %B %d, %Y (%R)}",
   },
   "clock#minute": {
     "format": "{:%M}",
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "tooltip-format": "{:%A, %B %d, %Y (%R)}",
   },
   "reload_style_on_change": true,
   "pulseaudio/slider": {
