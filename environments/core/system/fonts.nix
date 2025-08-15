@@ -18,6 +18,8 @@
         font-awesome
         roboto
 
+        jetbrains-mono
+
         jost
       ]
       ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
