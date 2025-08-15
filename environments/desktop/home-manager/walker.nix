@@ -128,6 +128,73 @@
             parser = "json";
           }
         )
+        {
+          name = "Session";
+          placeholder = "What do you want to do?";
+          show_icon_when_single = true;
+          entries = [
+            {
+              label = "Lock Screen";
+              sub = "Lock the screen";
+              exec = "loginctl lock-session";
+              searchable = "lock screen";
+              icon = "${pkgs.fetchurl {
+                url = "https://www.svgrepo.com/download/532323/lock-alt.svg";
+                hash = "sha256-aZUWgDf79uTXnm0PFHU40Id7lWempVOBd9KYmwn0WiU=";
+              }}";
+            }
+            {
+              label = "Suspend";
+              sub = "Suspend the system";
+              exec = "systemctl suspend";
+              searchable = "suspend systemctl sleep systemd";
+              icon = "${pkgs.fetchurl {
+                url = "https://www.svgrepo.com/download/414477/sleep.svg";
+                hash = "sha256-f6XGuP5A17R03kv5s63oy82Nnxtc9wEBsPdl/fr6I6w=";
+              }}";
+            }
+            {
+              label = "Suspend then Hibernate";
+              sub = "Suspend the system and hibernate after a while";
+              exec = "systemctl suspend-then-hibernate";
+              searchable = "suspend hibernate systemctl sleep systemd";
+              icon = "${pkgs.fetchurl {
+                url = "https://www.svgrepo.com/download/147724/hibernate-button.svg";
+                hash = "sha256-ovKw0MwEd6VJRf1efZDQRek0K0RBjIARo4fskl/I8po=";
+              }}";
+            }
+            {
+              label = "Hibernate";
+              sub = "Hibernate the system immediately";
+              exec = "systemctl hibernate";
+              searchable = "hibernate systemctl systemd";
+              icon = "${pkgs.fetchurl {
+                url = "https://www.svgrepo.com/download/147724/hibernate-button.svg";
+                hash = "sha256-ovKw0MwEd6VJRf1efZDQRek0K0RBjIARo4fskl/I8po=";
+              }}";
+            }
+            {
+              label = "Reboot";
+              sub = "Reboot the system";
+              exec = "systemctl reboot";
+              searchable = "reboot systemctl restart";
+              icon = "${pkgs.fetchurl {
+                url = "https://www.svgrepo.com/download/529810/restart.svg";
+                hash = "sha256-k0cdmEh+6VHoFRxnBbpJeIg2wsI/ZuxhO1544ro/FYo=";
+              }}";
+            }
+            {
+              label = "Power Off";
+              sub = "Power off the system";
+              exec = "systemctl poweroff";
+              searchable = "power off shutdown systemctl systemd";
+              icon = "${pkgs.fetchurl {
+                url = "https://www.svgrepo.com/download/332492/poweroff.svg";
+                hash = "sha256-iSmvcIsjyzwH+3sUtWQz0dNEDCYwM5tXg1Sl0KjEjNs=";
+              }}";
+            }
+          ];
+        }
       ];
     };
   };
