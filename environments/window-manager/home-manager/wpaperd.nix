@@ -27,9 +27,8 @@ in
 
               ln -sfn "$wallpaper" ${dataDir}/current
 
-              ${magick} "$wallpaper" -resize 50% -blur 0x10 "${dataDir}/lockscreen.png"
-
-              ${lib.meta.getExe config.programs.wallust.package} run --skip-sequences "$wallpaper"
+              systemd-run --user ${magick} "$wallpaper" -resize 50% -blur 0x10 "${dataDir}/lockscreen.png"
+              systemd-run --user ${lib.meta.getExe config.programs.wallust.package} run --dynamic-threshold --skip-sequences "$wallpaper"
             ''
           }";
       };
