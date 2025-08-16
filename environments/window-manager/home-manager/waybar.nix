@@ -6,12 +6,12 @@
 {
   imports = [
     # Waybar has dependency with swaync
-    ../swaync.nix
-    ../wallust.nix
-    ../wpaperd.nix
+    ./swaync.nix
+    ./wallust.nix
+    ./wpaperd.nix
   ];
   programs.waybar.enable = true;
-  programs.waybar.settings = {
+  programs.waybar.settings.main = {
     backlight = {
       device = "intel_backlight";
       format = "{percent}% {icon}";
@@ -68,13 +68,13 @@
       format = "{icon}";
       format-icons = {
         dnd-inhibited-none = "";
-        dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
+        dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
         dnd-none = "";
-        dnd-notification = "<span foreground='red'><sup></sup></span>";
+        dnd-notification = "<span foreground='red'><sup></sup></span>";
         inhibited-none = "";
-        inhibited-notification = "<span foreground='red'><sup></sup></span>";
+        inhibited-notification = "<span foreground='red'><sup></sup></span>";
         none = "";
-        notification = "<span foreground='red'><sup></sup></span>";
+        notification = "<span foreground='red'><sup></sup></span>";
       };
       on-click = "swaync-client --toggle-panel --skip-wait";
       on-click-right = "swaync-client --toggle-dnd --skip-wait";
@@ -238,6 +238,7 @@
         padding-top: 0.5rem;
         padding-right: 0.66rem; /* The icon is a bit misaligned */
         color: @foreground;
+        font-size: 1.2rem;
       }
 
       #idle_inhibitor.activated {
@@ -306,7 +307,7 @@
       ExecStartPre =
         pkgs.writeShellScript "wait-for-wallust" # sh
           ''
-            while [ ! -f "${config.xdg.dataHome}/wallpapers/gtk.css" ]; do
+            while [ ! -f "${config.xdg.configHome}/waybar/style.css" ]; do
               sleep 0.1
             done
           '';

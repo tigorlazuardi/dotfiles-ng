@@ -22,8 +22,7 @@
     # ./hyprpanel.nix
     ../../window-manager/home-manager/alacritty.nix
     ../../window-manager/home-manager/foot.nix
-    ../../window-manager/home-manager/quickshell
-    ../../window-manager/home-manager/waybar
+    ../../window-manager/home-manager/waybar.nix
   ];
   home.packages = with pkgs; [
     wl-clipboard
