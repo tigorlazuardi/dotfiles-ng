@@ -9,6 +9,7 @@
     # Waybar has dependency with swaync
     ../swaync.nix
     ../wallust.nix
+    ../wpaperd.nix
   ];
   programs.waybar.enable = true;
   # We will use our own waybar configuration
@@ -28,6 +29,13 @@
       PartOf = [ config.wayland.systemd.target ];
     };
     Service = {
+      ExecStartPre =
+        pkgs.writeShellScript "wait-for-wallust" # sh
+          ''
+            while [ ! -f "${config.xdg.dataHome}/wallpapers/gtk.css" ]; do
+              sleep 0.1
+            done
+          '';
       ExecStart = "${pkgs.waybar}/bin/waybar";
     };
     Install = {

@@ -8,7 +8,6 @@
 {
   imports = [
     ./audio.nix
-    ./avizo.nix
     # ./caelestia.nix
     ./hyprcursor.nix
     ./hypridle.nix

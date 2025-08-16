@@ -1,13 +1,13 @@
 {
   pkgs,
-  lib,
   config,
+  lib,
   ...
 }:
-let
-  inherit (lib) meta;
-in
 {
+  imports = [
+    ../../window-manager/home-manager/swayosd.nix
+  ];
   home.packages = with pkgs; [
     pavucontrol
     pamixer
@@ -29,22 +29,16 @@ in
   };
   wayland.windowManager.hyprland.settings.binde =
     let
-      pamixer = meta.getExe pkgs.pamixer;
-      playerctl = meta.getExe pkgs.playerctl;
-      brightnessctl = meta.getExe pkgs.brightnessctl;
+      playerctl = lib.meta.getExe pkgs.playerctl;
     in
     [
+      ", XF86AudioRaisevolume, exec, swayosd-client --output-volume raise"
+      ", XF86AudioLowervolume, exec, swayosd-client --output-volume lower"
+      ", XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
+      ", XF86AudioMicMute, exec, swayosd-client --input-volume mute-toggle"
       ", XF86AudioPlay, exec, ${playerctl} play-pause"
       ", XF86AudioPause, exec, ${playerctl} play-pause"
       ", XF86AudioNext, exec, ${playerctl} next"
       ", XF86AudioPrev, exec, ${playerctl} previous"
-    ]
-    ++ lib.optionals (!config.services.avizo.enable) [
-      ", XF86AudioRaisevolume, exec, ${pamixer} -i 5"
-      ", XF86AudioLowervolume, exec, ${pamixer} -d 5"
-      ", XF86AudioMute, exec, ${pamixer} -t"
-      ", XF86AudioMicMute, exec, ${pamixer} --default-source -m"
-      ", XF86MonBrightnessUp, exec, ${brightnessctl} set +5%"
-      ", XF86MonBrightnessDown, exec, ${brightnessctl} set 5%-"
     ];
 }
