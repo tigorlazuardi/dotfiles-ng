@@ -82,7 +82,7 @@
       url = "github:marlonrichert/zsh-autocomplete";
       flake = false;
     };
-    walker.url = "github:abenz1267/walker";
+    walker.url = "github:abenz1267/walker?ref=0.13.26"; # Freeze the walker version until 1.0.0 is released since it's undergoing full rewrite.
     caelestia = {
       url = "github:caelestia-dots/cli";
       inputs.nixpkgs.follows = "nixpkgs";

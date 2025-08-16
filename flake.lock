@@ -1084,15 +1084,16 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1754830695,
-        "narHash": "sha256-6nQYTUU3THpCuOaXNbvbvnZlLa1NdJTISdz45erI6Pw=",
+        "lastModified": 1755066824,
+        "narHash": "sha256-LslpfHXj31Lvq+26ZDzCTaGBbxmp7yXlgKT+uwUEEts=",
         "owner": "abenz1267",
         "repo": "walker",
-        "rev": "28af0c388908f4557161c57f449c61bb5847c508",
+        "rev": "745d720fdb59965d6fe660fc835181619a179027",
         "type": "github"
       },
       "original": {
         "owner": "abenz1267",
+        "ref": "0.13.26",
         "repo": "walker",
         "type": "github"
       }
