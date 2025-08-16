@@ -2,9 +2,16 @@
   config,
   user,
   lib,
+  pkgs,
   ...
 }:
+let
+  lockWallpaperPath = "${config.xdg.dataHome}/wallpapers/lockscreen.png";
+in
 {
+  imports = [
+    ../../window-manager/home-manager/wpaperd.nix
+  ];
   stylix.targets.hyprlock.enable = false;
   programs.hyprlock = {
     enable = config.wayland.windowManager.hyprland.enable;
@@ -19,7 +26,7 @@
       };
       background = {
         monitor = ""; # All monitors by default.
-        path = "${config.xdg.dataHome}/wallpapers/lockscreen.png";
+        path = lockWallpaperPath;
         contrast = 1;
         brightness = 0.5;
         vibrancy = 0.2;
@@ -80,4 +87,9 @@
       ];
     };
   };
+
+  services.wpaperd.execScript = # sh
+    ''
+      systemd-run --user ${lib.meta.getExe' pkgs.imagemagick "magick"} "$wallpaper" -resize 50% -blur 0x10 "${lockWallpaperPath}"
+    '';
 }
