@@ -64,11 +64,32 @@
         focus_on_activate = true;
         enable_swallow = true;
       };
-      # Smart Gaps / No Gaps when only one window is open
-      workspace = [
-        "w[tv1], gapsout:0, gapsin:0"
-        "f[1], gapsout:0, gapsin:0"
-      ];
+      workspace =
+        let
+          monitors = [
+            "DP-1"
+            "eDP-1"
+          ];
+          workspaceBinds = map (
+            monitor:
+            let
+              index = builtins.genList (i: i + 1) 9; # Generate 1-9
+              binds = map (i: "${toString i}, monitor:${monitor}") index;
+            in
+            binds
+          ) monitors;
+        in
+        lib.flatten workspaceBinds
+        ++ (map (monitor: "10, monitor:${monitor}") monitors)
+        ++ [
+          "11, monitor:DP-2" # Second monitor
+          "12, monitor:DP-3" # Third monitor
+        ]
+        ++ [
+          # Smart Gaps / No Gaps when only one window is open
+          "w[tv1], gapsout:0, gapsin:0"
+          "f[1], gapsout:0, gapsin:0"
+        ];
       windowrulev2 = [
         "bordersize 0, floating:0, onworkspace:w[tv1]"
         "rounding 0, floating:0, onworkspace:w[tv1]"
@@ -92,6 +113,7 @@
           "SHIFT_SUPER, J, swapwindow, d"
           "SHIFT_SUPER, K, swapwindow, u"
           "SHIFT_SUPER, L, swapwindow, r"
+          "SUPER, TAB, workspace, previous" # Win+Tab to toggle between two workspaces
         ]
         ++ (
           let
@@ -102,15 +124,18 @@
                 i = toString index;
               in
               [
-                "$mod,${i},moveworkspacetomonitor,${i} current"
                 "$mod,${i},workspace,${i}"
                 "SUPER_SHIFT,${i},movetoworkspacesilent,${i}"
               ]
             ) index;
-            workspaces = lib.flatten workspacesTuples;
+            workspaceGoto = lib.flatten workspacesTuples;
           in
-          workspaces
-        );
+          workspaceGoto
+        )
+        ++ [
+          "SUPER, 0, workspace, 10" # Go to workspace 10
+          "SUPER_SHIFT, 0, movetoworkspacesilent, 10" # Move window to workspace 10
+        ];
       bindm = [
         "$mod, mouse:272, movewindow" # Move window with left mouse button + Super
         "$mod, mouse:273, resizewindow" # Resize window with right mouse button + Super
