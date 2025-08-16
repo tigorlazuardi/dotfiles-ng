@@ -134,14 +134,33 @@
           show_icon_when_single = true;
           entries = [
             {
+              label = "Logout";
+              sub = "Logout from the current session";
+              exec = "loginctl terminate-session";
+              searchable = "uwsm stop";
+              icon = "${pkgs.writeText "logout.svg" # svg
+                ''
+                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                ''
+              }";
+            }
+            {
               label = "Lock Screen";
               sub = "Lock the screen";
               exec = "loginctl lock-session";
               searchable = "lock screen";
-              icon = "${pkgs.fetchurl {
-                url = "https://www.svgrepo.com/download/532323/lock-alt.svg";
-                hash = "sha256-aZUWgDf79uTXnm0PFHU40Id7lWempVOBd9KYmwn0WiU=";
-              }}";
+              icon = "${pkgs.writeText "lock.svg" # svg
+                ''
+                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                ''
+              }";
             }
             {
               label = "Suspend";
