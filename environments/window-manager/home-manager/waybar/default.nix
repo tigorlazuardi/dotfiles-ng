@@ -8,6 +8,7 @@
   imports = [
     # Waybar has dependency with swaync
     ../swaync.nix
+    ../wallust.nix
   ];
   programs.waybar.enable = true;
   # We will use our own waybar configuration
