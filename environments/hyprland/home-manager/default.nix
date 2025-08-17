@@ -18,6 +18,7 @@
     ./nemo.nix
     ./network.nix
     ./privacy.nix
+    ./waybar.nix
     ./wpaperd.nix
     ./walker.nix
     ../../window-manager/home-manager/alacritty.nix

@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }:
 let
@@ -368,6 +369,29 @@ in
         sleep 0.1;
       done
     '';
+  };
+  programs.waybar.settings.main = {
+    modules-left = lib.mkBefore [ "custom/notification" ];
+    "custom/notification" = {
+      escape = true;
+      exec = "swaync-client --subscribe-waybar";
+      exec-if = "which swaync-client";
+      format = "{icon}";
+      format-icons = {
+        dnd-inhibited-none = "";
+        dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
+        dnd-none = "";
+        dnd-notification = "<span foreground='red'><sup></sup></span>";
+        inhibited-none = "";
+        inhibited-notification = "<span foreground='red'><sup></sup></span>";
+        none = "";
+        notification = "<span foreground='red'><sup></sup></span>";
+      };
+      on-click = "swaync-client --toggle-panel --skip-wait";
+      on-click-right = "swaync-client --toggle-dnd --skip-wait";
+      return-type = "json";
+      tooltip = false;
+    };
   };
   stylix.targets.swaync.enable = false; # We will use Rose-Pine's swaync official styling.
 }
