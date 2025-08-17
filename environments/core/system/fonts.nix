@@ -20,6 +20,7 @@
 
         jetbrains-mono
 
+        ubuntu-sans-mono
         jost
       ]
       ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
