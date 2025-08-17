@@ -19,7 +19,7 @@ in
 
       * {
         all: unset;
-        font-size: 14px;
+        font-size: 1rem;
         font-family: "Ubuntu Nerd Font";
       }
 
@@ -28,19 +28,19 @@ in
       }
 
       scale {
-        margin: 0 7px;
+        margin: 0 1rem;
       }
 
       scale trough {
         margin: 0rem 1rem;
-        min-height: 8px;
-        min-width: 70px;
-        border-radius: 12.6px;
+        min-height: 1rem;
+        min-width: 5rem;
+        border-radius: 0.75rem;
       }
 
       trough slider {
-        margin: -10px;
-        border-radius: 12.6px;
+        margin: -0.625rem;
+        border-radius: 0.75rem;
         box-shadow: 0 0 2px alpha(@background, 0.8);
         transition: all 0.2s ease;
         background-color: @color1;
@@ -61,15 +61,15 @@ in
         box-shadow:
           0 0 8px 0 alpha(@background, 0.8),
           inset 0 0 0 1px @color1;
-        border-radius: 12.6px;
-        margin: 18px;
+        border-radius: 0.75rem;
+        margin: 1.125rem;
         color: @foreground;
         padding: 0;
       }
 
       .notification-background .notification {
-        padding: 7px;
-        border-radius: 12.6px;
+        padding: 0.5rem;
+        border-radius: 0.75rem;
         background-color: alpha(@cursor, 0.6);
       }
 
@@ -78,12 +78,12 @@ in
       }
 
       .notification .notification-content {
-        margin: 7px;
+        margin: 0.5rem;
       }
 
       .notification .notification-content overlay {
         /* icons */
-        margin: 4px;
+        margin: 0.25rem;
       }
 
       .notification-content .summary {
@@ -100,7 +100,7 @@ in
       }
 
       .notification > *:last-child > * {
-        min-height: 3.4em;
+        min-height: 3.4rem;
       }
 
       .notification {
@@ -108,10 +108,10 @@ in
       }
 
       .notification-background .close-button {
-        margin: 7px;
+        margin: 0.5rem;
         padding: 2px;
-        border-radius: 6.3px;
-        color: #1e1e2e;
+        border-radius: 0.45rem;
+        color: @foreground;
         background-color: @color3;
       }
 
@@ -124,12 +124,11 @@ in
       }
 
       .notification .notification-action {
-        border-radius: 7px;
+        border-radius: 0.5rem;
         color: @foreground;
         box-shadow: inset 0 0 0 1px @color8;
-        margin: 4px;
-        padding: 8px;
-        font-size: 0.2rem; /* controls the button size not text size*/
+        margin: 0.25rem;
+        /* font-size: 0.2rem; */ /* controls the button size not text size*/
       }
 
       .notification .notification-action {
@@ -157,38 +156,38 @@ in
       .notification progress,
       .notification trough,
       .notification progressbar {
-        border-radius: 12.6px;
-        padding: 3px 0;
+        border-radius: 0.75rem;
+        padding: 0.25rem 0;
       }
 
       /* control center */
       .control-center {
         box-shadow:
-          0 0 8px 0 alpha(@background, 0.8),
+          0 0 0.5rem 0 alpha(@background, 0.8),
           inset 0 0 0 1px @foreground;
-        border-radius: 12.6px;
+        border-radius: 0.75rem;
         background-color: alpha(@background, 0.7);
         color: @foreground;
-        padding: 14px;
+        padding: 1rem;
       }
 
       .control-center .notification-background {
-        border-radius: 7px;
+        border-radius: 0.5rem;
         box-shadow: inset 0 0 0 1px @color10;
-        margin: 4px 10px;
+        margin: 0.25rem 0.625rem;
       }
 
       .control-center .notification-background .notification {
         border-radius: 7px;
         background-color: alpha({{cursor | darken(0.3)}}, 0.95);
         box-shadow:
-          0 0 8px 0 alpha(@background, 0.8),
+          0 0 0.5rem 0 alpha(@background, 0.8),
           inset 0 0 0 1px @foreground;
       }
 
       .control-center .widget-title > label {
         color: @foreground;
-        font-size: 1.3em;
+        font-size: 1.3rem;
       }
 
       .control-center .widget-title button {
@@ -196,7 +195,7 @@ in
         color: @foreground;
         background-color: @background;
         box-shadow: inset 0 0 0 1px #45475a;
-        padding: 8px;
+        padding: 0.5rem;
       }
 
       .control-center .widget-title button:hover {
@@ -210,11 +209,11 @@ in
       }
 
       .control-center .notification-group {
-        margin-top: 10px;
+        margin-top: 0.625rem;
       }
 
       scrollbar slider {
-        margin: -3px;
+        margin: -0.5rem;
         opacity: 0.8;
       }
 
@@ -224,14 +223,14 @@ in
 
       /* dnd */
       .widget-dnd {
-        margin-top: 5px;
-        border-radius: 8px;
+        margin-top: 0.375rem;
+        border-radius: 0.5rem;
         font-size: 1.1rem;
       }
 
       .widget-dnd > switch {
         font-size: initial;
-        border-radius: 8px;
+        border-radius: 0.5rem;
         background: @color10;
         box-shadow: none;
       }
@@ -242,7 +241,7 @@ in
 
       .widget-dnd > switch slider {
         background: @color6;
-        border-radius: 8px;
+        border-radius: 0.5rem;
       }
 
       /* mpris */
