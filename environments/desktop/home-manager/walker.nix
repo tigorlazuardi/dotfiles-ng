@@ -136,8 +136,8 @@
             {
               label = "Logout";
               sub = "Logout from the current session";
-              exec = "loginctl terminate-session";
-              searchable = "uwsm stop";
+              exec = "loginctl terminate-session $XDG_SESSION_ID";
+              searchable = "logout exit stop quit loginctl";
               icon = "${pkgs.writeText "logout.svg" # svg
                 ''
                   <svg viewBox="0 0 24 24" width="24" height="24" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
