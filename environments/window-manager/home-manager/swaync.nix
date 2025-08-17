@@ -13,6 +13,7 @@ in
     ./wallust.nix
   ];
   services.swaync.enable = true;
+  services.swaync.settings.notification-icon-size = 64; # 64px
   xdg.configFile."wallust/templates/swaync.css".text = # css
     ''
       @import url("file://${config.xdg.dataHome}/wallpapers/gtk.css");
@@ -83,7 +84,7 @@ in
 
       .notification .notification-content overlay {
         /* icons */
-        margin: 0.25rem;
+        margin: 0.5rem;
       }
 
       .notification-content .summary {
