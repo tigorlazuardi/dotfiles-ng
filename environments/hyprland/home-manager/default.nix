@@ -9,6 +9,7 @@
   imports = [
     ./audio.nix
     # ./caelestia.nix
+    ./foot.nix
     ./hyprcursor.nix
     ./hypridle.nix
     ./hyprlock.nix
@@ -19,7 +20,6 @@
     ./privacy.nix
     ./wpaperd.nix
     ./walker.nix
-    # ./hyprpanel.nix
     ../../window-manager/home-manager/alacritty.nix
     ../../window-manager/home-manager/foot.nix
     ../../window-manager/home-manager/waybar.nix
@@ -98,7 +98,6 @@
         with lib;
         [
           "$mod, Q, killactive"
-          "$mod, Return, exec, ${meta.getExe' config.programs.foot.package "footclient"}"
           "$mod, B, exec, ${meta.getExe config.programs.vivaldi.package}"
           "$mod, E, exec, ${meta.getExe' pkgs.nemo-with-extensions "nemo"}"
           "SUPER_SHIFT, Delete, exec, uwsm stop"
