@@ -12,7 +12,6 @@
     ./foot.nix
     ./hyprcursor.nix
     ./hypridle.nix
-    ./hyprlock.nix
     ./hyprshot.nix
     ./kdeconnect.nix
     ./nemo.nix
@@ -24,6 +23,7 @@
     ../../window-manager/home-manager/alacritty.nix
     ../../window-manager/home-manager/foot.nix
     ../../window-manager/home-manager/waybar.nix
+    ../../window-manager/home-manager/hyprlock.nix
   ];
   home.packages = with pkgs; [
     wl-clipboard

@@ -10,11 +10,11 @@ let
 in
 {
   imports = [
-    ../../window-manager/home-manager/wpaperd.nix
+    ./wpaperd.nix
   ];
   stylix.targets.hyprlock.enable = false;
   programs.hyprlock = {
-    enable = config.wayland.windowManager.hyprland.enable;
+    enable = true;
     settings = {
       general = {
         no_fade_in = true;
