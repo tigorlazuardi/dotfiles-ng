@@ -131,11 +131,11 @@ let
       }
       {
         topic = "ytptube";
-        command-b = mkNotifySendCommand {
+        command = mkNotifySendCommand {
           name = "YTPTube";
           icon = pkgs.fetchurl {
-            url = "https://raw.githubusercontent.com/arabcoders/ytptube/refs/heads/master/ui/public/favicon.ico";
-            hash = "sha256-qvrSD81jC+RshJJqnulQqkVFP4eYM/Q4fXBDDg1jg1Q=";
+            url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/metube.png";
+            hash = "sha256-lwSfvMn2STqjt19mOXhYoTkDloOcbcEepG5uk/bAS4c=";
           };
           actions.open = {
             label = "Open YTPTube";
