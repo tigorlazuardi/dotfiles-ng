@@ -1,3 +1,11 @@
+{ config, lib, ... }:
+let
+  footBinary =
+    if config.programs.foot.server.enable then
+      lib.meta.getExe' config.programs.foot.package "footclient"
+    else
+      lib.meta.getExe config.programs.foot.package;
+in
 {
   programs.nixvim.extraConfigLua = ''
     if vim.g.neovide then
@@ -21,6 +29,25 @@
         vim.o.guifont = font .. ":h" .. font_size
         vim.notify("Font Set: " .. font .. ":h" .. font_size)
       end, { desc = "Increase font size" })
+
+      ${lib.optionalString config.programs.foot.enable # lua
+        ''
+          vim.keymap.set({ "n" }, "<F5>", function()
+            local cwd = vim.fn.getcwd()
+            local title = ([[Neovide - Foot - %s]]):format(cwd)
+            local app_id = ([[neovide-foot-%s]]):format(cwd:gsub("/", "-"))
+            vim.system({
+              "${footBinary}",
+              "--working-directory",
+              cwd,
+              "--title",
+              title,
+              "--app-id",
+              app_id,
+            }, { detach = true })
+          end, { desc = "Open foot terminal in Neovide" })
+        ''
+      }
 
       vim.keymap.set(
         { "n", "v", "s", "x", "o", "i", "l", "c", "t" },
