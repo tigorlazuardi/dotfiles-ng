@@ -9,14 +9,14 @@
       window#osd {
         border-radius: 999px;
         border: none;
-        background-color: rgba({{background | rgb}}, 0.8);
+        background-color: rgba({{cursor | rgb}}, 0.5);
       }
       window#osd #container {
         margin: 16px;
       }
       window#osd image,
       window#osd label {
-        color: rgba({{foreground | rgb}}, 1);
+        color: {{ foreground }};
       }
       window#osd progressbar:disabled,
       window#osd image:disabled {
