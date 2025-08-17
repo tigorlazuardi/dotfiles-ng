@@ -91,7 +91,7 @@ in
       }
 
       .notification-content .time {
-        color: @cursor;
+        color: @foreground;
       }
 
       .notification-content .body {
@@ -136,7 +136,7 @@ in
       }
 
       .notification .notification-action:hover {
-        background-color: @cursor;
+        background-color: @color1;
       }
 
       .notification .notification-action:active {
@@ -179,7 +179,7 @@ in
 
       .control-center .notification-background .notification {
         border-radius: 7px;
-        background-color: alpha(@cursor, 0.95);
+        background-color: alpha({{cursor | darken(0.3)}}, 0.95);
         box-shadow:
           0 0 8px 0 alpha(@background, 0.8),
           inset 0 0 0 1px @foreground;
