@@ -6,7 +6,7 @@
 }:
 let
   host = "https://ntfy.tigor.web.id";
-  tmpdir = "/tmp/ntfy_client/ytptube";
+  tmpdir = "/tmp/ntfy_client";
   ntfy-icon = pkgs.fetchurl {
     url = "https://docs.ntfy.sh/static/img/ntfy.png";
     hash = "sha256-JZvuRep9UKGgJXZ2vTOa6PtBStws281YfDDDe8S+/kU=";
@@ -15,16 +15,13 @@ let
     url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/qbittorrent.svg";
     hash = "sha256-3GpeIIea03tuk2fMyRQ/35A1H0DrCMIAzX0AP/GxwnU=";
   };
-  inherit (lib.meta) getExe;
   mkCommand =
     name: script:
     with pkgs;
-    ''${getExe (
-      writeShellScriptBin "ntfy-${name}-wrapped" ''
-        echo "$1"
-        ${systemd}/bin/systemd-run --user --no-block --collect ${getExe (writeShellScriptBin "ntfy-${name}" script)} "$1";
-      ''
-    )} "$raw"'';
+    ''${writeShellScript "ntfy-${name}-wrapped" ''
+      echo "$1"
+      ${systemd}/bin/systemd-run --user --no-block --collect ${writeShellScript "ntfy-${name}" script} "$1";
+    ''} "$raw"'';
   mkNotifySendCommand =
     {
       name,
@@ -155,7 +152,7 @@ in
   };
   systemd.user.services.ntfy-client = {
     Unit = rec {
-      After = [ "graphical-session.target" ];
+      After = [ config.wayland.systemd.target ];
       Requisite = After;
       PartOf = After;
       Description = [ "Subscribes to NTFY Notifications" ];
@@ -170,7 +167,7 @@ in
       ];
     };
     Install = {
-      WantedBy = [ "graphical-session.target" ];
+      WantedBy = [ config.wayland.systemd.target ];
     };
   };
 }
