@@ -5,16 +5,44 @@
   pkgs,
   ...
 }:
+let
+  tomlFormat = pkgs.formats.toml { };
+in
 {
   imports = [
     inputs.walker.homeManagerModules.default
   ];
+
+  home.packages = with pkgs; [
+    fd
+  ];
+
+  xdg.configFile = with lib; {
+    # We will read the default config from the package source and merge it with our custom config.
+    "walker/themes/nixos.toml".source = tomlFormat.generate "walker-theme-config.toml" (
+      recursiveUpdate
+        (importTOML "${config.programs.walker.package.src}/internal/config/config.default.toml")
+        {
+          ui.window.box = {
+            width = 1000;
+            v_align = "center";
+            scroll.list.max_height = 750;
+            margins.top = 0;
+          };
+        }
+    );
+  };
 
   programs.walker = {
     enable = true;
     runAsService = true;
 
     config = {
+      theme = "nixos";
+      builtins.finder = {
+        use_fd = true;
+        preview_images = true;
+      };
       builtins.applications.launch_prefix = "systemd-run --user ";
       builtins.runner.launch_prefix =
         let
