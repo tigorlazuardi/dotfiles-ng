@@ -9,7 +9,7 @@
     # We will use Nemo as the default file manager.
     ../../gnome/home-manager/nemo.nix
     # We will use Walker as the launcher.
-    ../../desktop/home-manager/walker.nix
+    ../../window-manager/home-manager/walker.nix
 
     ./wpaperd.nix
   ];

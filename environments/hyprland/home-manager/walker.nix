@@ -7,7 +7,7 @@
 with lib;
 {
   imports = [
-    ../../desktop/home-manager/walker.nix
+    ../../window-manager/home-manager/walker.nix
   ];
   systemd.user.services.walker = {
     Unit = {
