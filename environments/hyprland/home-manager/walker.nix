@@ -77,5 +77,10 @@ with lib;
     bind = [
       "$mod, D, exec, ${meta.getExe config.programs.walker.package}"
     ];
+    layerrule = [
+      "blur, walker"
+      "ignorezero, walker"
+      "ignorealpha 0.5, walker"
+    ];
   };
 }

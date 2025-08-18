@@ -264,7 +264,7 @@ in
       ''
         @define-color foreground rgba({{ foreground | rgb }}, 0.8);
         @define-color background rgba({{ background | rgb }}, 0.5);
-        @define-color color1     {{ color1 }};
+        @define-color color1     {{ cursor }};
 
         #window,
         #box,
