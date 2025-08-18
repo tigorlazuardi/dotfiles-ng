@@ -202,6 +202,7 @@
       security.acme = {
         acceptTerms = true;
         defaults.email = "tigor.hutasuhut@gmail.com";
+        defaults.dnsResolver = "192.168.100.5:53";
         certs."tigor.web.id" = {
           webroot = "/var/lib/acme/acme-challenge";
           group = "nginx";
@@ -209,7 +210,8 @@
             let
               domains = filterAttrs (
                 name: value:
-                (value.forceSSL || value.onlySSL)
+                (name != "tigor.web.id") # Do not put exact domain here, otherwise let's encrypt will reject it because it already exists and cannot put in SAN.
+                && (value.forceSSL || value.onlySSL)
                 && (value.useACMEHost == "tigor.web.id")
                 && (hasSuffix "tigor.web.id" name)
               ) config.services.nginx.virtualHosts;
