@@ -4,7 +4,7 @@ let
   configVolume = "${root}/prowlarr";
   inherit (config.users.users.servarr) uid;
   inherit (config.users.groups.servarr) gid;
-  # domain = "prowlarr.tigor.web.id";
+  domain = "prowlarr.tigor.web.id";
 in
 {
   sops = {
@@ -27,7 +27,7 @@ in
             <SslCertPassword></SslCertPassword>
             <SslCertPath></SslCertPath>
             <UpdateMechanism>Docker</UpdateMechanism>
-            <UrlBase>/prowlarr</UrlBase>
+            <UrlBase></UrlBase>
           </Config>
         '';
     };
@@ -54,24 +54,24 @@ in
   services.nginx.virtualHosts =
     let
       inherit (config.virtualisation.oci-containers.containers.prowlarr) ip httpPort;
-      proxyPass = "http://${ip}:${toString httpPort}/prowlarr";
+      proxyPass = "http://${ip}:${toString httpPort}";
     in
     {
-      "tigor.web.id" = {
+      "${domain}" = {
         forceSSL = true;
-        tinyauth.locations = [ "/prowlarr" ];
-        locations."/prowlarr".proxyPass = proxyPass;
+        tinyauth.enable = true;
+        locations."/".proxyPass = proxyPass;
       };
       "prowlarr.lan".locations."/".proxyPass = proxyPass;
     };
   services.homepage-dashboard.groups."Media Collectors".services.Prowlarr.settings = {
     description = "Indexer manager for the servarr stack";
-    href = "https://tigor.web.id/prowlarr";
+    href = "https://${domain}";
     icon = "prowlarr.svg";
     user = "${toString uid}:${toString gid}";
     widget = {
       type = "prowlarr";
-      url = "http://prowlarr.lan/prowlarr";
+      url = "http://prowlarr.lan";
       key = "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}";
     };
   };
