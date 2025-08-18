@@ -1,77 +1,58 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
-with lib;
+let
+  listHyprlandWindowJS =
+    pkgs.writeText "list-hyprland-windows.mjs" # javascript
+      ''
+        import { spawnSync } from "node:child_process";
+
+        const result = spawnSync("hyprctl", ["clients", "-j"]);
+        if (result.error) {
+          console.error("Error executing hyprctl clients -j:", result.error);
+          process.exit(1);
+        }
+        const output = JSON.parse(result.stdout.toString());
+        const iconMappings = {
+          "vivaldi-stable": "vivaldi",
+          footclient: "foot",
+        };
+        const elements = output.map((client) => ({
+          title: client.title,
+          icon: (() => {
+            const clientClass = client.class.toLowerCase();
+            return iconMappings[clientClass] || clientClass;
+          })(),
+          icon_size: 64,
+          description: `Workspace ''${client.workspace.name} · ''${client.class}`,
+          field: "exec",
+          method: "print",
+          hidden: {
+            exec: `hyprctl dispatch focuswindow address:''${client.address}`,
+          },
+        }));
+        console.log(
+          JSON.stringify({
+            settings: [],
+            elements,
+          }),
+        );
+      '';
+in
 {
   imports = [
     ../../window-manager/home-manager/sherlock.nix
   ];
 
-  # programs.sherlock.launcher = [
-  #   (
-  #     let
-  #       python = lib.meta.getExe' pkgs.python3 "python";
-  #       srcScript =
-  #         pkgs.writeText "walker-hyprland-windows.py" # python
-  #           ''
-  #             import json
-  #             import subprocess
-  #
-  #             # Icon mappings for class names
-  #             icon_mappings = {
-  #                 "vivaldi-stable": "vivaldi",
-  #                 "footclient": "foot"
-  #             }
-  #
-  #             # Get Hyprland clients
-  #             result = subprocess.run(['hyprctl', 'clients', '-j'], capture_output=True, text=True)
-  #             clients = json.loads(result.stdout)
-  #
-  #             entries = []
-  #             for client in clients:
-  #                 class_name = client["class"].lower()
-  #                 icon_name = icon_mappings.get(class_name, class_name)
-  #
-  #                 # Entry schema: https://github.com/abenz1267/walker/wiki/Plugins
-  #                 # Follow the `json` tag of Entry struct.
-  #                 entry = {
-  #                     "title": client["title"],
-  #                     "content":  f"Workspace {client['workspace']['name']} • {client['class']}",
-  #                     "result": json.dumps(client),
-  #                     "actions": [
-  #                       {
-  #                         "name": "focus",
-  #                         "exec": f"hyprctl dispatch focuswindow address:{client['address']}",
-  #                         "icon": icon_name,
-  #                         "method": "command",
-  #                         "exit": True,
-  #                       },
-  #                     ],
-  #                 }
-  #                 entries.append(entry)
-  #
-  #             print(json.dumps(entries))
-  #           '';
-  #     in
-  #     {
-  #       name = "Hyprland Windows";
-  #       alias = "hypr";
-  #       async = true;
-  #       priority = 1000;
-  #       spawn_focus = true;
-  #       args = {
-  #         icon = "window";
-  #         exec = python;
-  #         exec-args = srcScript;
-  #       };
-  #     }
-  #   )
-  # ];
-
   wayland.windowManager.hyprland.settings.bind = [
-    "$mod, D, exec, sherlock"
+    "$mod, W, exec, ${pkgs.writeShellScript "select-hyprland-window-sherlock" ''
+      selected=$(${pkgs.nodejs}/bin/node ${listHyprlandWindowJS} | ${config.programs.sherlock.package}/bin/sherlock)
+      if [ -n "$selected" ]; then
+        eval "$selected"
+      fi
+    ''}"
+    # "$mod, D, exec, sherlock"
   ];
 }

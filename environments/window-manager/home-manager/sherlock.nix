@@ -2,11 +2,13 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 {
   programs.sherlock = {
     enable = true;
+    package = inputs.sherlock.packages.${pkgs.system}.default;
     settings = {
       default_apps = {
         terminal =
@@ -21,7 +23,7 @@
         global_prefix = "systemd-run --user ";
       };
     };
-    systemd.enable = true;
+    systemd.enable = false; # sherlock daemon mode is not good enough for normal usage yet.
     launchers = [
       {
         name = "App Launcher";
