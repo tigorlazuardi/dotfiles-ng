@@ -102,8 +102,8 @@
         with lib;
         [
           "$mod, Q, killactive"
-          "$mod, B, exec, ${meta.getExe config.programs.vivaldi.package}"
-          "$mod, E, exec, ${meta.getExe' pkgs.nemo-with-extensions "nemo"}"
+          "$mod, B, exec, systemd-run --user ${meta.getExe config.programs.vivaldi.package}"
+          "$mod, E, exec, systemd-run --user ${meta.getExe' pkgs.nemo-with-extensions "nemo"}"
           "SUPER_SHIFT, Delete, exec, uwsm stop"
           "SUPER, space, fullscreen, 0"
           "SUPER, H, movefocus, l"
