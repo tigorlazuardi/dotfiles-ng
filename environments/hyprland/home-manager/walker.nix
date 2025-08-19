@@ -64,7 +64,7 @@ with lib;
   wayland.windowManager.hyprland.settings = {
     bind = [
       "$mod, BackSpace, exec, ${meta.getExe config.programs.walker.package} --modules='Session'"
-      "$mod, W, exec, ${meta.getExe config.programs.walker.package} --modules='Hyprland Windows'"
+      # "$mod, W, exec, ${meta.getExe config.programs.walker.package} --modules='Hyprland Windows'"
       "$mod, D, exec, ${meta.getExe config.programs.walker.package}"
     ];
     layerrule = [

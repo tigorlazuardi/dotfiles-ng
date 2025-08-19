@@ -87,6 +87,7 @@
       url = "github:caelestia-dots/cli";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sherlock.url = "github:Skxxtz/sherlock?tag=v0.1.14-3";
   };
   outputs = inputs: import ./machines inputs;
 }

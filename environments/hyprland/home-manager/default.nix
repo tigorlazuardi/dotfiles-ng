@@ -17,7 +17,7 @@
     ./nemo.nix
     ./network.nix
     ./privacy.nix
-    # ./sherlock.nix
+    ./sherlock.nix
     ./swaync.nix
     ./swayosd.nix
     ./waybar.nix
