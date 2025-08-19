@@ -7,6 +7,11 @@
 }:
 let
   tomlFormat = pkgs.formats.toml { };
+  terminalLaunchPrefix =
+    if config.programs.foot.server.enable then
+      "${lib.meta.getExe' config.programs.foot.package "footclient"}"
+    else
+      "${lib.meta.getExe config.programs.foot.package}";
 in
 {
   imports = [
@@ -29,15 +34,7 @@ in
         preview_images = true;
       };
       builtins.applications.launch_prefix = "systemd-run --user ";
-      builtins.runner.launch_prefix =
-        let
-          foot =
-            if config.programs.foot.server.enable then
-              lib.meta.getExe' config.programs.foot.package "footclient"
-            else
-              lib.meta.getExe config.programs.foot.package;
-        in
-        "${foot} ";
+      builtins.runner.launch_prefix = "${terminalLaunchPrefix} ";
       builtins.websearch.entries = [
         {
           name = "Google";
@@ -226,6 +223,38 @@ in
               }}";
             }
           ];
+        }
+        {
+          name = "zoxide";
+          placeholder = "Open recent directory in terminal or Neovide when Alt is held";
+          prefix = "z ";
+          parser = "json";
+          src = pkgs.writers.writeJS "walker-zoxide.mjs" { } ''
+            import { spawnSync } from "node:child_process";
+
+            const result = spawnSync("zoxide", ["query", "--list", "--score"]);
+            if (result.error) {
+              console.error("Error running zoxide query --list --score:", result.error);
+              process.exit(1);
+            }
+            const entries = [];
+            for (const line of result.stdout.toString().split("\n")) {
+              const l = line.trim();
+              if (l === "") continue; // Skip empty lines
+              const [score, path] = l.split(" ");
+              const s = parseFloat(score);
+              entries.push({
+                label: path,
+                sub: `Score: ''${score} • Hold Alt and Enter to open in Neovide`,
+                exec: `systemd-run --user ${terminalLaunchPrefix} --working-directory=''${path}`,
+                exec_alt: `systemd-run --user --working-directory="''${path}" ${config.programs.neovide.package}/bin/neovide --no-fork`,
+                score_final: isNaN(s) ? 0 : s,
+                searchable: `zoxide ''${path}`,
+                icon: "folder",
+              });
+            }
+            console.log(JSON.stringify(entries));
+          '';
         }
       ];
     };
