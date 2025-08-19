@@ -3,6 +3,7 @@
   imports = [
     inputs.nixvim.homeModules.nixvim
 
+    ./autocmds.nix
     ./clipboard.nix
     ./keymaps.nix
     ./neovide.nix
