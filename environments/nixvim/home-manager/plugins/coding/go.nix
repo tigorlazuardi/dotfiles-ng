@@ -140,11 +140,12 @@
       gotestsum
     ];
 
-    # Somehow something sets PATH env to use older version of Go.
-    extraConfigLuaPost = ''
-      vim.env.GOROOT = "${pkgs.go}/share/go"
-      vim.env.PATH = "${pkgs.go}/bin" .. ":" .. vim.env.PATH
-    '';
+    extraConfigLuaPost = # lua
+      ''
+        if vim.env.GOROOT == nil or vim.env.GOROOT == "" then
+          vim.env.GOROOT = "${pkgs.go}/share/go"
+        end
+      '';
     autoCmd = [
       {
         callback.__raw = # lua
