@@ -245,8 +245,8 @@ in
               const s = parseFloat(score);
               entries.push({
                 label: path,
-                sub: `Score: ''${score} • Hold Alt and Enter to open in Neovide`,
-                exec: `systemd-run --user ${terminalLaunchPrefix} --working-directory=''${path}`,
+                sub: `Score: ''${score} • Hold Alt and press Enter to open in Neovide`,
+                exec: `systemd-run --user ${terminalLaunchPrefix} --working-directory="''${path}" --title="Foot - ''${path}"`,
                 exec_alt: `systemd-run --user --working-directory="''${path}" ${config.programs.neovide.package}/bin/neovide --no-fork`,
                 score_final: isNaN(s) ? 0 : s,
                 searchable: `zoxide ''${path}`,
