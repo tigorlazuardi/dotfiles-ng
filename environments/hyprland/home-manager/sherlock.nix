@@ -53,6 +53,7 @@ in
         eval "$selected"
       fi
     ''}"
+    "$mod, S, exec, sherlock-systemd-user"
     # "$mod, D, exec, sherlock"
   ];
 }
