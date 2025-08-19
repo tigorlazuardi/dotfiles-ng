@@ -142,6 +142,7 @@ in
           name = "Session";
           placeholder = "What do you want to do?";
           show_icon_when_single = true;
+          show_sub_when_single = true;
           entries = [
             {
               label = "Logout";

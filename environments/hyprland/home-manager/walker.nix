@@ -26,6 +26,7 @@ with lib;
         name = "Hyprland Windows";
         placeholder = "Hyprland";
         show_icon_when_single = true;
+        show_sub_when_single = true;
         src = pkgs.writers.writeJS "walker-hyprland-windows" { } ''
           import { spawnSync } from "node:child_process";
           const result = spawnSync("hyprctl", ["clients", "-j"]);
@@ -62,6 +63,8 @@ with lib;
   };
   wayland.windowManager.hyprland.settings = {
     bind = [
+      "$mod, BackSpace, exec, ${meta.getExe config.programs.walker.package} --modules='Session'"
+      "$mod, W, exec, ${meta.getExe config.programs.walker.package} --modules='Hyprland Windows'"
       "$mod, D, exec, ${meta.getExe config.programs.walker.package}"
     ];
     layerrule = [
