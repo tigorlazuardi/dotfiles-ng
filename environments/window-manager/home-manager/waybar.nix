@@ -94,7 +94,6 @@
         layer = "top";
         modules-right = [
           "backlight"
-          "pulseaudio/slider"
           "pulseaudio"
           "idle_inhibitor"
           "clock#icon"
