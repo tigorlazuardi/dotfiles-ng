@@ -7,6 +7,7 @@
     ManUnlisted = { };
     WrapText = { };
     AutoCreateDir = { };
+    WindowTitle = { };
   };
   programs.nixvim.autoCmd = [
     {
@@ -24,6 +25,21 @@
       '';
       group = "CheckTime";
       desc = "Check if we need to reload the file when it changed";
+    }
+    {
+      event = [
+        "BufEnter"
+        "BufReadPost"
+      ];
+      group = "WindowTitle";
+      callback.__raw = ''
+        function()
+          if vim.o.buftype ~= "nofile" then
+            vim.opt.titlestring = ([[%s - %s]]):format(_M.platform or "nvim",vim.fn.expand("%:p"))
+          end
+        end
+      '';
+      desc = "Set window title to current file";
     }
     {
       event = [ "VimResized" ];

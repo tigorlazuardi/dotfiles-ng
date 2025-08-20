@@ -65,6 +65,7 @@
     wildmode = "longest:full,full";
     winminwidth = 5;
     wrap = true;
+    title = true;
 
     smoothscroll = true;
   };
