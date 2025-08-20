@@ -43,7 +43,7 @@ let
 in
 {
   imports = [
-    ../../window-manager/home-manager/sherlock.nix
+    ../../window-manager/home-manager/sherlock
   ];
 
   wayland.windowManager.hyprland.settings.bind = [
@@ -54,6 +54,8 @@ in
       fi
     ''}"
     "$mod, S, exec, sherlock-systemd-user"
-    # "$mod, D, exec, sherlock"
+    "$mod, Z, exec, sherlock-zoxide"
+    "$mod, N, exec, sherlock-zoxide neovide"
+    "$mod, D, exec, sherlock"
   ];
 }

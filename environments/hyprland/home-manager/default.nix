@@ -22,7 +22,7 @@
     ./swayosd.nix
     ./waybar.nix
     ./wpaperd.nix
-    ./walker.nix
+    # ./walker.nix
     ../../window-manager/home-manager/alacritty.nix
     ../../window-manager/home-manager/foot.nix
     ../../window-manager/home-manager/waybar.nix
