@@ -14,7 +14,7 @@
   options.programs.sherlock.terminal =
     with lib;
     mkOption {
-      type = types.string;
+      type = types.str;
       default =
         if config.programs.foot.server.enable then
           "${config.programs.foot.package}/bin/footclient"
