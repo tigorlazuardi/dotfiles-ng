@@ -8,6 +8,7 @@
 {
   imports = [
     ./audio.nix
+    ./power-menu.nix
     ./systemd-user.nix
     ./zoxide.nix
   ];

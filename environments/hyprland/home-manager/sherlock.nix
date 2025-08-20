@@ -53,6 +53,7 @@ in
         eval "$selected"
       fi
     ''}"
+    "$mod, BackSpace, exec, sherlock --sub-menu pm"
     "$mod, A, exec, sherlock-select-audio"
     "$mod, S, exec, sherlock-systemd-user"
     "$mod, Z, exec, sherlock-zoxide"
