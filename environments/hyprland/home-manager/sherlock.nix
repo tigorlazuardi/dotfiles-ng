@@ -53,6 +53,7 @@ in
         eval "$selected"
       fi
     ''}"
+    "$mod, A, exec, sherlock-select-audio"
     "$mod, S, exec, sherlock-systemd-user"
     "$mod, Z, exec, sherlock-zoxide"
     "$mod, N, exec, sherlock-zoxide neovide"

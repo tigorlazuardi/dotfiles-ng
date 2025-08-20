@@ -7,6 +7,7 @@
 }:
 {
   imports = [
+    ./audio.nix
     ./systemd-user.nix
     ./zoxide.nix
   ];
@@ -58,8 +59,9 @@
           name = "Media Player";
           type = "audio_sink";
           async = true;
-          home = "OnlyHome";
+          home = "Home";
           priority = 5;
+          spawn_focus = false;
           args = { };
           actions =
             let
