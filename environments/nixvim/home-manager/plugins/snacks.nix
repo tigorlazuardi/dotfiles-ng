@@ -24,7 +24,7 @@
       in
       [
         (map "<leader>e" "<cmd>lua Snacks.explorer()<cr>" { desc = "(Snacks) Open Explorer"; })
-        (map "<leader><leader>" "<cmd>lua Snacks.picker.files()<cr>" { desc = "(Snacks) Find Files"; })
+        # (map "<leader><leader>" "<cmd>lua Snacks.picker.files()<cr>" { desc = "(Snacks) Find Files"; })
         (map "<leader>bd" "<cmd>lua Snacks.bufdelete()<cr>" { desc = "(Snacks) Buffer Delete"; })
         (map "<leader>bo" "<cmd>lua Snacks.bufdelete.other()<cr>" {
           desc = "(Snacks) Buffer Delete Others";
@@ -35,10 +35,7 @@
         (map "<leader>:" "<cmd>lua Snacks.picker.command_history()<cr>" { desc = "Command History"; })
         (map "<leader>fp" "<cmd>lua Snacks.picker.projects()<cr>" { desc = "Projects"; })
         (map "<leader>sb" "<cmd>lua Snacks.picker.lines()<cr>" { desc = "(Snacks) Find Text in File"; })
-        (map "<leader>sg" "<cmd>lua Snacks.picker.grep()<cr>" { desc = "Find Text"; })
-        (map "<leader>sB" "<cmd>lua Snacks.picker.grep_buffer()<cr>" {
-          desc = "Find Text in Open Buffers";
-        })
+        # (map "<leader>sg" "<cmd>lua Snacks.picker.grep()<cr>" { desc = "Find Text"; })
         # (map "<cr>" "<cmd>lua Snacks.picker.grep()<cr>" { desc = "Find Text"; })
         (map "*" "<cmd>lua Snacks.picker.grep_word()<cr>" { desc = "Grep word under cursor"; })
         (map "<leader>sk" "<cmd>lua Snacks.picker.keymaps()<cr>" { desc = "Keymaps"; })

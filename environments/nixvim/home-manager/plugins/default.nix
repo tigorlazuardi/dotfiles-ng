@@ -13,6 +13,7 @@
     # ./dadbod.nix # dadbod breaks all the time, so we disable it for now
     ./flash.nix
     ./fugitive.nix
+    ./fzf-lua.nix
     ./gitsigns.nix
     ./grug-far.nix
     ./lualine.nix
