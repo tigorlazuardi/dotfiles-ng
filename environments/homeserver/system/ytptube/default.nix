@@ -13,10 +13,6 @@ let
     "--live-from-start"
     "--no-write-auto-subs"
     "--no-write-comments "
-    # "--write-description"
-    # "--write-info-json"
-    # "--write-subs"
-    "--write-thumbnail"
   ];
   inherit (config.virtualisation.oci-containers.containers.ytptube) ip httpPort;
   proxyPass = "http://${ip}:${toString httpPort}";
@@ -54,7 +50,8 @@ in
     environment = {
       TZ = "Asia/Jakarta";
       YTP_MAX_WORKERS = "4";
-      YTP_OUTPUT_TEMPLATE = "%(title).100s.%(ext)s";
+      YTP_OUTPUT_TEMPLATE = "%(title).50s.%(ext)s";
+      YTP_TEMP_DISABLED = "true";
     };
     extraOptions = [
       "--umask=0002"

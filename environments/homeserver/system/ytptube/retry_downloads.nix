@@ -1,9 +1,10 @@
 {
+  config,
   pkgs,
   ...
 }:
 let
-
+  template = config.virtualisation.oci-containers.containers.ytptube.environment.YTP_OUTPUT_TEMPLATE;
 in
 {
   systemd = {
@@ -18,7 +19,12 @@ in
         const { history } = await historyResponse.json();
 
         const failedDownloads = history.filter((item) => item.error !== null);
+        if (failedDownloads.length === 0) {
+          console.log("No failed downloads to retry.");
+          process.exit(0);
+        }
         const ids = failedDownloads.map((item) => item._id);
+        console.log("Failed downloads found:", failedDownloads.length, "IDs:", ids);
         const deleteResponse = await fetch(`''${baseUrl}/api/history`, {
           method: "DELETE",
           body: JSON.stringify({ ids, where: "done" }),
@@ -32,10 +38,12 @@ in
           preset: item.preset,
           folder: item.folder,
           cookies: item.cookies,
-          template: item.template,
+          template: "${template}",
           cli: item.cli,
           auto_start: item.auto_start,
         }));
+        console.log("Retrying downloads...");
+        console.table(body, ["url", "preset", "folder", "template", "cli"]);
         const response = await fetch(`''${baseUrl}/api/history`, {
           method: "POST",
           headers: {
@@ -51,7 +59,7 @@ in
     };
     timers.podman-ytptube-retry-downloads = {
       description = "Scheduler for retrying failed YTPTube downloads";
-      wantedBy = [ "podman-ytptube.service" ];
+      wantedBy = [ "timers.target" ];
       timerConfig.OnCalendar = "hourly";
     };
   };
