@@ -57,6 +57,7 @@ in
     ''}"
     "$mod, BackSpace, exec, sherlock --sub-menu pm"
     "$mod, A, exec, sherlock-select-audio"
+    "$mod, C, exec, sherlock-clipboard"
     "$mod, S, exec, sherlock-systemd-user"
     "$mod, Z, exec, sherlock-zoxide"
     "$mod, N, exec, sherlock-zoxide neovide"
