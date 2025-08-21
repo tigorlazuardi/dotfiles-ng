@@ -12,9 +12,10 @@ in
       after = [ "podman-ytptube.service" ];
       requisite = [ "podman-ytptube.service" ];
       partOf = [ "podman-ytptube.service" ];
-      script = pkgs.writers.writeJS "ytptube-retry-downloads" { } ''
-        const baseUrl = "http://ytptube.lan/api";
-        const { history } = await (await fetch(`''${baseUrl}/history`)).json();
+      serviceConfig.ExecStart = pkgs.writers.writeJS "ytptube-retry-downloads" { } ''
+        const baseUrl = "http://ytptube.lan";
+        const historyResponse = await fetch(`''${baseUrl}/api/history`);
+        const { history } = await historyResponse.json();
 
         const failedDownloads = history.filter((item) => item.error !== null);
         const ids = failedDownloads.map((item) => item._id);
