@@ -14,9 +14,9 @@ let
     "--live-from-start"
     "--no-write-auto-subs"
     "--no-write-comments "
-    "--write-description"
+    # "--write-description"
     # "--write-info-json"
-    "--write-subs"
+    # "--write-subs"
     "--write-thumbnail"
   ];
   inherit (config.virtualisation.oci-containers.containers.ytptube) ip httpPort;
