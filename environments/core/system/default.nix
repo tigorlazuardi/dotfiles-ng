@@ -32,5 +32,7 @@
     mandoc.enable = true;
   };
 
+  boot.tmp.cleanOnBoot = true;
+
   services.dbus.implementation = "broker";
 }
