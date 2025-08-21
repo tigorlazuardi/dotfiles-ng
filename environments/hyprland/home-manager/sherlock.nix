@@ -19,6 +19,7 @@ let
           "vivaldi-stable": "vivaldi",
           footclient: "foot",
           wasistlos: "com.github.xeco23.WasIstLos",
+          spotify: "spotify-client",
         };
         const elements = output.map((client) => ({
           title: client.title,
