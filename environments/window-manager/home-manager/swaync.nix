@@ -71,7 +71,7 @@ in
       .notification-background .notification {
         padding: 0.5rem;
         border-radius: 0.75rem;
-        background-color: alpha(@cursor, 0.6);
+        background-color: alpha(@cursor, 0.7);
       }
 
       .notification-background .notification.critical {
