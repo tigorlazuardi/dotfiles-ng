@@ -18,6 +18,7 @@ let
         const iconMappings = {
           "vivaldi-stable": "vivaldi",
           footclient: "foot",
+          wasistlos: "com.github.xeco23.WasIstLos",
         };
         const elements = output.map((client) => ({
           title: client.title,
