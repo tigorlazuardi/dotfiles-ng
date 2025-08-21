@@ -27,7 +27,7 @@ in
     ./retry_downloads.nix
   ];
   sops.secrets."apprise/discord/ytptube" = {
-    sopsFile = ../../../secrets/apprise.yaml;
+    sopsFile = ../../../../secrets/apprise.yaml;
     owner = "ytptube";
   };
   users = {

@@ -36,6 +36,7 @@
     ./tiny_auth.nix
     ./whatsapp.nix
     ./wireguard.nix
-    ./ytptube.nix
+
+    ./ytptube
   ];
 }
