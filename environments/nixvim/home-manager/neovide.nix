@@ -37,10 +37,12 @@ in
           local cwd = vim.fn.getcwd()
           local title = ([[Neovide - Foot - %s]]):format(cwd)
           vim.system({
+            "systemd-run",
+            "--user",
             "${footBinary}",
             "--working-directory",
             cwd,
-          }, { detach = true })
+          })
         end, { desc = "Open foot terminal in Neovide" })
 
         vim.keymap.set(
