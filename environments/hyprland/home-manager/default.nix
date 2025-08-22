@@ -21,6 +21,7 @@
     ./swaync.nix
     ./swayosd.nix
     ./waybar.nix
+    ./window_rules.nix
     ./wpaperd.nix
     # ./walker.nix
     ../../window-manager/home-manager/alacritty.nix
