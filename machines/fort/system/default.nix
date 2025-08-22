@@ -47,6 +47,8 @@
     ];
   };
 
+  networking.enableIPv6 = false;
+
   services.thermald.enable = true;
   services.tlp = {
     enable = true;
