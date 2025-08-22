@@ -48,19 +48,26 @@ in
     ../../window-manager/home-manager/sherlock
   ];
 
-  wayland.windowManager.hyprland.settings.bind = [
-    "$mod, W, exec, ${pkgs.writeShellScript "select-hyprland-window-sherlock" ''
-      selected=$(${pkgs.nodejs}/bin/node ${listHyprlandWindowJS} | ${config.programs.sherlock.package}/bin/sherlock)
-      if [ -n "$selected" ]; then
-        eval "$selected"
-      fi
-    ''}"
-    "$mod, BackSpace, exec, sherlock --sub-menu pm"
-    "$mod, A, exec, sherlock-select-audio"
-    "$mod, C, exec, sherlock-clipboard"
-    "$mod, S, exec, sherlock-systemd-user"
-    "$mod, Z, exec, sherlock-zoxide"
-    "$mod, N, exec, sherlock-zoxide neovide"
-    "$mod, D, exec, sherlock"
-  ];
+  wayland.windowManager.hyprland.settings = {
+    bind = [
+      "$mod, W, exec, ${pkgs.writeShellScript "select-hyprland-window-sherlock" ''
+        selected=$(${pkgs.nodejs}/bin/node ${listHyprlandWindowJS} | ${config.programs.sherlock.package}/bin/sherlock)
+        if [ -n "$selected" ]; then
+          eval "$selected"
+        fi
+      ''}"
+      "$mod, BackSpace, exec, sherlock --sub-menu pm"
+      "$mod, A, exec, sherlock-select-audio"
+      "$mod, C, exec, sherlock-clipboard"
+      "$mod, S, exec, sherlock-systemd-user"
+      "$mod, Z, exec, sherlock-zoxide"
+      "$mod, N, exec, sherlock-zoxide neovide"
+      "$mod, D, exec, sherlock"
+    ];
+    layerrule = [
+      "blur, sherlock"
+      "ignorezero, sherlock"
+      "ignorealpha 0.5, sherlock"
+    ];
+  };
 }

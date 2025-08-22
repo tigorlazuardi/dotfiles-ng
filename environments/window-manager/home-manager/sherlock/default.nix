@@ -9,6 +9,7 @@
   imports = [
     ./audio.nix
     ./clipboard.nix
+    ./css.nix
     ./nix_search.nix
     ./power-menu.nix
     ./systemd-user.nix
