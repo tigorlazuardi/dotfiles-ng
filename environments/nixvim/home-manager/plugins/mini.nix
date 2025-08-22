@@ -1,3 +1,14 @@
+{ config, ... }:
+let
+  inherit (config.lib.nixvim.lua) toLua;
+  grepOpts = {
+    formatters.file.truncate.__raw = ''vim.api.nvim_win_get_width(0) * 0.4'';
+  };
+  filePickerOpts = {
+    formatters.file.truncate.__raw = ''vim.api.nvim_win_get_width(0) * 0.4 < 100 and vim.api.nvim_win_get_width(0) * 0.8 or vim.api.nvim_win_get_width(0) * 0.4'';
+    layout.hidden.__raw = ''vim.api.nvim_win_get_width(0) < 100 and { "preview" } or nil'';
+  };
+in
 {
   programs.nixvim.extraConfigLua = ''
     local map_split = function(buf_id, lhs, direction)
@@ -101,12 +112,12 @@
           "__unkeyed-2.actions" = [
             {
               name = "F. Find Files";
-              action = "lua Snacks.picker.files()";
+              action = "lua Snacks.picker.files(${toLua filePickerOpts})";
               section = "Actions";
             }
             {
               name = "G. Find Text";
-              action = "lua Snacks.picker.grep()";
+              action = "lua Snacks.picker.grep(${toLua grepOpts})";
               section = "Actions";
             }
             {
@@ -115,9 +126,7 @@
               section = "Actions";
             }
           ];
-          "__unkeyed-3.builtin_actions" = {
-            __raw = ''require("mini.starter").sections.builtin_actions()'';
-          };
+          "__unkeyed-3.builtin_actions".__raw = ''require("mini.starter").sections.builtin_actions()'';
         };
       };
     };

@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   lib,
@@ -21,23 +22,37 @@
             inherit key action mode;
             options = lib.attrsets.filterAttrs (k: _: k != "mode") options;
           };
+        inherit (config.lib.nixvim.lua) toLua;
+        grepOpts = {
+          formatters.file.truncate.__raw = ''vim.api.nvim_win_get_width(0) * 0.4'';
+        };
+        filePickerOpts = {
+          formatters.file.truncate.__raw = ''vim.api.nvim_win_get_width(0) * 0.4 < 100 and vim.api.nvim_win_get_width(0) * 0.8 or vim.api.nvim_win_get_width(0) * 0.4'';
+          layout.hidden.__raw = ''vim.api.nvim_win_get_width(0) < 100 and { "preview" } or nil'';
+        };
       in
       [
         (map "<leader>e" "<cmd>lua Snacks.explorer()<cr>" { desc = "(Snacks) Open Explorer"; })
-        # (map "<leader><leader>" "<cmd>lua Snacks.picker.files()<cr>" { desc = "(Snacks) Find Files"; })
+        (map "<leader><leader>" "<cmd>lua Snacks.picker.files(${toLua filePickerOpts})<cr>" {
+          desc = "(Snacks) Find Files";
+        })
         (map "<leader>bd" "<cmd>lua Snacks.bufdelete()<cr>" { desc = "(Snacks) Buffer Delete"; })
         (map "<leader>bo" "<cmd>lua Snacks.bufdelete.other()<cr>" {
           desc = "(Snacks) Buffer Delete Others";
         })
         (map "<leader>z" "<cmd>lua Snacks.lazygit()<cr>" { desc = "(Snacks) Open Lazyeit"; })
         ### Searches
-        (map "<leader>ff" "<cmd>lua Snacks.picker.files()<cr>" { desc = "(Snacks) Find Files"; })
+        (map "<leader>ff" "<cmd>lua Snacks.picker.files(${toLua filePickerOpts})<cr>" {
+          desc = "(Snacks) Find Files";
+        })
         (map "<leader>:" "<cmd>lua Snacks.picker.command_history()<cr>" { desc = "Command History"; })
         (map "<leader>fp" "<cmd>lua Snacks.picker.projects()<cr>" { desc = "Projects"; })
         (map "<leader>sb" "<cmd>lua Snacks.picker.lines()<cr>" { desc = "(Snacks) Find Text in File"; })
-        # (map "<leader>sg" "<cmd>lua Snacks.picker.grep()<cr>" { desc = "Find Text"; })
+        (map "<leader>sg" "<cmd>lua Snacks.picker.grep(${toLua grepOpts})<cr>" { desc = "Find Text"; })
         # (map "<cr>" "<cmd>lua Snacks.picker.grep()<cr>" { desc = "Find Text"; })
-        (map "*" "<cmd>lua Snacks.picker.grep_word()<cr>" { desc = "Grep word under cursor"; })
+        (map "*" "<cmd>lua Snacks.picker.grep_word(${toLua grepOpts})<cr>" {
+          desc = "Grep word under cursor";
+        })
         (map "<leader>sk" "<cmd>lua Snacks.picker.keymaps()<cr>" { desc = "Keymaps"; })
         (map "<F1>" "<cmd>lua Snacks.picker.help()<cr>" { desc = "Help"; })
         (map "<leader>si" "<cmd>lua Snacks.picker.icons()<cr>" { desc = "Icons"; })
