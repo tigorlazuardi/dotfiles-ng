@@ -4,7 +4,7 @@
     fd
   ];
   programs.nixvim.plugins.fzf-lua = {
-    enable = true;
+    enable = false;
     settings.fzf_bin = lib.meta.getExe' pkgs.skim "sk";
     keymaps = {
       "<leader><leader>" = "files";
