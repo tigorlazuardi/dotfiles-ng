@@ -8,8 +8,9 @@
   imports = [
     # Waybar has dependency with swaync
     ./swaync.nix
-    ./wallust.nix
     ./wpaperd.nix
+
+    ./wallust
   ];
   # We will use lib.mkMerge to ensure css rules are applied in the correct order when
   # the css rules are merged.

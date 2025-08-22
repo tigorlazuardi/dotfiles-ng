@@ -16,7 +16,7 @@ in
 {
   imports = [
     inputs.walker.homeManagerModules.default
-    ./wallust.nix
+    ./wallust
   ];
 
   home.packages = with pkgs; [

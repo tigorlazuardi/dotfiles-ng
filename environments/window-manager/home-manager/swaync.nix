@@ -10,7 +10,8 @@ in
   imports = [
     # swaync tinted theming requires wpaperd and wallust
     ./wpaperd.nix
-    ./wallust.nix
+
+    ./wallust
   ];
   services.swaync.enable = true;
   services.swaync.settings.notification-icon-size = 64; # 64px

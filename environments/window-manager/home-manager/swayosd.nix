@@ -1,7 +1,7 @@
 { config, ... }:
 {
   imports = [
-    ./wallust.nix
+    ./wallust
   ];
   services.swayosd.enable = true;
   xdg.configFile."wallust/templates/swayosd.css".text = # css
