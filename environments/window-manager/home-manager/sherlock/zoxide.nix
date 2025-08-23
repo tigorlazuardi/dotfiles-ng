@@ -22,21 +22,29 @@ let
       '';
 in
 {
+  imports = [
+    ../../../gnome/home-manager/nemo.nix
+  ];
   programs.sherlock.launchers = [
     {
-      name = "Open Directory in Terminal/Neovide";
+      name = "Open Directory";
       type = "command";
       priority = 1200;
       args.commands = {
-        Zoxide = {
+        "Term (zoxide)" = {
           icon = "${termIcon}";
           exec = "sherlock-zoxide";
           search_string = "zoxide;z;cd;jump;project;dir";
         };
-        "Zoxide (Neovide)" = {
+        "Neovide (zoxide)" = {
           icon = "${neovideIcon}";
           exec = "sherlock-zoxide neovide";
           search_string = "zoxide;z;cd;jump;project;dir;neovide";
+        };
+        "Nemo (zoxide)" = {
+          icon = "${pkgs.nemo-with-extensions}/share/icons/hicolor/32x32/apps/nemo.png";
+          exec = "sherlock-zoxide nemo";
+          search_string = "zoxide;z;cd;jump;project;dir;nemo;file;manager;explorer";
         };
       };
     }
@@ -54,6 +62,10 @@ in
       switch (launcher) {
         case "neovide":
           icon = "${neovideIcon}";
+          break;
+        case "nemo":
+          icon =
+            "${pkgs.nemo-with-extensions}/share/icons/hicolor/32x32/apps/nemo.png";
           break;
         default:
           icon = "${termIcon}";
@@ -95,6 +107,13 @@ in
               "${config.programs.neovide.package}/bin/neovide",
               "--no-fork",
             ],
+            { stdio: "inherit" },
+          );
+          break;
+        case "nemo":
+          spawnSync(
+            "systemd-run",
+            ["--user", "${pkgs.nemo-with-extensions}/bin/nemo", path],
             { stdio: "inherit" },
           );
           break;
