@@ -86,6 +86,33 @@ let
       '';
 in
 {
+  programs.sherlock.launchers = [
+    {
+      name = "Systemd User Services";
+      priority = 1200;
+      type = "command";
+      shortcut = true;
+      args.commands."Systemd User" = {
+        exec = "sherlock-systemd-user";
+        icon = serviceIcon;
+        search_string = "systemd;services;units;user";
+      };
+      actions = [
+        {
+          name = "Clear Failed Units";
+          icon = serviceIcon;
+          method = "command";
+          exec = "systemctl --user reset-failed";
+        }
+        {
+          name = "List Units";
+          icon = serviceIcon;
+          method = "command";
+          exec = "sherlock-systemd-user";
+        }
+      ];
+    }
+  ];
   home.packages = [
     (pkgs.writers.writeJSBin "sherlock-systemd-user" { } ''
       import { spawnSync } from "node:child_process";
