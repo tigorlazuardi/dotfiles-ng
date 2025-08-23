@@ -62,6 +62,7 @@ in
       "$mod, S, exec, sherlock-systemd-user"
       "$mod, Z, exec, sherlock-zoxide"
       "$mod, N, exec, sherlock-zoxide neovide"
+      "$mod, M, exec, sherlock-zoxide nemo"
       "$mod, D, exec, sherlock"
     ];
     layerrule = [
