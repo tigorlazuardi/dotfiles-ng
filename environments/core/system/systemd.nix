@@ -34,21 +34,35 @@
     (pkgs.writers.writeJSBin "systemctl-list-units" { } ''
       import { spawnSync } from "node:child_process";
       const isUser = (process.argv[2] || "").toLowerCase() === "user";
-      const opts = ["list-units", "--type=service,timer,socket", "--output=json"];
+      const opts = [
+        "list-units",
+        "--type=service,timer,socket",
+        "--output=json",
+        "--all",
+      ];
       if (isUser) {
         opts.unshift("--user");
       }
       const unitsResult = spawnSync("systemctl", opts);
       const units = JSON.parse(unitsResult.stdout);
+      let unitTargetNameLength = 0,
+        loadTargetLength = 0,
+        activeTargetLength = 0,
+        subTargetLength = 0;
+      for (const unit of units) {
+        if (unit.unit.length > unitTargetNameLength)
+          unitTargetNameLength = unit.unit.length;
+        if (unit.load.length > loadTargetLength) loadTargetLength = unit.load.length;
+        if (unit.active.length > activeTargetLength)
+          activeTargetLength = unit.active.length;
+        if (unit.sub.length > subTargetLength) subTargetLength = unit.sub.length;
+      }
       // Target length for unit name column
-      const unitNameTargetLength = units.reduce((unit, current) =>
-        current.unit.length > unit.unit.length ? current : unit,
-      ).unit.length;
       const entries = units.map((unit) => {
-        const unitNamePadding = " ".repeat(unitNameTargetLength - unit.unit.length);
-        const loadPadding = " ".repeat("loaded".length - unit.load.length);
-        const activePadding = " ".repeat("active".length - unit.active.length);
-        const subPadding = " ".repeat("listening".length - unit.sub.length);
+        const unitNamePadding = " ".repeat(unitTargetNameLength - unit.unit.length);
+        const loadPadding = " ".repeat(loadTargetLength - unit.load.length);
+        const activePadding = " ".repeat(activeTargetLength - unit.active.length);
+        const subPadding = " ".repeat(subTargetLength - unit.sub.length);
         return `''${unit.unit}''${unitNamePadding} ''${unit.load}''${loadPadding} ''${unit.active}''${activePadding} ''${unit.sub}''${subPadding} ''${unit.description}`;
       });
       const selected = spawnSync("${pkgs.skim}/bin/sk", [], {
