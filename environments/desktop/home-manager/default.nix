@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   imports = [
     ./chromium.nix
@@ -13,4 +14,12 @@
 
     ./wezterm
   ];
+
+  gtk = {
+    enable = true;
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme; # Specify the package
+      name = "Adwaita"; # Specify the theme name
+    };
+  };
 }
