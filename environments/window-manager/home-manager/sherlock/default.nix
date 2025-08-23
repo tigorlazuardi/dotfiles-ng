@@ -12,6 +12,7 @@
     ./css.nix
     ./nix_search.nix
     ./power-menu.nix
+    ./symbols.nix
     ./systemd-user.nix
     ./zoxide.nix
   ];

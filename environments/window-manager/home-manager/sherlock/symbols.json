@@ -1,0 +1,794 @@
+{
+  "elements": [
+    {
+      "title": "☺",
+      "description": "White smiling face · Alt 1 · U+263A",
+      "method": "copy"
+    },
+    {
+      "title": "☻",
+      "description": "Black smiling face · Alt 2 · U+263B",
+      "method": "copy"
+    },
+    {
+      "title": "♥",
+      "description": "Heart suit · Alt 3 · U+2665",
+      "method": "copy"
+    },
+    {
+      "title": "♦",
+      "description": "Diamond suit · Alt 4 · U+2666",
+      "method": "copy"
+    },
+    {
+      "title": "♣",
+      "description": "Club suit · Alt 5 · U+2663",
+      "method": "copy"
+    },
+    {
+      "title": "♠",
+      "description": "Spade suit · Alt 6 · U+2660",
+      "method": "copy"
+    },
+    {
+      "title": "•",
+      "description": "Bullet point · Alt 7 · U+2022",
+      "method": "copy"
+    },
+    {
+      "title": "◘",
+      "description": "Inverse bullet · Alt 8 · U+25D8",
+      "method": "copy"
+    },
+    {
+      "title": "○",
+      "description": "White circle · Alt 9 · U+25CB",
+      "method": "copy"
+    },
+    {
+      "title": "◙",
+      "description": "Inverse white circle · Alt 10 · U+25D9",
+      "method": "copy"
+    },
+    {
+      "title": "♂",
+      "description": "Male sign · Alt 11 · U+2642",
+      "method": "copy"
+    },
+    {
+      "title": "♀",
+      "description": "Female sign · Alt 12 · U+2640",
+      "method": "copy"
+    },
+    {
+      "title": "♪",
+      "description": "Eighth note · Alt 13 · U+266A",
+      "method": "copy"
+    },
+    {
+      "title": "♫",
+      "description": "Beamed eighth notes · Alt 14 · U+266B",
+      "method": "copy"
+    },
+    {
+      "title": "☼",
+      "description": "White sun with rays · Alt 15 · U+263C",
+      "method": "copy"
+    },
+    {
+      "title": "►",
+      "description": "Black right-pointing pointer · Alt 16 · U+25BA",
+      "method": "copy"
+    },
+    {
+      "title": "◄",
+      "description": "Black left-pointing pointer · Alt 17 · U+25C4",
+      "method": "copy"
+    },
+    {
+      "title": "↕",
+      "description": "Up down arrow · Alt 18 · U+2195",
+      "method": "copy"
+    },
+    {
+      "title": "‼",
+      "description": "Double exclamation mark · Alt 19 · U+203C",
+      "method": "copy"
+    },
+    {
+      "title": "¶",
+      "description": "Pilcrow sign · Alt 20 · U+00B6",
+      "method": "copy"
+    },
+    {
+      "title": "§",
+      "description": "Section sign · Alt 21 · U+00A7",
+      "method": "copy"
+    },
+    {
+      "title": "▬",
+      "description": "Black rectangle · Alt 22 · U+25AC",
+      "method": "copy"
+    },
+    {
+      "title": "↨",
+      "description": "Up down arrow with base · Alt 23 · U+21A8",
+      "method": "copy"
+    },
+    {
+      "title": "↑",
+      "description": "Upwards arrow · Alt 24 · U+2191",
+      "method": "copy"
+    },
+    {
+      "title": "↓",
+      "description": "Downwards arrow · Alt 25 · U+2193",
+      "method": "copy"
+    },
+    {
+      "title": "→",
+      "description": "Rightwards arrow · Alt 26 · U+2192",
+      "method": "copy"
+    },
+    {
+      "title": "←",
+      "description": "Leftwards arrow · Alt 27 · U+2190",
+      "method": "copy"
+    },
+    {
+      "title": "∟",
+      "description": "Right angle · Alt 28 · U+221F",
+      "method": "copy"
+    },
+    {
+      "title": "↔",
+      "description": "Left right arrow · Alt 29 · U+2194",
+      "method": "copy"
+    },
+    {
+      "title": "▲",
+      "description": "Black up-pointing triangle · Alt 30 · U+25B2",
+      "method": "copy"
+    },
+    {
+      "title": "▼",
+      "description": "Black down-pointing triangle · Alt 31 · U+25BC",
+      "method": "copy"
+    },
+    {
+      "title": "Ç",
+      "description": "Latin capital letter C with cedilla · Alt 128 · U+00C7",
+      "method": "copy"
+    },
+    {
+      "title": "ü",
+      "description": "Latin small letter u with diaeresis · Alt 129 · U+00FC",
+      "method": "copy"
+    },
+    {
+      "title": "é",
+      "description": "Latin small letter e with acute · Alt 130 · U+00E9",
+      "method": "copy"
+    },
+    {
+      "title": "â",
+      "description": "Latin small letter a with circumflex · Alt 131 · U+00E2",
+      "method": "copy"
+    },
+    {
+      "title": "ä",
+      "description": "Latin small letter a with diaeresis · Alt 132 · U+00E4",
+      "method": "copy"
+    },
+    {
+      "title": "à",
+      "description": "Latin small letter a with grave · Alt 133 · U+00E0",
+      "method": "copy"
+    },
+    {
+      "title": "å",
+      "description": "Latin small letter a with ring above · Alt 134 · U+00E5",
+      "method": "copy"
+    },
+    {
+      "title": "ç",
+      "description": "Latin small letter c with cedilla · Alt 135 · U+00E7",
+      "method": "copy"
+    },
+    {
+      "title": "ê",
+      "description": "Latin small letter e with circumflex · Alt 136 · U+00EA",
+      "method": "copy"
+    },
+    {
+      "title": "ë",
+      "description": "Latin small letter e with diaeresis · Alt 137 · U+00EB",
+      "method": "copy"
+    },
+    {
+      "title": "è",
+      "description": "Latin small letter e with grave · Alt 138 · U+00E8",
+      "method": "copy"
+    },
+    {
+      "title": "ï",
+      "description": "Latin small letter i with diaeresis · Alt 139 · U+00EF",
+      "method": "copy"
+    },
+    {
+      "title": "î",
+      "description": "Latin small letter i with circumflex · Alt 140 · U+00EE",
+      "method": "copy"
+    },
+    {
+      "title": "ì",
+      "description": "Latin small letter i with grave · Alt 141 · U+00EC",
+      "method": "copy"
+    },
+    {
+      "title": "Ä",
+      "description": "Latin capital letter A with diaeresis · Alt 142 · U+00C4",
+      "method": "copy"
+    },
+    {
+      "title": "Å",
+      "description": "Latin capital letter A with ring above · Alt 143 · U+00C5",
+      "method": "copy"
+    },
+    {
+      "title": "É",
+      "description": "Latin capital letter E with acute · Alt 144 · U+00C9",
+      "method": "copy"
+    },
+    {
+      "title": "æ",
+      "description": "Latin small letter ae · Alt 145 · U+00E6",
+      "method": "copy"
+    },
+    {
+      "title": "Æ",
+      "description": "Latin capital letter AE · Alt 146 · U+00C6",
+      "method": "copy"
+    },
+    {
+      "title": "ô",
+      "description": "Latin small letter o with circumflex · Alt 147 · U+00F4",
+      "method": "copy"
+    },
+    {
+      "title": "ö",
+      "description": "Latin small letter o with diaeresis · Alt 148 · U+00F6",
+      "method": "copy"
+    },
+    {
+      "title": "ò",
+      "description": "Latin small letter o with grave · Alt 149 · U+00F2",
+      "method": "copy"
+    },
+    {
+      "title": "û",
+      "description": "Latin small letter u with circumflex · Alt 150 · U+00FB",
+      "method": "copy"
+    },
+    {
+      "title": "ù",
+      "description": "Latin small letter u with grave · Alt 151 · U+00F9",
+      "method": "copy"
+    },
+    {
+      "title": "ÿ",
+      "description": "Latin small letter y with diaeresis · Alt 152 · U+00FF",
+      "method": "copy"
+    },
+    {
+      "title": "Ö",
+      "description": "Latin capital letter O with diaeresis · Alt 153 · U+00D6",
+      "method": "copy"
+    },
+    {
+      "title": "Ü",
+      "description": "Latin capital letter U with diaeresis · Alt 154 · U+00DC",
+      "method": "copy"
+    },
+    {
+      "title": "¢",
+      "description": "Cent sign · Alt 155 · U+00A2",
+      "method": "copy"
+    },
+    {
+      "title": "£",
+      "description": "Pound sign · Alt 156 · U+00A3",
+      "method": "copy"
+    },
+    {
+      "title": "¥",
+      "description": "Yen sign · Alt 157 · U+00A5",
+      "method": "copy"
+    },
+    {
+      "title": "₧",
+      "description": "Peseta sign · Alt 158 · U+20A7",
+      "method": "copy"
+    },
+    {
+      "title": "ƒ",
+      "description": "Latin small letter f with hook · Alt 159 · U+0192",
+      "method": "copy"
+    },
+    {
+      "title": "á",
+      "description": "Latin small letter a with acute · Alt 160 · U+00E1",
+      "method": "copy"
+    },
+    {
+      "title": "í",
+      "description": "Latin small letter i with acute · Alt 161 · U+00ED",
+      "method": "copy"
+    },
+    {
+      "title": "ó",
+      "description": "Latin small letter o with acute · Alt 162 · U+00F3",
+      "method": "copy"
+    },
+    {
+      "title": "ú",
+      "description": "Latin small letter u with acute · Alt 163 · U+00FA",
+      "method": "copy"
+    },
+    {
+      "title": "ñ",
+      "description": "Latin small letter n with tilde · Alt 164 · U+00F1",
+      "method": "copy"
+    },
+    {
+      "title": "Ñ",
+      "description": "Latin capital letter N with tilde · Alt 165 · U+00D1",
+      "method": "copy"
+    },
+    {
+      "title": "ª",
+      "description": "Feminine ordinal indicator · Alt 166 · U+00AA",
+      "method": "copy"
+    },
+    {
+      "title": "º",
+      "description": "Masculine ordinal indicator · Alt 167 · U+00BA",
+      "method": "copy"
+    },
+    {
+      "title": "¿",
+      "description": "Inverted question mark · Alt 168 · U+00BF",
+      "method": "copy"
+    },
+    {
+      "title": "⌐",
+      "description": "Reversed not sign · Alt 169 · U+2310",
+      "method": "copy"
+    },
+    {
+      "title": "¬",
+      "description": "Not sign · Alt 170 · U+00AC",
+      "method": "copy"
+    },
+    {
+      "title": "½",
+      "description": "Vulgar fraction one half · Alt 171 · U+00BD",
+      "method": "copy"
+    },
+    {
+      "title": "¼",
+      "description": "Vulgar fraction one quarter · Alt 172 · U+00BC",
+      "method": "copy"
+    },
+    {
+      "title": "¡",
+      "description": "Inverted exclamation mark · Alt 173 · U+00A1",
+      "method": "copy"
+    },
+    {
+      "title": "«",
+      "description": "Left-pointing double angle quotation mark · Alt 174 · U+00AB",
+      "method": "copy"
+    },
+    {
+      "title": "»",
+      "description": "Right-pointing double angle quotation mark · Alt 175 · U+00BB",
+      "method": "copy"
+    },
+    {
+      "title": "░",
+      "description": "Light shade · Alt 176 · U+2591",
+      "method": "copy"
+    },
+    {
+      "title": "▒",
+      "description": "Medium shade · Alt 177 · U+2592",
+      "method": "copy"
+    },
+    {
+      "title": "▓",
+      "description": "Dark shade · Alt 178 · U+2593",
+      "method": "copy"
+    },
+    {
+      "title": "│",
+      "description": "Box drawings light vertical · Alt 179 · U+2502",
+      "method": "copy"
+    },
+    {
+      "title": "┤",
+      "description": "Box drawings light vertical and left · Alt 180 · U+2524",
+      "method": "copy"
+    },
+    {
+      "title": "╡",
+      "description": "Box drawings vertical single and left double · Alt 181 · U+2561",
+      "method": "copy"
+    },
+    {
+      "title": "╢",
+      "description": "Box drawings vertical double and left single · Alt 182 · U+2562",
+      "method": "copy"
+    },
+    {
+      "title": "╖",
+      "description": "Box drawings down double and left single · Alt 183 · U+2556",
+      "method": "copy"
+    },
+    {
+      "title": "╕",
+      "description": "Box drawings down single and left double · Alt 184 · U+2555",
+      "method": "copy"
+    },
+    {
+      "title": "╣",
+      "description": "Box drawings double vertical and left · Alt 185 · U+2563",
+      "method": "copy"
+    },
+    {
+      "title": "║",
+      "description": "Box drawings double vertical · Alt 186 · U+2551",
+      "method": "copy"
+    },
+    {
+      "title": "╗",
+      "description": "Box drawings double down and left · Alt 187 · U+2557",
+      "method": "copy"
+    },
+    {
+      "title": "╝",
+      "description": "Box drawings double up and left · Alt 188 · U+255D",
+      "method": "copy"
+    },
+    {
+      "title": "╜",
+      "description": "Box drawings up double and left single · Alt 189 · U+255C",
+      "method": "copy"
+    },
+    {
+      "title": "╛",
+      "description": "Box drawings up single and left double · Alt 190 · U+255B",
+      "method": "copy"
+    },
+    {
+      "title": "┐",
+      "description": "Box drawings light down and left · Alt 191 · U+2510",
+      "method": "copy"
+    },
+    {
+      "title": "└",
+      "description": "Box drawings light up and right · Alt 192 · U+2514",
+      "method": "copy"
+    },
+    {
+      "title": "┴",
+      "description": "Box drawings light up and horizontal · Alt 193 · U+2534",
+      "method": "copy"
+    },
+    {
+      "title": "┬",
+      "description": "Box drawings light down and horizontal · Alt 194 · U+252C",
+      "method": "copy"
+    },
+    {
+      "title": "├",
+      "description": "Box drawings light vertical and right · Alt 195 · U+251C",
+      "method": "copy"
+    },
+    {
+      "title": "─",
+      "description": "Box drawings light horizontal · Alt 196 · U+2500",
+      "method": "copy"
+    },
+    {
+      "title": "┼",
+      "description": "Box drawings light vertical and horizontal · Alt 197 · U+253C",
+      "method": "copy"
+    },
+    {
+      "title": "╞",
+      "description": "Box drawings vertical single and right double · Alt 198 · U+255E",
+      "method": "copy"
+    },
+    {
+      "title": "╟",
+      "description": "Box drawings vertical double and right single · Alt 199 · U+255F",
+      "method": "copy"
+    },
+    {
+      "title": "╚",
+      "description": "Box drawings double up and right · Alt 200 · U+255A",
+      "method": "copy"
+    },
+    {
+      "title": "╔",
+      "description": "Box drawings double down and right · Alt 201 · U+2554",
+      "method": "copy"
+    },
+    {
+      "title": "╩",
+      "description": "Box drawings double up and horizontal · Alt 202 · U+2569",
+      "method": "copy"
+    },
+    {
+      "title": "╦",
+      "description": "Box drawings double down and horizontal · Alt 203 · U+2566",
+      "method": "copy"
+    },
+    {
+      "title": "╠",
+      "description": "Box drawings double vertical and right · Alt 204 · U+2560",
+      "method": "copy"
+    },
+    {
+      "title": "═",
+      "description": "Box drawings double horizontal · Alt 205 · U+2550",
+      "method": "copy"
+    },
+    {
+      "title": "╬",
+      "description": "Box drawings double vertical and horizontal · Alt 206 · U+256C",
+      "method": "copy"
+    },
+    {
+      "title": "╧",
+      "description": "Box drawings up single and horizontal double · Alt 207 · U+2567",
+      "method": "copy"
+    },
+    {
+      "title": "╨",
+      "description": "Box drawings up double and horizontal single · Alt 208 · U+2568",
+      "method": "copy"
+    },
+    {
+      "title": "╤",
+      "description": "Box drawings down single and horizontal double · Alt 209 · U+2564",
+      "method": "copy"
+    },
+    {
+      "title": "╥",
+      "description": "Box drawings down double and horizontal single · Alt 210 · U+2565",
+      "method": "copy"
+    },
+    {
+      "title": "╙",
+      "description": "Box drawings up double and right single · Alt 211 · U+2559",
+      "method": "copy"
+    },
+    {
+      "title": "╘",
+      "description": "Box drawings up single and right double · Alt 212 · U+2558",
+      "method": "copy"
+    },
+    {
+      "title": "╒",
+      "description": "Box drawings down single and right double · Alt 213 · U+2552",
+      "method": "copy"
+    },
+    {
+      "title": "╓",
+      "description": "Box drawings down double and right single · Alt 214 · U+2553",
+      "method": "copy"
+    },
+    {
+      "title": "╫",
+      "description": "Box drawings vertical double and horizontal single · Alt 215 · U+256B",
+      "method": "copy"
+    },
+    {
+      "title": "╪",
+      "description": "Box drawings vertical single and horizontal double · Alt 216 · U+256A",
+      "method": "copy"
+    },
+    {
+      "title": "┘",
+      "description": "Box drawings light up and left · Alt 217 · U+2518",
+      "method": "copy"
+    },
+    {
+      "title": "┌",
+      "description": "Box drawings light down and right · Alt 218 · U+250C",
+      "method": "copy"
+    },
+    {
+      "title": "█",
+      "description": "Full block · Alt 219 · U+2588",
+      "method": "copy"
+    },
+    {
+      "title": "▄",
+      "description": "Lower half block · Alt 220 · U+2584",
+      "method": "copy"
+    },
+    {
+      "title": "▌",
+      "description": "Left half block · Alt 221 · U+258C",
+      "method": "copy"
+    },
+    {
+      "title": "▐",
+      "description": "Right half block · Alt 222 · U+2590",
+      "method": "copy"
+    },
+    {
+      "title": "▀",
+      "description": "Upper half block · Alt 223 · U+2580",
+      "method": "copy"
+    },
+    {
+      "title": "α",
+      "description": "Greek small letter alpha · Alt 224 · U+03B1",
+      "method": "copy"
+    },
+    {
+      "title": "ß",
+      "description": "Latin small letter sharp s · Alt 225 · U+00DF",
+      "method": "copy"
+    },
+    {
+      "title": "Γ",
+      "description": "Greek capital letter gamma · Alt 226 · U+0393",
+      "method": "copy"
+    },
+    {
+      "title": "π",
+      "description": "Greek small letter pi · Alt 227 · U+03C0",
+      "method": "copy"
+    },
+    {
+      "title": "Σ",
+      "description": "Greek capital letter sigma · Alt 228 · U+03A3",
+      "method": "copy"
+    },
+    {
+      "title": "σ",
+      "description": "Greek small letter sigma · Alt 229 · U+03C3",
+      "method": "copy"
+    },
+    {
+      "title": "µ",
+      "description": "Micro sign · Alt 230 · U+00B5",
+      "method": "copy"
+    },
+    {
+      "title": "τ",
+      "description": "Greek small letter tau · Alt 231 · U+03C4",
+      "method": "copy"
+    },
+    {
+      "title": "Φ",
+      "description": "Greek capital letter phi · Alt 232 · U+03A6",
+      "method": "copy"
+    },
+    {
+      "title": "Θ",
+      "description": "Greek capital letter theta · Alt 233 · U+0398",
+      "method": "copy"
+    },
+    {
+      "title": "Ω",
+      "description": "Greek capital letter omega · Alt 234 · U+03A9",
+      "method": "copy"
+    },
+    {
+      "title": "δ",
+      "description": "Greek small letter delta · Alt 235 · U+03B4",
+      "method": "copy"
+    },
+    {
+      "title": "∞",
+      "description": "Infinity · Alt 236 · U+221E",
+      "method": "copy"
+    },
+    {
+      "title": "φ",
+      "description": "Greek small letter phi · Alt 237 · U+03C6",
+      "method": "copy"
+    },
+    {
+      "title": "ε",
+      "description": "Greek small letter epsilon · Alt 238 · U+03B5",
+      "method": "copy"
+    },
+    {
+      "title": "∩",
+      "description": "Intersection · Alt 239 · U+2229",
+      "method": "copy"
+    },
+    {
+      "title": "≡",
+      "description": "Identical to · Alt 240 · U+2261",
+      "method": "copy"
+    },
+    {
+      "title": "±",
+      "description": "Plus-minus sign · Alt 241 · U+00B1",
+      "method": "copy"
+    },
+    {
+      "title": "≥",
+      "description": "Greater-than or equal to · Alt 242 · U+2265",
+      "method": "copy"
+    },
+    {
+      "title": "≤",
+      "description": "Less-than or equal to · Alt 243 · U+2264",
+      "method": "copy"
+    },
+    {
+      "title": "⌠",
+      "description": "Top half integral · Alt 244 · U+2320",
+      "method": "copy"
+    },
+    {
+      "title": "⌡",
+      "description": "Bottom half integral · Alt 245 · U+2321",
+      "method": "copy"
+    },
+    {
+      "title": "÷",
+      "description": "Division sign · Alt 246 · U+00F7",
+      "method": "copy"
+    },
+    {
+      "title": "≈",
+      "description": "Almost equal to · Alt 247 · U+2248",
+      "method": "copy"
+    },
+    {
+      "title": "°",
+      "description": "Degree sign · Alt 248 · U+00B0",
+      "method": "copy"
+    },
+    {
+      "title": "∙",
+      "description": "Bullet operator · Alt 249 · U+2219",
+      "method": "copy"
+    },
+    {
+      "title": "·",
+      "description": "Middle dot · Alt 250 · U+00B7",
+      "method": "copy"
+    },
+    {
+      "title": "√",
+      "description": "Square root · Alt 251 · U+221A",
+      "method": "copy"
+    },
+    {
+      "title": "ⁿ",
+      "description": "Superscript Latin small letter n · Alt 252 · U+207F",
+      "method": "copy"
+    },
+    {
+      "title": "²",
+      "description": "Superscript two · Alt 253 · U+00B2",
+      "method": "copy"
+    },
+    {
+      "title": "■",
+      "description": "Black medium square · Alt 254 · U+25A0",
+      "method": "copy"
+    }
+  ]
+}
