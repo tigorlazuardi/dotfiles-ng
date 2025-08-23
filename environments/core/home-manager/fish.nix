@@ -9,6 +9,10 @@
     functions = {
       fish_greeting = "";
     };
+    binds = {
+      "alt-u".command = "systemctl-list-units user";
+      "alt-s".command = "systemctl-list-units";
+    };
     shellAliases = {
       ls = "${pkgs.eza}/bin/eza -lah";
       cat = "${pkgs.bat}/bin/bat";
