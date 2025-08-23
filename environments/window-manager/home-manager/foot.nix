@@ -1,5 +1,8 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    libsixel # For displaying images in foot terminal
+  ];
   programs.foot = {
     enable = true;
     server.enable = true;
