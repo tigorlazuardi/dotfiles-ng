@@ -22,6 +22,25 @@ let
       '';
 in
 {
+  programs.sherlock.launchers = [
+    {
+      name = "Open Directory in Terminal/Neovide";
+      type = "command";
+      priority = 1200;
+      args.commands = {
+        Zoxide = {
+          icon = "${termIcon}";
+          exec = "sherlock-zoxide";
+          search_string = "zoxide;z;cd;jump;project;dir";
+        };
+        "Zoxide (Neovide)" = {
+          icon = "${neovideIcon}";
+          exec = "sherlock-zoxide neovide";
+          search_string = "zoxide;z;cd;jump;project;dir;neovide";
+        };
+      };
+    }
+  ];
   home.packages = [
     (pkgs.writers.writeJSBin "sherlock-zoxide" { } ''
       import { spawnSync } from "node:child_process";
