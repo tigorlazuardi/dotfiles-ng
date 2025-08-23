@@ -88,14 +88,21 @@ in
 {
   programs.sherlock.launchers = [
     {
-      name = "Systemd User Services";
+      name = "Systemd User";
       priority = 1200;
       type = "command";
       shortcut = true;
-      args.commands."Systemd User" = {
-        exec = "sherlock-systemd-user";
-        icon = serviceIcon;
-        search_string = "systemd;services;units;user";
+      args.commands = {
+        "List Units" = {
+          exec = "sherlock-systemd-user";
+          icon = serviceIcon;
+          search_string = "systemd;services;list;units;user";
+        };
+        "Clear Failed Units" = {
+          exec = "systemctl --user reset-failed";
+          icon = serviceIcon;
+          search_string = "systemd;services;units;user;clear;failed";
+        };
       };
       actions = [
         {
