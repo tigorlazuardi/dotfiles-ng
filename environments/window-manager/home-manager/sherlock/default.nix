@@ -50,7 +50,7 @@
           alias = "app";
           type = "app_launcher";
           args = { };
-          priority = 3;
+          priority = 1000;
           home = "Home";
         }
         {
@@ -65,7 +65,7 @@
           type = "audio_sink";
           async = true;
           home = "Home";
-          priority = 5;
+          priority = 1;
           spawn_focus = false;
           args = { };
           actions =
@@ -78,21 +78,21 @@
                 icon = "media-skip-forward";
                 method = "command";
                 exec = "${playerctl} next";
-                exit = true;
+                exit = false;
               }
               {
                 name = "Previous";
                 icon = "media-skip-backward";
                 method = "command";
                 exec = "${playerctl} previous";
-                exit = true;
+                exit = false;
               }
               {
                 name = "Play/Pause";
                 icon = "media-play-pause";
                 method = "command";
                 exec = "${playerctl} play-pause";
-                exit = true;
+                exit = false;
               }
             ];
         }
@@ -100,14 +100,13 @@
           name = "Web Search";
           display_name = "Google Search";
           tag_start = "{keyword}";
-          tag_end = "{keyword}";
           alias = "g";
           type = "web_launcher";
           args = {
             search_engine = "google";
             icon = "google";
           };
-          priority = 1;
+          priority = 1500;
         }
       ];
     };

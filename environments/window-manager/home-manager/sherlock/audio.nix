@@ -47,6 +47,18 @@ let
       '';
 in
 {
+  programs.sherlock.launchers = [
+    {
+      name = "Select Audio Output";
+      type = "command";
+      priority = 2000;
+      args.commands.Audio = {
+        icon = speakerIcon;
+        exec = "sherlock-select-audio";
+        search_string = "audio;sound;output;sink;device";
+      };
+    }
+  ];
   home.packages = [
     pkgs.pulseaudio
     (pkgs.writers.writeJSBin "sherlock-select-audio" { } ''
