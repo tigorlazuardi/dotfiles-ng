@@ -16,6 +16,7 @@ in
   wayland.windowManager.hyprland.settings.bind = [
     ", Print, exec, ${hyprshot} --freeze --mode region --raw --silent | ${satty} --filename - --output-filename ${screenshotDir}/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
     "SHIFT, Print, exec, ${hyprshot} --freeze --mode region -o ${screenshotDir}"
+    "ALT, Print, exec, claude-screenshot"
     "SUPER, Print, exec, ${hyprshot} --freeze --mode window --raw --silent | ${satty} --filename - --output-filename ${screenshotDir}/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
     "SHIFT_SUPER, Print, exec, ${hyprshot} --freeze --mode window -o ${screenshotDir}"
   ];
