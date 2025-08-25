@@ -116,6 +116,31 @@
           "SHIFT_SUPER, K, swapwindow, u"
           "SHIFT_SUPER, L, swapwindow, r"
           "SUPER, TAB, workspace, previous" # Win+Tab to toggle between two workspaces
+          "SUPER, W, exec, systemd-run --user ${
+            pkgs.writers.writeJS "move-to-workspace.mjs" { } ''
+              import { spawnSync } from "node:child_process";
+              const windowInfoOut = spawnSync("hyprctl", ["activewindow", "-j"])
+                .stdout.toString()
+                .trim();
+              if (!windowInfoOut) process.exit(0);
+              const windowInfo = JSON.parse(windowInfoOut);
+              const workspace = spawnSync("${pkgs.zenity}/bin/zenity", [
+                "--forms",
+                `--title=Move ''${windowInfo.class} Window`,
+                "--text=To What Worskspace?",
+                "--add-entry=Workspace",
+              ])
+                .stdout.toString()
+                .trim();
+              if (!workspace) process.exit(0);
+              const target = isNaN(Number(workspace)) ? `name:''${workspace}` : workspace;
+              spawnSync("hyprctl", [
+                "dispatch",
+                "movetoworkspacesilent",
+                `''${target},address:''${windowInfo.address}`,
+              ]);
+            ''
+          }"
         ]
         ++ (
           let
