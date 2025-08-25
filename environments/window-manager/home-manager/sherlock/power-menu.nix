@@ -10,7 +10,7 @@
         commands = {
           "Lock Screen" = {
             search_string = "lock;screen";
-            exec = "loginctl lock-session";
+            exec = "systemd-run --user loginctl lock-session";
             icon =
               pkgs.writeText "lock.svg" # svg
                 ''
@@ -25,7 +25,7 @@
           };
           Suspend = {
             search_string = "suspend;sleep";
-            exec = "systemctl suspend";
+            exec = "systemd-run --user systemctl suspend";
             icon =
               pkgs.writeText "sleep.svg" # svg
                 ''
@@ -45,7 +45,7 @@
           };
           "Suspend then Hibernate" = {
             search_string = "suspend;hibernate;sleep";
-            exec = "systemctl suspend-then-hibernate";
+            exec = "systemd-run --user systemctl suspend-then-hibernate";
             icon =
               pkgs.writeText "sleep-filled.svg" # svg
                 ''
@@ -65,7 +65,7 @@
           };
           Hibernate = {
             search_string = "hibernate";
-            exec = "systemctl hibernate";
+            exec = "systemd-run --user systemctl hibernate";
             icon =
               pkgs.writeText "hibernate.svg" # svg
                 ''
@@ -82,7 +82,7 @@
           };
           Restart = {
             search_string = "restart;reboot";
-            exec = "systemctl reboot";
+            exec = "systemd-run --user systemctl reboot";
             icon =
               pkgs.writeText "restart.svg" # svg
                 ''
@@ -97,7 +97,7 @@
           };
           "Power Off" = {
             search_string = "power;off;shutdown";
-            exec = "systemctl poweroff";
+            exec = "systemd-run --user systemctl poweroff";
             icon =
               pkgs.writeText "poweroff.svg" # svg
                 ''
@@ -111,8 +111,8 @@
                 '';
           };
           "Log Out" = {
-            search_string = "logout;sign out;logoff";
-            exec = "loginctl terminate-session $XDG_SESSION_ID";
+            search_string = "logout;signout;logoff;signoff";
+            exec = "systemd-run --user loginctl terminate-session $XDG_SESSION_ID";
             icon =
               pkgs.writeText "exit.svg" # svg
                 ''
