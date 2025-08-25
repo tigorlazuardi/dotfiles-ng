@@ -124,6 +124,8 @@
                 .trim();
               if (!windowInfoOut) process.exit(0);
               const windowInfo = JSON.parse(windowInfoOut);
+              // We need to check this because the user can use this script without any active window
+              if (!windowInfo.address) process.exit(0);
               const workspace = spawnSync("${pkgs.zenity}/bin/zenity", [
                 "--forms",
                 `--title=Move ''${windowInfo.class} Window`,
