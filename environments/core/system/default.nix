@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   ...
 }:
 {
@@ -31,6 +32,12 @@
     generateCaches = true;
     mandoc.enable = true;
   };
+
+  environment.systemPackages = with pkgs; [
+    btop
+    htop
+    below
+  ];
 
   boot.tmp.cleanOnBoot = true;
 
