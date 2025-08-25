@@ -13,7 +13,7 @@
         inherit (lib) meta;
       in
       [
-        "$mod, Return, exec, ${meta.getExe' config.programs.foot.package "footclient"}"
+        "$mod, Return, exec, systemd-run --user ${meta.getExe' config.programs.foot.package "footclient"}"
       ];
   };
 }

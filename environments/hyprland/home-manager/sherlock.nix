@@ -56,14 +56,14 @@ in
           eval "$selected"
         fi
       ''}"
-      "$mod, BackSpace, exec, sherlock --sub-menu pm"
-      "$mod, A, exec, sherlock-select-audio"
-      "$mod, C, exec, sherlock-clipboard"
-      "$mod, S, exec, sherlock-systemd-user"
-      "$mod, Z, exec, sherlock-zoxide"
-      "$mod, N, exec, sherlock-zoxide neovide"
-      "$mod, M, exec, sherlock-zoxide nemo"
-      "$mod, D, exec, sherlock"
+      "$mod, BackSpace, exec, systemd-run --user sherlock --sub-menu pm"
+      "$mod, A, exec, systemd-run --user sherlock-select-audio"
+      "$mod, C, exec, systemd-run --user sherlock-clipboard"
+      "$mod, S, exec, systemd-run --user sherlock-systemd-user"
+      "$mod, Z, exec, systemd-run --user sherlock-zoxide"
+      "$mod, N, exec, systemd-run --user sherlock-zoxide neovide"
+      "$mod, M, exec, systemd-run --user sherlock-zoxide nemo"
+      "$mod, D, exec, systemd-run --user sherlock"
     ];
     layerrule = [
       "blur, sherlock"
