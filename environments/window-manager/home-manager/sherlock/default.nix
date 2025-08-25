@@ -34,10 +34,10 @@
         default_apps = {
           terminal =
             if (config.programs.foot.server.enable) then
-              "${config.programs.foot.package}/bin/footclient"
+              "systemd-run --user ${config.programs.foot.package}/bin/footclient"
             else
-              "${config.programs.foot.package}/bin/foot";
-          browser = "${config.programs.vivaldi.package}/bin/vivaldi %u";
+              "systemd-run --user ${config.programs.foot.package}/bin/foot";
+          browser = "systemd-run --user ${config.programs.vivaldi.package}/bin/vivaldi %u";
         };
         behavior = {
           global_prefix = "systemd-run --user";
