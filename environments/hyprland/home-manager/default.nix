@@ -34,6 +34,7 @@
     font-manager
     hyprland-qt-support
     brightnessctl
+    kdePackages.kdialog
   ];
   services.hyprpolkitagent.enable = config.wayland.windowManager.hyprland.enable;
   wayland.windowManager.hyprland = {
@@ -116,7 +117,7 @@
           "SHIFT_SUPER, K, swapwindow, u"
           "SHIFT_SUPER, L, swapwindow, r"
           "SUPER, TAB, workspace, previous" # Win+Tab to toggle between two workspaces
-          "SUPER, W, exec, systemd-run --user ${
+          "SHIFT SUPER, W, exec, systemd-run --user ${
             pkgs.writers.writeJS "move-to-workspace.mjs" { } ''
               import { spawnSync } from "node:child_process";
               const windowInfoOut = spawnSync("hyprctl", ["activewindow", "-j"])
@@ -126,11 +127,9 @@
               const windowInfo = JSON.parse(windowInfoOut);
               // We need to check this because the user can use this script without any active window
               if (!windowInfo.address) process.exit(0);
-              const workspace = spawnSync("${pkgs.zenity}/bin/zenity", [
-                "--forms",
+              const workspace = spawnSync("${pkgs.kdePackages.kdialog}/bin/kdialog", [
                 `--title=Move ''${windowInfo.class} Window`,
-                "--text=To What Worskspace?",
-                "--add-entry=Workspace",
+                `--inputbox=Move ''${windowInfo.class}' Window to Workspace`,
               ])
                 .stdout.toString()
                 .trim();
@@ -143,6 +142,18 @@
               ]);
             ''
           }"
+          "SUPER, W, exec, systemd-run --user ${pkgs.writeShellScript "switch-to-workspace.sh" ''
+            workspace=$(${pkgs.kdePackages.kdialog}/bin/kdialog --title "Switch Workspace"  --inputbox "Move to Workspace")
+            if [ -z "$workspace" ]; then
+              exit 0
+            fi
+            if ! [[ "$workspace" =~ ^[0-9]+$ ]]; then
+              target="name:$workspace"
+            else
+              target="$workspace"
+            fi
+            hyprctl dispatch workspace "$target"
+          ''}"
         ]
         ++ (
           let
