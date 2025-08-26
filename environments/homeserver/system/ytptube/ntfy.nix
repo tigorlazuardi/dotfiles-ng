@@ -1,109 +1,72 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
-let
-  inherit (lib.meta) getExe;
-in
 {
   services.ntfy-sh.middlewares = [
     {
       topic = "ytptube-raw";
       command = ''${
-        getExe (
-          with pkgs;
-          writeShellScriptBin "ytptube-command-handler" ''
-            echo "$1"
+        pkgs.writers.writeJS "ytptube-raw-handler.mjs" { } ''
+          const payload = process.argv[2];
+          const token = process.env.NTFY_USER_BASE64;
+          console.log(payload);
 
-            json=
-            # YTPTube sends a file with attachment if the download process is using Cookies instead
-            # of a direct json response.
-            #
-            # We have to check if the attachment is present, if it is, we will download the file
-            # and parse it.
-            attachmentUrl=$(echo "$1" | ${jq}/bin/jq -r '.attachment.url')
-            if [ "$attachmentUrl" != "null" ]; then
-              json=$(${wget}/bin/wget -O - "$attachmentUrl")
-            else
-              json=$(echo "$1" | ${jq}/bin/jq -r '.message')
-            fi
-            is_live=$(echo "$json" | ${jq}/bin/jq -r '.data.is_live')
-            if [ "$is_live" == "true" ]; then
-              echo "Live stream detected, skipping notification."
-              exit 0
-            fi
-            title=$(echo "$json" | ${jq}/bin/jq -r '.data.title')
-            folder=$(echo "$json" | ${jq}/bin/jq -r '.data.folder')
-            thumbnail=$(echo "$json" | ${jq}/bin/jq -r '.data.extras.thumbnail')
-            url="$(echo "$json" | ${jq}/bin/jq -r '.data.url')"
+          const parsed = JSON.parse(payload);
+          const attachmentUrl = parsed.attachment?.url;
+          let rawData;
+          if (attachmentUrl) {
+            const res = await fetch(attachmentUrl);
+            rawData = await res.text();
+          } else {
+            rawData = parsed.message;
+          }
+          const { event, title, data, message } = JSON.parse(rawData);
 
-            data=$(${jq}/bin/jq -n \
-              --arg title "$title" \
-              --arg folder "$folder" \
-              --arg thumbnail "$thumbnail" \
-              --arg url "$url" \
-              '{
-                topic: "ytptube",
-                message: $title,
-                title: "Download Completed: " + $folder,
-                attach: $thumbnail,
-                priority: 3,
-                icon: "https://raw.githubusercontent.com/arabcoders/ytptube/refs/heads/master/ui/public/favicon.ico",
-                click: "https://ytptube.tigor.web.id",
-                tags: [$folder],
-                actions: [
-                  {
-                    action: "view",
-                    label: "Source",
-                    url: $url
-                  }
-                ]
-              }'
-            )
+          const body = {
+            topic: "ytptube",
+            title,
+            message,
+            attach: data.extras.thumbnail,
+            priority: 3,
+            icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/youtube-dl.png",
+            click: "https://ytptube.tigor.web.id",
+            tags: [data.folder],
+            actions: [
+              {
+                action: "view",
+                label: "Source",
+                url: data.url,
+              },
+            ],
+          };
 
-            ${curl}/bin/curl https://${config.services.ntfy-sh.domain} \
-              -H "Authorization: Basic $NTFY_USER_BASE64" \
-              -d "$data"
-          ''
-        )
-      } "$raw"'';
-    }
-    {
-      topic = "ytptube-raw";
-      command = ''${
-        getExe (
-          with pkgs;
-          writeShellScriptBin "ytptube-command-handler" ''
-            echo "$1"
-
-            json=""
-            attachmentUrl=$(echo "$1" | ${jq}/bin/jq -r '.attachment.url')
-            if [ "$attachmentUrl" != "null" ]; then
-              json=$(${wget}/bin/wget -O - "$attachmentUrl")
-            else
-              json=$(echo "$1" | ${jq}/bin/jq -r '.message')
-            fi
-            is_live=$(echo "$json" | ${jq}/bin/jq -r '.data.is_live')
-            if [ "$is_live" == "true" ]; then
-              exit 0
-            fi
-            title=$(echo "$json" | ${jq}/bin/jq -r '.data.title')
-            folder=$(echo "$json" | ${jq}/bin/jq -r '.data.folder')
-            thumbnail=$(echo "$json" | ${jq}/bin/jq -r '.data.extras.thumbnail')
-            url="$(echo "$json" | ${jq}/bin/jq -r '.data.url')"
-            body=$(printf "Title  : %s\nFolder : %s\nURL    : %s" "$title" "$folder" "$url")
-
-            endpoint=$(cat ${config.sops.secrets."apprise/discord/ytptube".path})
-
-            ${apprise}/bin/apprise \
-              -t "Download Completed: $folder" \
-              -b "$body" \
-              -a "$thumbnail" \
-              "$endpoint"
-          ''
-        )
+          fetch("https://${config.services.ntfy-sh.domain}", {
+            method: "POST",
+            headers: {
+              Authorization: `Basic ''${token}`,
+            },
+            body: JSON.stringify(body),
+          })
+            .then((_) => {
+              console.log(
+                JSON.stringify({
+                  message: `Notification sent to topic ytptube on event ''${event}`,
+                  body,
+                }),
+              );
+            })
+            .catch((err) => {
+              console.error(
+                JSON.stringify({
+                  message: `Failed to send notification to topic ytptube on event ''${event}`,
+                  error: err.message,
+                  body,
+                }),
+              );
+            });
+        ''
       } "$raw"'';
     }
   ];
