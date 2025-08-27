@@ -38,6 +38,7 @@
       }
     ];
   };
+  networking.enableIPv6 = false;
   # # TODO: Remove this when bindings are proper.
   # fileSystems."/var/lib/suwayomi-server" = {
   #   device = "/nas/services/suwayomi-server";
