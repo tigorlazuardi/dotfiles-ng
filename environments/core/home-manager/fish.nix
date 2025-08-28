@@ -21,7 +21,6 @@
       du = "${pkgs.dust}/bin/dust";
       jq = "${pkgs.gojq}/bin/gojq";
       v = "nvim";
-      cd = "z";
       tree = "${pkgs.tre-command}/bin/tre";
     };
     interactiveShellInit = # fish
