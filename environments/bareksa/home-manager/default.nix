@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   imports = [
     # Bareksa environment has dependencies on Go
@@ -11,5 +12,9 @@
     ./redis.nix
     ./slack.nix
     ./zoom.nix
+  ];
+
+  home.packages = with pkgs; [
+    postman
   ];
 }
