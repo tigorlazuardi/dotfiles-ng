@@ -8,6 +8,7 @@
     ./keymaps.nix
     ./neovide.nix
     ./opts.nix
+    ./git.nix
     ./plugins
   ];
   programs.nixvim = {
