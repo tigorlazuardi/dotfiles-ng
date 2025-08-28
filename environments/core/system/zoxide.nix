@@ -4,6 +4,8 @@
     flags = [
       "--cmd"
       "cd"
+      "--hook"
+      "prompt"
     ];
   };
 }

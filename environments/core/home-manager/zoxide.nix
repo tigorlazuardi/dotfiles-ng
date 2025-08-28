@@ -1,9 +1,7 @@
+{ osConfig, ... }:
 {
   programs.zoxide = {
     enable = true;
-    options = [
-      "--cmd"
-      "cd"
-    ];
+    options = osConfig.programs.zoxide.flags;
   };
 }
