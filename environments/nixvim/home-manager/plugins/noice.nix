@@ -1,6 +1,11 @@
-{ pkgs, ... }:
 {
-  programs.nixvim.keymaps = [
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  programs.nixvim.keymaps = lib.mkIf config.programs.nixvim.plugins.noice.enable [
     {
       key = "<S-Enter>";
       action.__raw = ''
@@ -37,10 +42,13 @@
         };
         # cmdline.view = "cmdline";
         hover.silent = true;
+        cmdline = {
+          view = "cmdline";
+        };
         presets = {
           lsp_doc_border = true;
           bottom_search = true;
-          # command_pallete = true;
+          # command_pallete = false;
           long_message_to_split = true;
           inc_rename = false;
         };
