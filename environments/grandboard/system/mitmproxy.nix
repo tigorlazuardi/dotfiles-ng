@@ -37,13 +37,23 @@ in
     image = "docker.io/mitmproxy/mitmproxy:latest";
     ip = "10.88.10.100";
     httpPort = 8081;
-    ports = [ "40823:8080" ];
+    ports = [
+      "40823:8080"
+      "40824:8081"
+      "40825:51820/udp"
+    ];
     volumes = [
       "${dataDir}:/home/mitmproxy/.mitmproxy"
       "${pkgs.writeText "mitmproxy-addons.py" script}:/addons.py"
     ];
     cmd = [
-      "mitmdump"
+      "mitmweb"
+      "--web-host"
+      "0.0.0.0"
+      "--set"
+      "web_password=grandboard"
+      "--mode"
+      "wireguard"
       "-s"
       "/addons.py"
     ];
