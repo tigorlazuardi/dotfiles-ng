@@ -4,6 +4,7 @@
     ./docker.nix
     ./homepage-dashboard.nix
     ./huly.nix
+    ./kafka.nix
     ./mitmproxy.nix
     ./nginx.nix
     ./penpot.nix
