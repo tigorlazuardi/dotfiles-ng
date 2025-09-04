@@ -1,7 +1,7 @@
 {
   imports = [
     ./dex.nix
-    # ./docker.nix
+    ./docker.nix
     ./homepage-dashboard.nix
     ./huly.nix
     ./mitmproxy.nix
