@@ -1,11 +1,13 @@
 {
   imports = [
     ./dex.nix
+    # ./docker.nix
     ./homepage-dashboard.nix
     ./huly.nix
     ./mitmproxy.nix
     ./nginx.nix
     ./penpot.nix
+    ./tinyauth.nix
   ];
   users = {
     users.grandboard = {

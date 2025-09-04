@@ -16,6 +16,7 @@ in
         domains = filterAttrs (
           name: value:
           (value.forceSSL || value.onlySSL)
+          && (name != "${namespace}.web.id")
           && (value.useACMEHost == "${namespace}.web.id")
           && (hasSuffix "${namespace}.web.id" name)
         ) config.services.nginx.virtualHosts;

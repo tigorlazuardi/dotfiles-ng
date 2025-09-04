@@ -43,6 +43,11 @@ let
         name = "Penpot";
         redirectURIs = [ "https://penpot.${namespace}.web.id/api/auth/oauth/oidc/callback" ];
       }
+      {
+        id = config.sops.placeholder."${namespace}/dex/clients/tinyauth/client_id";
+        secret = config.sops.placeholder."${namespace}/dex/clients/tinyauth/client_secret";
+        name = "TinyAuth";
+      }
     ];
   };
 in
@@ -58,6 +63,8 @@ in
       "${namespace}/dex/clients/huly/client_secret" = opts;
       "${namespace}/dex/clients/penpot/client_id" = opts;
       "${namespace}/dex/clients/penpot/client_secret" = opts;
+      "${namespace}/dex/clients/tinyauth/client_id" = opts;
+      "${namespace}/dex/clients/tinyauth/client_secret" = opts;
     };
   sops.templates."${namespace}/dex/config.yaml".file =
     (pkgs.formats.yaml { }).generate "config.yaml"
