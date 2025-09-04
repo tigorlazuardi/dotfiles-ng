@@ -46,7 +46,10 @@ let
       {
         id = config.sops.placeholder."${namespace}/dex/clients/tinyauth/client_id";
         secret = config.sops.placeholder."${namespace}/dex/clients/tinyauth/client_secret";
-        name = "TinyAuth";
+        name = "Tiny Auth";
+        redirectURIs = [
+          "https://tinyauth.${namespace}.web.id/api/oauth/callback/generic"
+        ];
       }
     ];
   };

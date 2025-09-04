@@ -14,6 +14,7 @@ in
     GENERIC_CLIENT_SECRET=${config.sops.placeholder."${namespace}/dex/clients/tinyauth/client_secret"}
     GENERIC_AUTH_URL=${issuer}/auth
     GENERIC_TOKEN_URL=${issuer}/token
+    GENERIC_USER_URL=${issuer}/userinfo
     GENERIC_SCOPES=openid email profile groups
     GENERIC_NAME=Dex
     SECRET=${config.sops.placeholder."${namespace}/tinyauth/secret"}

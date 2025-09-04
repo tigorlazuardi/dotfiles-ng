@@ -8,6 +8,7 @@
     ./nginx.nix
     ./penpot.nix
     ./tinyauth.nix
+    ./volumes.nix
   ];
   users = {
     users.grandboard = {
