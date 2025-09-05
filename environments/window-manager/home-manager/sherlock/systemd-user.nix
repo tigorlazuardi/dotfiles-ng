@@ -163,7 +163,7 @@ in
           field: "exec",
           icon: "${viewIcon}",
           hidden: {
-            exec: `systemd-run --user ${config.programs.sherlock.terminal} journalctl --user --pager-end --unit ''${systemdUnit}`,
+            exec: `systemd-run --user ${config.programs.sherlock.terminal} bash -c "journalctl --user --unit ''${systemdUnit} | nvim -R -M"`,
           },
         },
         {
@@ -172,7 +172,7 @@ in
           field: "exec",
           icon: "${tailIcon}",
           hidden: {
-            exec: `systemd-run --user ${config.programs.sherlock.terminal} journalctl --user --follow --unit ''${systemdUnit}`,
+            exec: `systemd-run --user --ignore-failure ${config.programs.sherlock.terminal} journalctl --user --follow --unit ''${systemdUnit}`,
           },
         },
         {

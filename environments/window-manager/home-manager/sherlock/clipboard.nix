@@ -17,8 +17,18 @@
       cargoHash = "sha256-D2/L7vQkjEgawde9cZH45s0FSLluihqYSSwW5eLNMxM=";
     })
     (pkgs.writeShellScriptBin "sherlock-clipboard" ''
-      set -euo pipefail
-      sherlock-clp | sherlock | tr -d '\n' | cliphist decode | wl-copy
+      selected=$(sherlock-clp | sherlock | tr -d '\n')
+      echo "Selected entry: $selected" >&2
+      content=$(echo -n "$selected" | cliphist decode)
+      if [ $? -ne 0 ]; then
+        echo "Failed to get clipboard content: $content" >&2
+        exit 1
+      fi
+      if [ -z "$content" ]; then
+        echo "No content found for the selected entry: $selected" >&2
+        exit 1
+      fi
+      echo -n "$content" | wl-copy
     '')
   ];
 }
