@@ -19,6 +19,7 @@
     ./nvim-docs-view.nix
     ./qml.nix
     ./svelte.nix
+    ./tailwindcss.nix
     ./tiny-code-action.nix
     ./typescript.nix
     ./yaml.nix
