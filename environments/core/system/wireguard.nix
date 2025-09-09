@@ -61,7 +61,7 @@
                   allowedIPs = mkOption {
                     type = types.str;
                     description = "The IPs that this device is allowed to access through the VPN. Typically";
-                    default = "0.0.0.0/0, ::/0"; # Route all traffic through the VPN.
+                    default = "0.0.0.0/0"; # Route all traffic through the VPN.
                   };
                 };
               }
