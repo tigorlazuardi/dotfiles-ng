@@ -40,6 +40,11 @@
           devices = [ "homeserver" ];
           path = "/home/${user.name}/sync/Redmage/Windows";
         };
+        Music = {
+          id = "Music";
+          devices = [ "homeserver" ];
+          path = "/home/${user.name}/sync/Music";
+        };
       };
     };
   };
