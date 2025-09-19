@@ -51,6 +51,16 @@ in
             "work-laptop"
           ];
         };
+        "Music" = {
+          id = "Music";
+          label = "Music";
+          path = "/nas/Syncthing/Sync/Music";
+          devices = [
+            "castle"
+            "work-laptop"
+            "oppo-find-x8"
+          ];
+        };
       };
     };
   };
