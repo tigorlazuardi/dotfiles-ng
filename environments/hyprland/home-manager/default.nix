@@ -59,10 +59,10 @@
       master = {
         mfact = 0.625;
       };
-      gestures = {
-        workspace_swipe = true;
-        workspace_swipe_create_new = false;
-      };
+      # gestures = {
+      #   workspace_swipe = true;
+      #   workspace_swipe_create_new = false;
+      # };
       misc = {
         vrr = 0;
         focus_on_activate = true;

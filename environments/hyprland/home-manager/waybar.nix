@@ -15,6 +15,10 @@
   };
   xdg.configFile."wallust/templates/waybar.css".text = # css
     ''
+      * {
+        font-family: "JetBrainsMono Nerd Font";
+      }
+
       #workspaces {
         background-color: alpha(@color0, 0.5);
         color: @foreground;
@@ -32,6 +36,7 @@
       #workspaces button {
         padding-top: 0.25rem;
         padding-bottom: 0.25rem;
+        color: @foreground;
       }
 
       #workspaces button.visible {

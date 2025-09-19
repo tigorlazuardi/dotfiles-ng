@@ -4,7 +4,7 @@
     inputs.stylix.nixosModules.stylix
   ];
   stylix = {
-    enable = true;
+    enable = false;
     image = null;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
     opacity = {

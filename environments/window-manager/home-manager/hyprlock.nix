@@ -12,7 +12,7 @@ in
   imports = [
     ./wpaperd.nix
   ];
-  stylix.targets.hyprlock.enable = false;
+  # stylix.targets.hyprlock.enable = false;
   programs.hyprlock = {
     enable = true;
     settings = {

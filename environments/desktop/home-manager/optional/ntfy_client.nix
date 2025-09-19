@@ -155,7 +155,7 @@ in
       After = [ config.wayland.systemd.target ];
       Requisite = After;
       PartOf = After;
-      Description = [ "Subscribes to NTFY Notifications" ];
+      Description = "Subscribes to NTFY Notifications";
     };
     Service = with pkgs; {
       Type = "simple";

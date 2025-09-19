@@ -132,7 +132,7 @@
         width = 45;
       };
       # We will use our own waybar configuration
-      stylix.targets.waybar.enable = false;
+      # stylix.targets.waybar.enable = false;
       home.packages = with pkgs; [
         brightnessctl
       ];
@@ -140,6 +140,7 @@
         ''
           window#waybar {
             background-color: alpha(@background, 0.65);
+            color: @foreground;
           }
 
           #pulseaudio-slider {

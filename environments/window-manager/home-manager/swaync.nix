@@ -394,5 +394,5 @@ in
       tooltip = false;
     };
   };
-  stylix.targets.swaync.enable = false; # We will use Rose-Pine's swaync official styling.
+  # stylix.targets.swaync.enable = false; # We will use Rose-Pine's swaync official styling.
 }

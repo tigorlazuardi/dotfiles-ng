@@ -4,7 +4,7 @@
   # See: https://github.com/nix-community/stylix/issues/554#issuecomment-2351509456
   #
   # base16 themes are ugly and very unreadable in neovim, so let's disable them.
-  stylix = {
-    targets.nixvim.enable = false;
-  };
+  # stylix = {
+  #   targets.nixvim.enable = false;
+  # };
 }
