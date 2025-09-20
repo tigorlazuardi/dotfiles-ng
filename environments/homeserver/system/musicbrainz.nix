@@ -31,7 +31,15 @@ in
           inherit (config.systemd.socketActivations.podman-musicbrainz) address;
         in
         {
-          "/".proxyPass = "http://unix:${address}";
+          "/" = {
+            proxyPass = "http://unix:${address}";
+            extraConfig = # nginx
+              ''
+                proxy_read_timeout 1d;
+                proxy_connect_timeout 1d;
+                proxy_send_timeout 1d;
+              '';
+          };
         };
     };
   };
