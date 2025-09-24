@@ -32,7 +32,7 @@
       file_output="$dir/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
       ${slurp}/bin/slurp | ${grim}/bin/grim -g - "$file_output"
       if [ -f "$file_output" ]; then
-        echo "$file_output" | ${wl-clipboard}/bin/wl-copy 
+        echo "$file_output" | ${wl-clipboard}/bin/wl-copy
         ${libnotify}/bin/notify-send --icon="$file_output" "Claude Screenshot" "Screenshot saved to $file_output and file path copied to clipboard."
       fi
     '')
