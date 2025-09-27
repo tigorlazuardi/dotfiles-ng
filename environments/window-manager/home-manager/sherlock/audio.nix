@@ -91,7 +91,7 @@ in
           description: `''${audio.properties["alsa.card_name"]} • ''${audio.name}`,
           field: "exec",
           hidden: {
-            exec: `pactl set-default-sink ''${audio.name}`,
+            exec: `systemd-run --user pactl set-default-sink ''${audio.name}`,
           },
         };
         const metadata = known[audio.description];
