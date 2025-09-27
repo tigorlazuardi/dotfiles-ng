@@ -10,6 +10,7 @@
     ./input.nix
     ./layout.nix
     ./nemo.nix
+    ./neovide.nix
     ./privacy.nix
     ./sherlock.nix
     ./swaync.nix
