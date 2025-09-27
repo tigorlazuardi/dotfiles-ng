@@ -47,6 +47,7 @@ in
     };
   };
   config = mkIf config.programs.niri.enable {
+    home.sessionVariables.DISPLAY = ":0";
     xdg.configFile."niri/config.kdl".source =
       pkgs.runCommand "config.kdl" { } # sh
         ''

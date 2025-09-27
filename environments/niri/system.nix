@@ -23,4 +23,12 @@
     };
   };
   programs.kdeconnect.enable = true;
+  programs.uwsm.enable = true;
+  programs.uwsm.waylandCompositors = {
+    niri = {
+      prettyName = "Niri";
+      comment = "A scrollable-tiling Wayland compositor";
+      binPath = "/run/current-system/sw/bin/niri-session";
+    };
+  };
 }
