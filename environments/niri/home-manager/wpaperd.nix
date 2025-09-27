@@ -1,13 +1,14 @@
-{ config, ... }:
 {
-  services.wpaperd = {
-    enable = true;
-    settings = {
-      default = {
-        duration = "15m";
-        mode = "stretch";
-        path = "${config.home.homeDirectory}/sync/Redmage/Windows";
-      };
+  imports = [ ../../window-manager/home-manager/wpaperd.nix ];
+
+  programs.niri.settings.binds = {
+    "Mod+u" = {
+      _props.repeat = false;
+      spawn = "wpaperctl next";
+    };
+    "Mod+y" = {
+      _props.repeat = false;
+      spawn = "wpaperctl previous";
     };
   };
 }
