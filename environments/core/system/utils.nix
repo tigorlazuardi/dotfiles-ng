@@ -16,7 +16,7 @@
         set -e
         export NIXPKGS_ALLOW_UNFREE=1
         build_path=$(nix build "nixpkgs#$1" --impure --no-link --print-out-paths)
-        ${xdg-utils}/bin/xdg-open $build_path
+        systemd-run --user ${xdg-utils}/bin/xdg-open $build_path
       ''
     )
     (writeShellScriptBin "build" # sh

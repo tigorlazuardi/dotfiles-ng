@@ -7,7 +7,11 @@
   programs.niri.settings.binds = {
     "Mod+Return" = {
       _props.repeat = false;
-      spawn = "systemd-run --user ${lib.meta.getExe' config.programs.foot.package "footclient"}";
+      spawn = [
+        "systemd-run"
+        "--user"
+        "${lib.meta.getExe' config.programs.foot.package "footclient"}"
+      ];
     };
   };
 }

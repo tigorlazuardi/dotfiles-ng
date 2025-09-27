@@ -14,12 +14,18 @@
     };
   };
 
-  programs.niri.settings.extraConfigPost = # kdl
+  programs.niri.extraConfigPost = # kdl
     ''
       window-rule {
-        match app-id="vivaldi.*" title="WhatsApp - Vivaldi"
+        match app-id="vivaldi.*" title=r#"WhatsApp - Vivaldi"#
 
         block-out-from "screencast"
+      }
+
+      window-rule {
+        match app-id="vivaldi.*"
+
+        open-maximized true
       }
     '';
 }

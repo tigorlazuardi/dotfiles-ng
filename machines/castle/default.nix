@@ -10,7 +10,8 @@
 
     ../../environments/desktop/system/optional/vial.nix
 
-    ../../environments/hyprland/system.nix
+    # ../../environments/hyprland/system.nix
+    ../../environments/niri/system.nix
 
     ./hardware.nix
     ./disko.nix
@@ -30,7 +31,8 @@
 
       # ../../environments/gnome/home-manager
 
-      ../../environments/hyprland/home-manager
+      # ../../environments/hyprland/home-manager
+      ../../environments/niri/home-manager
 
       ../../environments/desktop/home-manager/optional/obs-studio.nix
       ../../environments/desktop/home-manager/optional/feishin.nix

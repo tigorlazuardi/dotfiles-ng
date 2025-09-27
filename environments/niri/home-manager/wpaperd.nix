@@ -4,11 +4,17 @@
   programs.niri.settings.binds = {
     "Mod+u" = {
       _props.repeat = false;
-      spawn = "wpaperctl next";
+      spawn = [
+        "wpaperctl"
+        "next"
+      ];
     };
     "Mod+y" = {
       _props.repeat = false;
-      spawn = "wpaperctl previous";
+      spawn = [
+        "wpaperctl"
+        "previous"
+      ];
     };
   };
 }
