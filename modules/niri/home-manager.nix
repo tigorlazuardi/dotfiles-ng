@@ -64,33 +64,8 @@ in
           source = portalFormat.generate "niri-portals.conf" config.programs.niri.portalConfig;
         };
 
-    # Niri requires XWayland satellite to be running to handle XWayland applications.
-    #
-    # See: https://github.com/YaLTeR/niri/wiki/Xwayland
-    #
-    # However we will use systemd for better control.
-    systemd.user.services.xwayland-satellite = {
-      Unit = {
-        Description = "Xwayland outside your Wayland";
-        PartOf = "graphical-session.target";
-        After = "graphical-session.target";
-        Requisite = "graphical-session.target";
-      };
-      Service = {
-        Type = "notify";
-        NotifyAccess = "all";
-        ExecStart = meta.getExe pkgs.xwayland-satellite;
-        StandardOutput = "journal";
-        Environment = [
-          "DISPLAY=:0"
-        ];
-        Restart = "on-failure";
-      };
-      Install = {
-        WantedBy = [
-          "niri.service"
-        ];
-      };
-    };
+    home.packages = with pkgs; [
+      xwayland-satellite # required by Niri for XWayland support. Will be called automatically by Niri.
+    ];
   };
 }

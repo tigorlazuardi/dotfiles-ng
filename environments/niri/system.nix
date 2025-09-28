@@ -31,4 +31,5 @@
       binPath = "/run/current-system/sw/bin/niri-session";
     };
   };
+  environment.variables.DISPLAY = ":0"; # Required for xwayland-sattelite to work
 }

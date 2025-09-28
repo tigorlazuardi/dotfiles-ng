@@ -42,6 +42,7 @@
         "Mod+l".focus-column-or-monitor-right = { };
         "Mod+k".focus-window-or-workspace-up = { };
         "Mod+j".focus-window-or-workspace-down = { };
+        "Mod+Shift+BackSpace".quit = { };
         "Mod+q".close-window = { };
         "Mod+Comma".consume-window-into-column = { };
         "Mod+Period".expel-window-from-column = { };
