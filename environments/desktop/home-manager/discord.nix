@@ -37,11 +37,6 @@ in
     Install.WantedBy = [ config.wayland.systemd.target ];
   };
 
-  services.swaync.settings.scripts._10-discord = {
-    app-name = "[Vv]esktop";
-    exec = "hyprctl dispatch focuswindow vesktop";
-    run-on = "action";
-  };
   dconf.settings."org/gnome/shell".favorite-apps = [
     "vesktop.desktop"
   ];

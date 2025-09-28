@@ -8,24 +8,23 @@
     ../../desktop/home-manager/vivaldi.nix
   ];
   programs.niri.settings.binds = {
-    "Mod+b" = {
-      _props.repeat = false;
-      spawn = lib.meta.getExe config.programs.vivaldi.package;
-    };
+    "Mod+b".action.spawn = [
+      (lib.meta.getExe config.programs.vivaldi.package)
+    ];
   };
-
-  programs.niri.extraConfigPost = # kdl
-    ''
-      window-rule {
-        match app-id="vivaldi.*" title=r#"WhatsApp - Vivaldi"#
-
-        block-out-from "screencast"
-      }
-
-      window-rule {
-        match app-id="vivaldi.*"
-
-        open-maximized true
-      }
-    '';
+  programs.niri.settings.window-rules = [
+    {
+      matches = [ { app-id = "vivaldi.*"; } ];
+      open-maximized = true;
+    }
+    {
+      matches = [
+        {
+          app-id = "vivaldi.*";
+          title = "WhatsApp - Vivaldi";
+        }
+      ];
+      block-out-from = "screencast"; # block from screen share but allow screenshots
+    }
+  ];
 }

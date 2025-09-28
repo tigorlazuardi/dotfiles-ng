@@ -1,6 +1,6 @@
 {
   imports = [
     ./pipewire.nix
-    ./stylix.nix
+    # ./stylix.nix
   ];
 }

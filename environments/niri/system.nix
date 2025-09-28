@@ -1,15 +1,18 @@
 {
+  inputs,
   pkgs,
   user,
   config,
   ...
 }:
 {
+  imports = [
+    inputs.niri.nixosModules.niri
+  ];
+  # nixpkgs.overlays = [ inputs.niri.overlays.niri ];
   programs.niri.enable = true;
-  services.gnome.gnome-keyring.enable = true;
+  programs.niri.package = pkgs.niri;
   programs.dconf.enable = true;
-  xdg.mime.enable = true;
-  xdg.icons.enable = true;
   services.avahi.enable = true;
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   programs.hyprlock.enable = true;
@@ -32,4 +35,18 @@
     };
   };
   environment.variables.DISPLAY = ":0"; # Required for xwayland-sattelite to work
+  # services.keyd allows pressing a the meta key without any modifier to open a keybind menu
+  services.keyd = {
+    enable = true;
+    keyboards.default = {
+      ids = [ "*" ];
+      settings.global = {
+        overload_tap_timeout = 200; # Milliseconds to register a tap before timeout
+      };
+      settings.main = {
+        compose = "layer(meta)";
+        leftmeta = "overload(meta, macro(leftmeta+f))"; # Tap to trigger niri window search
+      };
+    };
+  };
 }

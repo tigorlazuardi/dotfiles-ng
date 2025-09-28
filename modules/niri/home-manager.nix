@@ -41,6 +41,20 @@ in
       inherit type;
       default = { };
     };
+    windowRules = mkOption {
+      type = types.listOf type;
+      default = [ ];
+      description = ''
+        A list of window rules to apply. See the niri documentation for details.
+      '';
+      apply =
+        value:
+        let
+          windowRules = map (v: format { window-rule = v; }) value;
+          joined = concatStringsSep "\n" windowRules;
+        in
+        joined;
+    };
     portalConfig = mkOption {
       type = portalFormat.type;
       default = { };
@@ -54,6 +68,7 @@ in
           cat << EOF > $out
           ${config.programs.niri.extraConfigPre}
           ${format config.programs.niri.settings}
+          ${config.programs.niri.windowRules}
           ${config.programs.niri.extraConfigPost}
           EOF
           ${pkgs.niri}/bin/niri validate --config $out

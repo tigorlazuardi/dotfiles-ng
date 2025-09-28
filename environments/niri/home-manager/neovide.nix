@@ -1,9 +1,8 @@
 {
-  programs.niri.extraConfigPost = # kdl
-    ''
-      window-rule {
-        match app-id="neovide"
-        open-maximized true
-      }
-    '';
+  programs.niri.settings.window-rules = [
+    {
+      matches = [ { app-id = "neovide"; } ];
+      open-maximized = true;
+    }
+  ];
 }

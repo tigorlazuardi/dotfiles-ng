@@ -8,10 +8,7 @@
     ../../gnome/home-manager/nemo.nix
   ];
 
-  programs.niri.settings.binds = {
-    "Mod+e" = {
-      _props.repeat = false;
-      spawn = lib.meta.getExe' pkgs.nemo-with-extensions "nemo";
-    };
-  };
+  programs.niri.settings.binds."Mod+e".action.spawn = [
+    (lib.meta.getExe' pkgs.nemo-with-extensions "nemo")
+  ];
 }

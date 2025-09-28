@@ -32,7 +32,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    stylix.url = "github:danth/stylix";
     nixvim.url = "github:nix-community/nixvim";
     disko = {
       url = "github:nix-community/disko/latest";
@@ -88,6 +87,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sherlock.url = "github:Skxxtz/sherlock?tag=v0.1.14-3";
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = inputs: import ./machines inputs;
 }

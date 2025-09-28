@@ -4,7 +4,5 @@
     package = pkgs.borealis-cursors;
     name = "Borealis-cursors";
   };
-  programs.niri.settings.cursor = {
-    xcursor-theme = "Borealis-cursors";
-  };
+  programs.niri.settings.cursor.theme = "Borealis-cursors";
 }

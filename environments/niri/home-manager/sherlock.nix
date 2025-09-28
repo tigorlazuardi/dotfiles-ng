@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   findWindowJS = pkgs.writers.writeJS "findNiriWindow" { } ''
     import { spawnSync } from "node:child_process";
@@ -43,69 +43,34 @@ in
   imports = [
     ../../window-manager/home-manager/sherlock
   ];
-
-  programs.niri.extraConfigPost = # kdl
-    ''
-      layer-rule {
-        match namespace="sherlock"
-
-        shadow {
-          on
-          softness 40
-          spread 5
-          offset x=0 y=0
-          draw-behind-window true
-          color "#00000099"
-        }
-      }
-    '';
-
-  programs.niri.settings.binds = {
-    "Mod+BackSpace" = {
-      _props.repeat = false;
-      spawn = [
-        "sherlock"
-        "--sub-menu"
-        "pm"
+  programs.niri.settings.layer-rules = [
+    {
+      matches = [
+        { namespace = "sherlock"; }
       ];
-    };
-    "Mod+f" = {
-      _props.repeat = false;
-      spawn = "${findWindowJS}";
-    };
-    "Mod+z" = {
-      _props.repeat = false;
-      spawn = "sherlock-select-audio";
-    };
-    "Mod+c" = {
-      _props.repeat = false;
-      spawn = "sherlock-clipboard";
-    };
-    "Mod+t" = {
-      _props.repeat = false;
-      spawn = "sherlock-systemd-user";
-    };
-    "Mod+v" = {
-      _props.repeat = false;
-      spawn = "sherlock-zoxide";
-    };
-    "Mod+n" = {
-      _props.repeat = false;
-      spawn = [
-        "sherlock-zoxide"
-        "neovide"
-      ];
-    };
-    "Mod+m" = {
-      _props.repeat = false;
-      spawn = [
-        "sherlock-zoxide"
-        "nemo"
-      ];
-    };
-    "Mod+r" = {
-      _props.repeat = false;
-      spawn = "sherlock";
-    };
+      shadow = {
+        enable = true;
+        softness = 40;
+        spread = 5;
+        offset = {
+          x = 0;
+          y = 0;
+        };
+        draw-behind-window = true;
+        color = "#00000099";
+      };
+    }
+  ];
+
+  programs.niri.settings.binds = with config.lib.niri.actions; {
+    "Mod+BackSpace".action = spawn "sherlock" "--sub-menu" "pm";
+    "mod+f".action = spawn "${findWindowJS}";
+    "mod+z".action = spawn "sherlock-select-audio";
+    "mod+c".action = spawn "sherlock-clipboard";
+    "mod+t".action = spawn "sherlock-systemd-user";
+    "mod+v".action = spawn "sherlock-zoxide";
+    "mod+n".action = spawn "sherlock-zoxide" "neovide";
+    "mod+m".action = spawn "sherlock-zoxide" "nemo";
+    "mod+r".action = spawn "sherlock";
   };
 }

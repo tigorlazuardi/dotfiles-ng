@@ -8,7 +8,7 @@
     ./mpv.nix
     ./neovide.nix
     ./spotify.nix
-    ./stylix.nix
+    # ./stylix.nix
     ./vivaldi.nix
     ./whatsapp.nix
 

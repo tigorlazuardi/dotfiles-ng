@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -15,25 +16,26 @@
   ];
 
   programs.niri.settings.binds =
+    with config.lib.niri.actions;
     let
       playerctl = lib.meta.getExe pkgs.playerctl;
     in
     {
       "XF86AudioPlay" = {
-        _props.repeat = false;
-        spawn = "${playerctl} play-pause";
+        allow-when-locked = true;
+        action = spawn "${playerctl}" "play-pause";
       };
-      "XF86AudioPause" = {
-        _props.repeat = false;
-        spawn = "${playerctl} play-pause";
+      "XF86AudioStop" = {
+        allow-when-locked = true;
+        action = spawn "${playerctl}" "stop";
       };
       "XF86AudioNext" = {
-        _props.repeat = false;
-        spawn = "${playerctl} next";
+        allow-when-locked = true;
+        action = spawn "${playerctl}" "next";
       };
       "XF86AudioPrev" = {
-        _props.repeat = false;
-        spawn = "${playerctl} previous";
+        allow-when-locked = true;
+        action = spawn "${playerctl}" "previous";
       };
     };
 }
