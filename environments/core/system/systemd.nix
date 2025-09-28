@@ -91,7 +91,7 @@
       switch (action) {
         case "View":
           systemCommand = "journalctl";
-          systemArgs = ["--unit", unit, "--pager-end"];
+          systemArgs = ["--unit", unit, "|", "nvim", "-R"];
           break;
         case "Follow":
           systemCommand = "journalctl";
@@ -119,7 +119,9 @@
         systemArgs.unshift(systemCommand);
         systemCommand = "sudo";
       }
-      spawnSync(systemCommand, systemArgs, { stdio: "inherit" });
+      spawnSync("sh", ["-c", [systemCommand, ...systemArgs].join(" ")], {
+        stdio: "inherit",
+      });
     '')
   ];
 }
