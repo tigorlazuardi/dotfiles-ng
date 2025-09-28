@@ -20,11 +20,11 @@ in
 
         const failedDownloads = history.filter((item) => item.error !== null);
         if (failedDownloads.length === 0) {
-          console.log("No failed downloads to retry.");
+          console.info("No failed downloads to retry.");
           process.exit(0);
         }
         const ids = failedDownloads.map((item) => item._id);
-        console.log("Failed downloads found:", failedDownloads.length, "IDs:", ids);
+        console.info("Failed downloads found:", failedDownloads.length, "IDs:", ids);
         const deleteResponse = await fetch(`''${baseUrl}/api/history`, {
           method: "DELETE",
           body: JSON.stringify({ ids, where: "done" }),
@@ -33,7 +33,7 @@ in
           console.error("Failed to delete history items:", await deleteResponse.text());
           process.exit(1);
         }
-        const body = failedDownloads.map((item) => ({
+        let body = failedDownloads.map((item) => ({
           url: item.url,
           preset: item.preset,
           folder: item.folder,
@@ -42,7 +42,12 @@ in
           cli: item.cli,
           auto_start: item.auto_start,
         }));
-        console.log("Retrying downloads...");
+        body = body.filter((item) => !item.error.includes("HTTP Error 403: Forbidden")); // Filter out 403 errors. They will never succeed.
+        if (body.length === 0) {
+          console.error("No downloads to retry after filtering out 403 errors.");
+          process.exit(0);
+        }
+        console.info("Retrying downloads...");
         console.table(body, ["url", "preset", "folder", "template", "cli"]);
         const response = await fetch(`''${baseUrl}/api/history`, {
           method: "POST",
