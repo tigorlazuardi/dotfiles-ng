@@ -17,6 +17,7 @@
     ./layout.nix
     ./nemo.nix
     ./neovide.nix
+    ./screenshot.nix
     ./sherlock.nix
     ./slack.nix
     ./swaync.nix
@@ -27,6 +28,8 @@
     ./waybar.nix
     ./wpaperd.nix
   ];
+
+  home.sessionVariables.DISPLAY = ":0"; # This is required for XWayland applications.
 
   programs.niri = {
     settings = {
@@ -39,29 +42,19 @@
         "Mod+Tab".action = toggle-overview;
         "Mod+slash".action = show-hotkey-overlay;
         "Mod+g".action = maximize-column;
-        "Mod+a".action = focus-column-or-monitor-left;
-        "Mod+d".action = focus-column-or-monitor-right;
-        "Mod+w".action = focus-window-or-workspace-up;
-        "Mod+s".action = focus-window-or-workspace-down;
-        "Mod+h".action = focus-column-or-monitor-left;
-        "Mod+l".action = focus-column-or-monitor-right;
+        "Mod+h".action = focus-column-left;
+        "Mod+l".action = focus-column-right;
         "Mod+k".action = focus-window-or-workspace-up;
         "Mod+j".action = focus-window-or-workspace-down;
         "Mod+Shift+BackSpace".action = quit;
+        "Mod+r".action = switch-preset-column-width;
         "Mod+q".action = close-window;
         "Mod+Comma".action = consume-window-into-column;
         "Mod+Period".action = expel-window-from-column;
-        "Mod+Shift+a".action = move-column-left-or-to-monitor-left;
-        "Mod+Shift+d".action = move-column-right-or-to-monitor-right;
-        "Mod+Shift+w".action = move-window-up-or-to-workspace-up;
-        "Mod+Shift+s".action = move-window-down-or-to-workspace-down;
-        "Mod+Shift+h".action = move-column-left-or-to-monitor-left;
-        "Mod+Shift+l".action = move-column-right-or-to-monitor-right;
-        "Mod+Shift+k".action = move-window-up-or-to-workspace-up;
-        "Mod+Ctrl+a".action = move-column-left;
-        "Mod+Ctrl+d".action = move-column-right;
-        "Mod+Ctrl+w".action = move-column-to-workspace-up;
-        "Mod+Ctrl+s".action = move-column-to-workspace-down;
+        "Mod+Shift+h".action = focus-monitor-left;
+        "Mod+Shift+j".action = focus-workspace-down;
+        "Mod+Shift+l".action = focus-monitor-right;
+        "Mod+Shift+k".action = focus-workspace-up;
         "Mod+Ctrl+h".action = move-column-left;
         "Mod+Ctrl+l".action = move-column-right;
         "Mod+Ctrl+k".action = move-column-to-workspace-up;
