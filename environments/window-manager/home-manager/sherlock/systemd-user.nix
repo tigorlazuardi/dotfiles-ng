@@ -4,6 +4,11 @@
   ...
 }:
 let
+  documentIcon =
+    pkgs.writeText "document.svg" # svg
+      ''
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-code-icon lucide-file-code"><path d="M10 12.5 8 15l2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/></svg>
+      '';
   serviceIcon =
     pkgs.writeText "home-gear.svg" # svg
       ''
@@ -157,6 +162,15 @@ in
       }
       const entry = output.find((unit) => unit.unit === systemdUnit);
       const actions = [
+        {
+          title: `Read ''${systemdUnit} Definition`,
+          description: `''${entry.load} ''${entry.active} ''${entry.sub} · Read ''${systemdUnit} Definition`,
+          field: "exec",
+          icon: "${documentIcon}",
+          hidden: {
+            exec: `systemd-run --user ${config.programs.sherlock.terminal} bash -c "systemctl --user cat ''${systemdUnit} | nvim -R -M"`,
+          },
+        },
         {
           title: `View ''${systemdUnit} Logs`,
           description: `''${entry.load} ''${entry.active} ''${entry.sub} · View ''${systemdUnit} logs`,

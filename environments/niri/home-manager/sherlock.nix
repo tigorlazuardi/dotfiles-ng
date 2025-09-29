@@ -63,10 +63,10 @@ in
   ];
 
   programs.niri.settings.binds = with config.lib.niri.actions; {
-    "Mod+BackSpace".action = spawn "sherlock" "--sub-menu" "pm";
+    # "Mod+BackSpace".action = spawn "sherlock" "--sub-menu" "pm";
     "mod+f".action = spawn "${findWindowJS}";
     "mod+a".action = spawn "sherlock-select-audio";
-    "mod+c".action = spawn "sherlock-clipboard";
+    # "mod+c".action = spawn "sherlock-clipboard";
     "mod+s".action = spawn "sherlock-systemd-user";
     "mod+z".action = spawn "sherlock-zoxide";
     "mod+n".action = spawn "sherlock-zoxide" "neovide";

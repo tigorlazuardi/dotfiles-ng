@@ -15,7 +15,7 @@
   programs.dconf.enable = true;
   services.avahi.enable = true;
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  programs.hyprlock.enable = true;
+  # programs.hyprlock.enable = true;
   services.greetd = {
     enable = true;
     settings = {

@@ -7,11 +7,12 @@
     # inputs.niri.homeModules.niri # Automatically imported by niri inputs (specifically by inputs.niri.nixosModules.niri).
 
     ../../window-manager/home-manager/kdeconnect.nix
-    ../../window-manager/home-manager/hypridle.nix
+    # ../../window-manager/home-manager/hypridle.nix
     ../../window-manager/home-manager/network_manager.nix
 
     ./audio.nix
     ./cursor.nix
+    ./dankMaterialShell.nix
     ./foot.nix
     ./input.nix
     ./layout.nix
@@ -20,12 +21,12 @@
     ./screenshot.nix
     ./sherlock.nix
     ./slack.nix
-    ./swaync.nix
-    ./swayosd.nix
+    # ./swaync.nix
+    # ./swayosd.nix
     ./vesktop.nix
     ./vivaldi.nix
     ./wasistlos.nix
-    ./waybar.nix
+    # ./waybar.nix
     ./wpaperd.nix
   ];
 
