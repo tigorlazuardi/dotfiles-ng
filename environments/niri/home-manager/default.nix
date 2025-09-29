@@ -10,6 +10,7 @@
     # ../../window-manager/home-manager/hypridle.nix
     ../../window-manager/home-manager/network_manager.nix
 
+    ./anyrun.nix
     ./audio.nix
     ./cursor.nix
     ./dankMaterialShell.nix
@@ -27,7 +28,7 @@
     ./vivaldi.nix
     ./wasistlos.nix
     # ./waybar.nix
-    ./wpaperd.nix
+    # ./wpaperd.nix
   ];
 
   home.sessionVariables.DISPLAY = ":0"; # This is required for XWayland applications.
@@ -42,7 +43,7 @@
       binds = with config.lib.niri.actions; {
         "Mod+Tab".action = toggle-overview;
         "Mod+slash".action = show-hotkey-overlay;
-        "Mod+g".action = maximize-column;
+        "Mod+space".action = maximize-column;
         "Mod+h".action = focus-column-left;
         "Mod+l".action = focus-column-right;
         "Mod+k".action = focus-window-or-workspace-up;

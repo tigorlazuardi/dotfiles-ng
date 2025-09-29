@@ -17,7 +17,7 @@ in
         local font_size = vim.o.lines < 60 and 11 or 12
 
         vim.o.guifont = font .. ":h" .. font_size
-        vim.g.neovide_opacity = 0.7
+        vim.g.neovide_opacity = 0.8
         vim.g.transparency = 0.8
         vim.g.neovide_window_blurred = true
 

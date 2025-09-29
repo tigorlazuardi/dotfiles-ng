@@ -95,6 +95,7 @@
       url = "github:AvengeMedia/DankMaterialShell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    anyrun.url = "github:anyrun-org/anyrun";
   };
   outputs = inputs: import ./machines inputs;
 }
