@@ -20,7 +20,6 @@
       xdg.configFile."wallust/templates/waybar.css".text =
         lib.mkBefore # css
           ''
-            /* cannot use import url because waybar does not react to changes of imported files */
             ${config.xdg.configFile."wallust/templates/gtk.css".text}
           '';
     }
@@ -76,7 +75,7 @@
           interval = "999999999999";
           tooltip-format = "{:%A, %B %d, %Y (%R)}";
         };
-        # height = 1440;
+        height = 1440;
         idle_inhibitor = {
           format = "{icon}";
           format-icons = {
@@ -105,7 +104,7 @@
           "tray"
           "battery"
         ];
-        # position = "top";
+        position = "right";
         pulseaudio = {
           format = "{icon}";
           format-bluetooth = "{icon}";
@@ -130,7 +129,7 @@
           icon-size = 21;
           spacing = 14;
         };
-        # width = 45;
+        width = 45;
       };
       # We will use our own waybar configuration
       # stylix.targets.waybar.enable = false;
@@ -179,7 +178,6 @@
             padding-bottom: 0.5rem;
             padding-top: 0.5rem;
             padding-right: 0.66rem; /* The icon is a bit misaligned */
-            padding-left: 1rem;
             color: @foreground;
             font-size: 1.2rem;
           }
@@ -194,6 +192,7 @@
           }
 
           #custom-notification {
+            margin-top: 0.5rem;
             font-size: 1.4rem;
             color: @foreground;
           }
