@@ -17,6 +17,8 @@
     enableBrightnessControl = true;
     enableNightMode = true;
     enableAudioWavelength = true;
+    enableCalendarEvents = true;
+    enableDynamicTheming = true;
   };
   programs.niri.settings.binds =
     with config.lib.niri.actions;
