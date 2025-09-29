@@ -9,7 +9,8 @@
     ../../environments/game/system
     # ../../environments/gnome/system
 
-    ../../environments/hyprland/system.nix
+    # ../../environments/hyprland/system.nix
+    ../../environments/niri/system.nix
 
     ./hardware.nix
     ./system
@@ -29,7 +30,8 @@
       ../../environments/desktop/home-manager/optional/feishin.nix
       ../../environments/desktop/home-manager/optional/ntfy_client.nix
 
-      ../../environments/hyprland/home-manager
+      # ../../environments/hyprland/home-manager
+      ../../environments/niri/home-manager
 
       ./home-manager
     ];

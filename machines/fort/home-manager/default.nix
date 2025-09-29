@@ -3,6 +3,7 @@
   imports = [
     ./hyprland.nix
     ./waybar.nix
+    ./niri.nix
   ];
   sops.secrets = {
     "ssh/fort/private_key" = {
