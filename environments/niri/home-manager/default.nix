@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   ...
 }:
 {
@@ -32,7 +33,9 @@
   ];
 
   home.sessionVariables.DISPLAY = ":0"; # This is required for XWayland applications.
-
+  home.packages = with pkgs; [
+    xwayland-satellite # required by Niri for XWayland support. Will be called automatically by Niri.
+  ];
   programs.niri = {
     settings = {
       environment = {
