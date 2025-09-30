@@ -12,6 +12,10 @@
   ];
   gtk.theme.package = pkgs.colloid-gtk-theme;
   gtk.theme.name = "Colloid";
+  gtk.iconTheme = {
+    package = lib.mkForce pkgs.colloid-icon-theme;
+    name = lib.mkForce "Colloid";
+  };
   programs.dankMaterialShell = {
     enable = true;
     enableClipboard = true;
