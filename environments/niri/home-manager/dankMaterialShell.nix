@@ -70,24 +70,6 @@
         allow-when-locked = true;
         action = dms-ipc "brightness" "decrement" "5" "";
       };
-      "Mod+u" = {
-        action = spawn "${pkgs.writeShellScript "next-wallpaper" ''
-          dms ipc call wallpaper next
-          dms ipc call wallpaper nextFor eDP-1
-          dms ipc call wallpaper nextFor DP-1
-          # Reverse direction for the next montior for variety
-          dms ipc call wallpaper prevFor DP-2
-        ''}";
-      };
-      "Mod+y" = {
-        action = spawn "${pkgs.writeShellScript "prev-wallpaper" ''
-          dms ipc call wallpaper prev
-          dms ipc call wallpaper prevFor eDP-1
-          dms ipc call wallpaper prevFor DP-1
-          # Reverse direction for the next montior for variety
-          dms ipc call wallpaper nextFor DP-2
-        ''}";
-      };
     };
   systemd.user.services.quickshell.Unit = {
     PartOf = [ config.wayland.systemd.target ];

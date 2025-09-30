@@ -27,9 +27,10 @@
     # ./swayosd.nix
     ./vesktop.nix
     ./vivaldi.nix
+    ./wallust.nix
     ./wasistlos.nix
     # ./waybar.nix
-    # ./wpaperd.nix
+    ./wpaperd.nix
   ];
 
   home.sessionVariables.DISPLAY = ":0"; # This is required for XWayland applications.
