@@ -11,7 +11,6 @@
   ];
   # nixpkgs.overlays = [ inputs.niri.overlays.niri ];
   programs.niri.enable = true;
-  programs.niri.package = pkgs.niri;
   programs.dconf.enable = true;
   services.avahi.enable = true;
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
