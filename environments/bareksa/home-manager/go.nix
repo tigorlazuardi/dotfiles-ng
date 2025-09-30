@@ -1,3 +1,3 @@
 {
-  programs.go.goPrivate = [ "gitlab.bareksa.com" ];
+  programs.go.env.GOPRIVATE = [ "gitlab.bareksa.com" ];
 }
