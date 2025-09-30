@@ -2,6 +2,7 @@
   config,
   inputs,
   pkgs,
+  lib,
   ...
 }:
 {
@@ -88,4 +89,8 @@
         ''}";
       };
     };
+  systemd.user.services.quickshell.Unit = {
+    PartOf = [ config.wayland.systemd.target ];
+    After = lib.mkForce [ config.wayland.systemd.target ];
+  };
 }
