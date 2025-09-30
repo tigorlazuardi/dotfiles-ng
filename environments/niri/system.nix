@@ -24,6 +24,15 @@
       };
     };
   };
+  programs.regreet = {
+    enable = true;
+    settings = {
+      background = {
+        path = "/home/${user.name}/.local/share/wallpapers/current";
+        fit = "Fill";
+      };
+    };
+  };
   programs.kdeconnect.enable = true;
   programs.uwsm.enable = true;
   programs.uwsm.waylandCompositors = {
