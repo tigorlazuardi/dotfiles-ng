@@ -46,7 +46,7 @@
     };
     extraCss = # css
       ''
-        @import url("${config.xdg.configHome}/gtk-4.0/dank-colors.css");
+        @import url("file://${config.xdg.configHome}/gtk-4.0/dank-colors.css");
 
         window {
           background: transparent;
