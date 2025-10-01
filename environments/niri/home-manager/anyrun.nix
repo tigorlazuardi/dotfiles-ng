@@ -126,7 +126,7 @@
       "websearch.ron".text = # ron
         ''
           Config(
-            prefix: "?",
+            prefix: "",
             engines: [
               Google,
               Custom(
