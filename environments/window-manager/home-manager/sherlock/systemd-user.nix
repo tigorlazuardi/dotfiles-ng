@@ -132,13 +132,13 @@ in
       const result = spawnSync("systemctl", [
         "--user",
         "list-units",
-        "--type=service",
+        "--type=service,timer,scope",
         "--all",
         "--output=json",
       ]);
       if (result.error) {
         console.error(
-          "Error executing systemctl --user list-units --type=service --all --output=json:",
+          "Error executing systemctl --user list-units --type=service,scope,timer --all --output=json:",
           result.error,
         );
         process.exit(1);
