@@ -13,6 +13,8 @@
     # ../../environments/hyprland/system.nix
     ../../environments/niri/system.nix
 
+    ../../environments/core/system/optional/docker.nix
+
     ./hardware.nix
     ./disko.nix
     ./system
