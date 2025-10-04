@@ -234,7 +234,7 @@
                   job = "nginx",
                 },
               ]
-              forward_to = [loki.process.nginx_relabel.receiver]
+              forward_to = [loki.process.nginx.receiver]
             }
 
             loki.source.file "nginx_access_redirect" {
@@ -245,7 +245,7 @@
                   job = "nginx",
                 },
               ]
-              forward_to = [loki.process.nginx_relabel.receiver]
+              forward_to = [loki.process.nginx.receiver]
             }
 
             loki.source.file "nginx_access_client_error" {
@@ -256,7 +256,7 @@
                   job = "nginx",
                 },
               ]
-              forward_to = [loki.process.nginx_relabel.receiver]
+              forward_to = [loki.process.nginx.receiver]
             }
 
             loki.source.file "nginx_access_server_error" {
@@ -267,7 +267,7 @@
                   job = "nginx",
                 },
               ]
-              forward_to = [loki.process.nginx_relabel.receiver]
+              forward_to = [loki.process.nginx.receiver]
             }
 
             loki.source.file "nginx_error" {
@@ -278,24 +278,50 @@
                   job = "nginx",
                 },
               ]
-              forward_to = [loki.process.nginx_relabel.receiver]
+              forward_to = [loki.process.nginx.receiver]
             }
 
-            loki.process "nginx_relabel" {
+            loki.process "nginx" {
               stage.json {
                 expressions = {
+                  body_bytes_sent = "body_bytes_sent",
                   host = "http_host",
+                  http_referrer = "http_referrer",
+                  http_user_agent = "http_user_agent",
+                  http_x_forwarded_for = "http_x_forwarded_for",
                   level = "level",
+                  remote_addr = "remote_addr",
+                  request_length = "request_length",
+                  request_method = "request_method",
+                  scheme = "scheme",
                   status = "status",
                   time = "time",
+                  uri = "uri",
+                  upstream = "upstream",
                 }
               }
 
-              stage.labels {
+              stage.labels { // For low cardinality fields
                 values = {
-                  host = "",
-                  level = "",
-                  status = "",
+                  log_level = "level",
+                }
+              }
+
+              stage.structured_metadata { // For high cardinality fields
+                values = {
+                  host_name = "host",
+                  http_referrer = "http_referrer",
+                  http_request_method = "request_method",
+                  http_request_size = "request_length",
+                  http_response_status_code = "status",
+                  http_user_agent = "http_user_agent",
+                  http_x_forwarded_for = "http_x_forwarded_for",
+                  http_response_body_size = "body_bytes_sent",
+                  network_peer_address = "remote_addr",
+                  url_path = "uri",
+                  url_scheme = "scheme",
+                  user_agent_original = "http_user_agent",
+                  upstream_address = "upstream",
                 }
               }
 
