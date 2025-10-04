@@ -105,10 +105,10 @@ in
           forward_to  = [prometheus.remote_write.mimir.receiver]
       }
 
-      otelcol.exporter.otlphttp "mimir" {
-        client {
-          endpoint = "http://${http_listen_address}:${toString http_listen_port}/otlp"
-        }
+      otelcol.exporter.prometheus "mimir" {
+        forward_to = [prometheus.remote_write.mimir.receiver]
+        resource_to_telemetry_conversion = true
+        include_scope_info = true
       }
     '';
   services.homepage-dashboard = {
