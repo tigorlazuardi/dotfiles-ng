@@ -56,6 +56,7 @@ in
         };
 
         limits_config = {
+          allow_structured_metadata = true;
           retention_period = "30d";
           ingestion_rate_mb = 32;
           ingestion_burst_size_mb = 64;
@@ -66,6 +67,8 @@ in
             directory = "${dataDir}/chunks";
           };
         };
+
+        pattern_ingester.enabled = true;
       };
     };
   # https://grafana.com/docs/grafana/latest/datasources/loki/
@@ -101,48 +104,42 @@ in
   ];
   environment.etc."alloy/config.alloy".text = # hocon
     ''
-      otelcol.exporter.loki "default" {
-          forward_to = [loki.write.default.receiver]
-      }
-
       loki.write "default" {
         endpoint {
           url = "http://${http_listen_address}:${toString http_listen_port}/loki/api/v1/push"
         }
       }
 
-      // read systemd journal logs
-      loki.source.journal "read" {
+      loki.source.journal "system" {
           forward_to = [loki.process.journal.receiver]
           format_as_json = true
-          relabel_rules = loki.relabel.journal.rules
+          relabel_rules = loki.relabel.system_journal.rules
+          matches = "_SYSTEMD_SLICE=system.slice"
           labels = {
-              job = "systemd-journal",
-              component = "loki.source.journal",
+              job = "systemd/system.slice",
+              deployment_environment = "production",
+              deployment_environment_name = "production",
+              service_namespace = "system.slice",
           }
       }
 
-      loki.relabel "journal" {
-          forward_to = []
+      loki.relabel "system_journal" {
+          forward_to = [] // not used but must exist
           rule {
               source_labels = ["__journal__systemd_unit"]
-              target_label  = "unit"
+              target_label  = "service_name"
           }
           rule {
               source_labels = ["__journal__hostname"]
-              target_label  = "host"
-          }
-          rule {
-              source_labels = [ "__journal__systemd_user_unit" ]
-              target_label = "user_unit"
+              target_label  = "host_name"
           }
           rule {
               source_labels = [ "__journal__transport" ]
-              target_label = "transport"
+              target_label = "log_iostream"
           }
           rule {
               source_labels = [ "__journal_priority_keyword" ]
-              target_label = "severity"
+              target_label = "log_level"
           }
       }
 
@@ -158,9 +155,15 @@ in
 
           stage.labels {
               values = {
-                  level = "",
+                  log_level = "level",
               }
           }
+      }
+
+      otelcol.exporter.otlphttp "loki" {
+        client {
+          endpoint = "http://${http_listen_address}:${toString http_listen_port}/otlp"
+        }
       }
     '';
 

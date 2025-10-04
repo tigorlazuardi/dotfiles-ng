@@ -52,8 +52,8 @@ in
 
       otelcol.processor.batch "default" {
           output {
-              logs    = [otelcol.exporter.loki.default.input]
-              metrics = [otelcol.exporter.prometheus.mimir.input]
+              logs    = [otelcol.exporter.otlphttp.loki.input]
+              metrics = [otelcol.exporter.otlphttp.mimir.input]
               traces  = [otelcol.exporter.otlp.tempo.input]
           }
       }

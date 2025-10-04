@@ -6,6 +6,10 @@ in
 {
   services.mimir = {
     enable = true;
+    extraFlags = [
+      "-distributor.otel-keep-identifying-resource-attributes=true"
+      ''-distributor.otel-promote-resource-attributes="service.instance.id,service.name,service.namespace,service.version,cloud.availability_zone,cloud.region,container.name,deployment.environment,deployment.environment.name,k8s.cluster.name,k8s.container.name,k8s.cronjob.name,k8s.daemonset.name,k8s.deployment.name,k8s.job.name,k8s.namespace.name,k8s.pod.name,k8s.replicaset.name,k8s.statefulset.name"''
+    ];
     configuration = {
       multitenancy_enabled = false;
       server = {
@@ -101,8 +105,10 @@ in
           forward_to  = [prometheus.remote_write.mimir.receiver]
       }
 
-      otelcol.exporter.prometheus "mimir" {
-        forward_to = [prometheus.remote_write.mimir.receiver]
+      otelcol.exporter.otlphttp "mimir" {
+        client {
+          endpoint = "http://${http_listen_address}:${toString http_listen_port}/otlp"
+        }
       }
     '';
   services.homepage-dashboard = {
