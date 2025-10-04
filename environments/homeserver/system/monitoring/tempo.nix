@@ -30,6 +30,22 @@
       ingester = {
         lifecycler.ring.replication_factor = 1;
       };
+      metrics_generator = {
+        registry.external_labels = {
+          source = "tempo";
+          cluster = "homeserver";
+        };
+        storage = {
+          path = "/var/lib/private/tempo/generator/wal";
+          remote_write =
+            let
+              inherit (config.services.mimir.configuration.server) http_listen_address http_listen_port;
+            in
+            [
+              { url = "http://${http_listen_address}:${toString http_listen_port}/api/v1/push"; }
+            ];
+        };
+      };
     };
   };
 
