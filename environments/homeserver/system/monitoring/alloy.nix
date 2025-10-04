@@ -25,6 +25,14 @@ in
     "grpc.otel.lan" = {
       locations."/".proxyPass = "http://${otelcolGRPCListenAddress}";
     };
+    "otel.tigor.web.id" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${otelcolHTTPListenAddress}";
+    };
+    "otelgrpc.tigor.web.id" = {
+      forceSSL = true;
+      locations."/".proxyPass = "http://${otelcolGRPCListenAddress}";
+    };
   };
   systemd.services.alloy.serviceConfig.User = "root";
   environment.etc."alloy/config.alloy".text =
