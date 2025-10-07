@@ -5,7 +5,7 @@
       friendly-snippets.enable = true;
       blink-ripgrep = {
         enable = true;
-        lazyLoad.settings.ft = [ "manually_loaded" ];
+        # lazyLoad.settings.ft = [ "manually_loaded" ];
       };
       blink-cmp = {
         enable = true;
@@ -130,12 +130,12 @@
           };
           keymap.preset = "default";
         };
-        lazyLoad.settings = {
-          event = [
-            "InsertEnter"
-            "CmdlineEnter"
-          ];
-        };
+        # lazyLoad.settings = {
+        #   event = [
+        #     "InsertEnter"
+        #     "CmdlineEnter"
+        #   ];
+        # };
       };
     };
   };
