@@ -3,6 +3,8 @@ let
   domain = "photos.tigor.web.id";
   volume = "/wolf/immich";
   version = "release";
+  inherit (config.virtualisation.oci-containers.containers.immich-server) ip httpPort;
+  address = "http://${ip}:${toString httpPort}";
 in
 {
   # While Nix provides a service for Immich, a Docker compose setup is preferred because it's easier to backup and manage,
@@ -11,10 +13,10 @@ in
     image = "ghcr.io/immich-app/immich-server:${version}";
     ip = "10.88.4.1";
     httpPort = 2283;
-    socketActivation = {
-      enable = true;
-      idleTimeout = "15m";
-    };
+    # socketActivation = {
+    #   enable = true;
+    #   idleTimeout = "15m";
+    # };
     volumes = [
       "${volume}/server:/usr/src/app/upload"
     ];
@@ -116,15 +118,10 @@ in
       '';
     unitConfig.StopWhenUnneeded = true; # Stop when the server is stopped.
   };
-  services.anubis.instances.immich.settings.TARGET =
-    let
-      inherit (config.systemd.socketActivations.podman-immich-server) address;
-    in
-    "unix://${address}";
+  services.anubis.instances.immich.settings.TARGET = address;
   services.nginx.virtualHosts =
     let
       inherit (config.services.anubis.instances.immich.settings) BIND;
-      inherit (config.systemd.socketActivations.podman-immich-server) address;
     in
     {
       "${domain}" = {
@@ -141,7 +138,7 @@ in
           {
             "/api" = {
               inherit extraConfig;
-              proxyPass = "http://unix:${address}";
+              proxyPass = address;
             };
             "/" = {
               inherit extraConfig;
@@ -149,7 +146,7 @@ in
             };
           };
       };
-      "immich.lan".locations."/".proxyPass = "http://unix:${address}";
+      "immich.lan".locations."/".proxyPass = address;
     };
   services.homepage-dashboard.groups.Media.services.Immich.settings = {
     description = "Family Photos and Videos Server";
