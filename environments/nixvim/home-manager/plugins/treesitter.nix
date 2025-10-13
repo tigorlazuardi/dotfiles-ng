@@ -205,7 +205,7 @@
     };
     ts-context-commentstring = {
       enable = true;
-      extraOptions.enable_autocmd = false;
+      settings.enable_autocmd = false;
     };
     mini.modules.comment.options.custom_commentstring.__raw = ''
       function()
