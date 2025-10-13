@@ -33,6 +33,13 @@
       };
     };
   };
+  xdg.portal.extraPortals = with pkgs; [
+    xdg-desktop-portal-gnome
+    xdg-desktop-portal-gtk
+  ];
+  environment.systemPackages = with pkgs; [
+    nautilus # For file picking dialogs
+  ];
   programs.kdeconnect.enable = true;
   programs.uwsm.enable = true;
   programs.uwsm.waylandCompositors = {

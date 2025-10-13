@@ -96,6 +96,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     anyrun.url = "github:anyrun-org/anyrun";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
   outputs = inputs: import ./machines inputs;
 }

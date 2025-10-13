@@ -1,6 +1,6 @@
 {
   imports = [
+    ./flatpak.nix
     ./pipewire.nix
-    # ./stylix.nix
   ];
 }

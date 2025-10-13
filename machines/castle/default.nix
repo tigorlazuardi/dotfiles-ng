@@ -9,6 +9,7 @@
     ../../environments/game/system
 
     ../../environments/desktop/system/optional/vial.nix
+    ../../environments/desktop/system/optional/kdenlive.nix
 
     # ../../environments/hyprland/system.nix
     ../../environments/niri/system.nix
