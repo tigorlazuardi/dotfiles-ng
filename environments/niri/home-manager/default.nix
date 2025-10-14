@@ -44,6 +44,7 @@
         DISPLAY = ":0"; # This is required for XWayland applications.
         NIXOS_OZONE_WL = "1";
       };
+      input.touchpad.natural-scroll = false;
       binds = with config.lib.niri.actions; {
         "Mod+Tab".action = toggle-overview;
         "Mod+slash".action = show-hotkey-overlay;
