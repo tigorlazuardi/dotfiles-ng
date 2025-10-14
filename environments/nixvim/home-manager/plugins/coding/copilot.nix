@@ -35,7 +35,7 @@
             enabled = true;
             auto_trigger = true;
             hide_during_completion = false;
-            keymap.accept = "<a-l>";
+            keymap.accept = "<m-l>";
           };
           filetypes = {
             env = false;
