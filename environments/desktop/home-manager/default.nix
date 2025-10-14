@@ -3,6 +3,7 @@
   imports = [
     ./chromium.nix
     ./discord.nix
+    ./flatpak.nix
     ./ghostty.nix
     ./jellyfin.nix
     ./mpv.nix
