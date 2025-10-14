@@ -300,20 +300,20 @@
             },
           }, true)
         '';
-        root_dir.__raw = # lua
-          ''
-            function(fname)
-              local util = require 'lspconfig.util'
-              local mod_cache = [[/home/${user.name}/go/pkg/mod]]
-              if fname:sub(1, #mod_cache) == mod_cache then
-                local clients = vim.lsp.get_active_clients { name = "gopls" }
-                if #clients > 0 then
-                  return clients[#clients].config.root_dir
-                end
-              end
-              return util.root_pattern('go.mod', 'go.work', '.git')(fname)
-            end
-          '';
+        # root_dir.__raw = # lua
+        #   ''
+        #     function(fname)
+        #       local util = require 'lspconfig.util'
+        #       local mod_cache = [[/home/${user.name}/go/pkg/mod]]
+        #       if fname:sub(1, #mod_cache) == mod_cache then
+        #         local clients = vim.lsp.get_active_clients { name = "gopls" }
+        #         if #clients > 0 then
+        #           return clients[#clients].config.root_dir
+        #         end
+        #       end
+        #       return util.root_pattern('go.mod', 'go.work', '.git')(fname)
+        #     end
+        #   '';
       };
     };
     plugins.neotest.adapters.golang = {
