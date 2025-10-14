@@ -113,6 +113,12 @@
         }
       '';
     extraConfigFiles = {
+      "niri-focus.ron".text = # ron
+        ''
+          Config(
+            max_entries: 5,
+          )
+        '';
       "applications.ron".text = # ron
         ''
           Config(
