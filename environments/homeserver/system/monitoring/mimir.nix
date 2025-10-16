@@ -58,6 +58,8 @@ in
         };
       };
 
+      usage_stats.enabled = false;
+
       ruler_storage = {
         backend = "filesystem";
         filesystem.dir = "${baseDir}/data/rules";
