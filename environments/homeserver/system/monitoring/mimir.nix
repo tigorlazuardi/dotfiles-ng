@@ -7,8 +7,8 @@ in
   services.mimir = {
     enable = true;
     extraFlags = [
-      "-distributor.otel-keep-identifying-resource-attributes=true"
-      ''-distributor.otel-promote-resource-attributes="service.instance.id,service.name,service.namespace,service.version,cloud.availability_zone,cloud.region,container.name,deployment.environment,deployment.environment.name,k8s.cluster.name,k8s.container.name,k8s.cronjob.name,k8s.daemonset.name,k8s.deployment.name,k8s.job.name,k8s.namespace.name,k8s.pod.name,k8s.replicaset.name,k8s.statefulset.name"''
+      # "-distributor.otel-keep-identifying-resource-attributes"
+      # ''-distributor.otel-promote-resource-attributes="service.instance.id,service.name,service.namespace,service.version,cloud.availability_zone,cloud.region,container.name,deployment.environment,deployment.environment.name,k8s.cluster.name,k8s.container.name,k8s.cronjob.name,k8s.daemonset.name,k8s.deployment.name,k8s.job.name,k8s.namespace.name,k8s.pod.name,k8s.replicaset.name,k8s.statefulset.name"''
     ];
     configuration = {
       multitenancy_enabled = false;
@@ -41,6 +41,11 @@ in
         compactor_blocks_retention_period = "30d";
         max_label_name_length = 1024;
         max_label_value_length = 2048;
+        otel_keep_identifying_resource_attributes = true;
+        promote_otel_resource_attributes = "service.instance.id,service.name,service.namespace,service.version,cloud.availability_zone,cloud.region,container.name,deployment.environment,deployment.environment.name,k8s.cluster.name,k8s.container.name,k8s.cronjob.name,k8s.daemonset.name,k8s.deployment.name,k8s.job.name,k8s.namespace.name,k8s.pod.name,k8s.replicaset.name,k8s.statefulset.name";
+        otel_metric_suffixes_enabled = true;
+        otel_created_timestamp_zero_ingestion_enabled = true;
+        otel_convert_histograms_to_nhcb = true;
       };
 
       distributor = {
@@ -107,10 +112,16 @@ in
           forward_to  = [prometheus.remote_write.mimir.receiver]
       }
 
-      otelcol.exporter.prometheus "mimir" {
-        forward_to = [prometheus.remote_write.mimir.receiver]
-        resource_to_telemetry_conversion = true
-        include_scope_info = true
+      // otelcol.exporter.prometheus "mimir" {
+      //   forward_to = [prometheus.remote_write.mimir.receiver]
+      //   resource_to_telemetry_conversion = true
+      //   include_scope_info = true
+      // }
+
+      otelcol.exporter.otlphttp "mimir" {
+        client {
+          endpoint = "http://${http_listen_address}:${toString http_listen_port}/otlp"
+        }
       }
     '';
   services.homepage-dashboard = {

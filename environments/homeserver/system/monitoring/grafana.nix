@@ -20,6 +20,7 @@ in
     };
   services.grafana = {
     enable = true;
+    provision.datasources.settings.prune = true;
     settings = {
       server = {
         protocol = "http";
@@ -59,6 +60,11 @@ in
         role_attribute_path = "grafana_role";
       };
     };
+  };
+  services.db-gate.connections.grafana_db = {
+    label = "Grafana";
+    engine = "sqlite@dbgate-plugin-sqlite";
+    url = "/var/lib/grafana/data/grafana.db";
   };
   systemd.socketActivations.grafana =
     let

@@ -86,7 +86,7 @@
             filterByTraceID = false;
             filterBySpanID = false;
             customQuery = true;
-            query = ''method="$''${__span.tags.method}"'';
+            query = ''{service_namespace="$''${__span.tags["service.namespace"]}", service_name="$''${__span.tags["service.name"]}"} | trace_id="$''${__span.traceId}"'';
           };
         };
       }
@@ -96,6 +96,10 @@
       otelcol.exporter.otlp "tempo" {
           client {
               endpoint = "${config.services.tempo.settings.distributor.receivers.otlp.protocols.grpc.endpoint}"
+              tls {
+                insecure = true
+                insecure_skip_verify = true
+              }
           }
       }
     '';

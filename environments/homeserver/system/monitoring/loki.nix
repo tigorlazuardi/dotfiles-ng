@@ -86,17 +86,10 @@ in
         derivedFields = [
           {
             datasourceUid = "tempo";
-            matcherRegex = ''trace_?[Ii][Dd]=(\w+)'';
             name = "Log Trace";
             url = "$\${__value.raw}";
             urlDisplayLabel = "Trace";
-          }
-          {
-            datasourceUid = "tempo";
-            matcherRegex = ''"trace_?[Ii][Dd]":"(\w+)"'';
-            name = "Trace";
-            url = "$\${__value.raw}";
-            urlDisplayLabel = "Trace";
+            matcherRegex = "trace_id=(\\w+)";
           }
         ];
       };
