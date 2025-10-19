@@ -168,12 +168,14 @@ in
         }
 
         output {
-          logs = [otelcol.exporter.loki.default.input]
+          logs = [otelcol.exporter.otlphttp.loki.input]
         }
       }
 
-      otelcol.exporter.loki "default" {
-        forward_to = [loki.write.default.receiver]
+      otelcol.exporter.otlphttp "loki" {
+        client {
+          endpoint = "http://${http_listen_address}:${toString http_listen_port}/otlp"
+        }
       }
     '';
 
