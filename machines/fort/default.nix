@@ -28,6 +28,7 @@
       # ../../environments/gnome/home-manager
 
       ../../environments/desktop/home-manager/optional/feishin.nix
+      ../../environments/desktop/home-manager/optional/flameshot.nix
       ../../environments/desktop/home-manager/optional/ntfy_client.nix
 
       # ../../environments/hyprland/home-manager
