@@ -85,6 +85,7 @@ in
       jsonData = {
         httpMethod = "POST";
         prometheusType = "Mimir";
+        timeInterval = "60s";
         timeout = 30;
       };
     }

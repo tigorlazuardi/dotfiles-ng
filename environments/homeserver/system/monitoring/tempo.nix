@@ -30,7 +30,12 @@
       ingester = {
         lifecycler.ring.replication_factor = 1;
       };
+      overrides.metrics_generator_processors = [ "local-blocks" ];
       metrics_generator = {
+        processor.local_blocks = {
+          filter_server_spans = false;
+          flush_to_storage = true;
+        };
         registry.external_labels = {
           source = "tempo";
           cluster = "homeserver";
@@ -77,12 +82,6 @@
             datasourceUid = "loki";
             spanStartTimeShift = "-1h";
             spanEndTimeShift = "1h";
-            tags = [
-              "job"
-              "instance"
-              "pod"
-              "namespace"
-            ];
             filterByTraceID = false;
             filterBySpanID = false;
             customQuery = true;
