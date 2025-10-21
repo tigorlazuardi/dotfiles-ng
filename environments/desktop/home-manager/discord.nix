@@ -1,40 +1,31 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }:
-let
-  inherit (lib.meta) getExe;
-  script =
-    pkgs.writeShellScriptBin "discord-autostart" # sh
-      ''
+{
+  home.packages = with pkgs; [ vesktop ];
+
+  xdg.configFile."discord/settings.json".source = (pkgs.formats.json { }).generate "settings.json" {
+    SKIP_HOST_UPDATE = true;
+  };
+
+  systemd.user.services.discord = {
+    Unit = rec {
+      Description = "Discord autostart service";
+      PartOf = [ config.wayland.systemd.target ];
+      Requisite = PartOf;
+      After = [ "tray.target" ];
+    };
+    Service = {
+      ExecStart = pkgs.writeShellScript "discord-autostart-wrapper" ''
         until ${pkgs.netcat}/bin/nc -z discord.com 443 > /dev/null; do
           ${pkgs.coreutils}/bin/sleep 0.1
         done
         ${pkgs.vesktop}/bin/vesktop "$@"
       '';
-in
-{
-  home = {
-    packages = with pkgs; [ vesktop ];
-    file = {
-      ".config/discord/settings.json".source = (pkgs.formats.json { }).generate "settings.json" {
-        SKIP_HOST_UPDATE = true;
-      };
     };
-  };
-
-  systemd.user.services.discord = {
-    Unit = {
-      Description = "Discord autostart service";
-      After = [ config.wayland.systemd.target ];
-      PartOf = [ config.wayland.systemd.target ];
-    };
-    Service = {
-      ExecStart = "${getExe script}";
-    };
-    Install.WantedBy = [ config.wayland.systemd.target ];
+    Install.WantedBy = [ "tray.target" ];
   };
 
   dconf.settings."org/gnome/shell".favorite-apps = [
