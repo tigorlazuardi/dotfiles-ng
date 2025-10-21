@@ -11,8 +11,6 @@
   systemd.user.services.whatsapp-autostart = {
     Unit = rec {
       Description = "WhatsApp Autostart Service";
-      Requires = [ "tray.target" ];
-      After = Requires;
       PartOf = [ config.wayland.systemd.target ];
       Requisite = PartOf;
     };

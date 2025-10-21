@@ -15,8 +15,6 @@
       Description = "Discord autostart service";
       PartOf = [ config.wayland.systemd.target ];
       Requisite = PartOf;
-      Requires = [ "tray.target" ];
-      After = Requires;
     };
     Service = {
       ExecStart = pkgs.writeShellScript "discord-autostart-wrapper" ''

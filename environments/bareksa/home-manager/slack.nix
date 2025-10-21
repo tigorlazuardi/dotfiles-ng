@@ -21,10 +21,8 @@
   systemd.user.services.slack = {
     Unit = rec {
       Description = "Slack autostart service";
-      Requires = [ "tray.target" ];
       PartOf = [ config.wayland.systemd.target ];
       Requisite = PartOf;
-      After = Requires;
     };
     Service = {
       ExecStart = pkgs.writeShellScript "slack-autostart" ''
