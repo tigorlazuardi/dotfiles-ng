@@ -12,6 +12,7 @@
     Unit = rec {
       Description = "WhatsApp Autostart Service";
       PartOf = [ config.wayland.systemd.target ];
+      After = [ "tray.target" ];
       Requisite = PartOf;
     };
     Service = {
@@ -21,6 +22,10 @@
         done
         ${pkgs.wasistlos}/bin/wasistlos
       '';
+      Restart = "on-failure";
+      RestartSec = 1;
+      RestartSteps = 2;
+      RestartMaxDelaySec = 10;
     };
     Install.WantedBy = [ config.wayland.systemd.target ];
   };

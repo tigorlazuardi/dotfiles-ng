@@ -13,8 +13,10 @@
   systemd.user.services.discord = {
     Unit = rec {
       Description = "Discord autostart service";
+      After = [ "tray.target" ];
       PartOf = [ config.wayland.systemd.target ];
       Requisite = PartOf;
+      Requires = [ "tray.target" ];
     };
     Service = {
       ExecStart = pkgs.writeShellScript "discord-autostart-wrapper" ''
@@ -23,6 +25,10 @@
         done
         ${pkgs.vesktop}/bin/vesktop "$@"
       '';
+      Restart = "on-failure";
+      RestartSec = 1;
+      RestartSteps = 2;
+      RestartMaxDelaySec = 10;
     };
     Install.WantedBy = [ config.wayland.systemd.target ];
   };
