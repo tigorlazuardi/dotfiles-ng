@@ -23,6 +23,7 @@
       Description = "Slack autostart service";
       PartOf = [ config.wayland.systemd.target ];
       Requisite = PartOf;
+      After = [ "tray.target" ];
     };
     Service = {
       ExecStart = pkgs.writeShellScript "slack-autostart" ''
