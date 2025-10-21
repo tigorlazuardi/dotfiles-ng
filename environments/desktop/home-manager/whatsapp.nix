@@ -1,31 +1,28 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }:
-let
-  script = pkgs.writeShellScriptBin "whatsapp-autostart" ''
-    until ${pkgs.netcat}/bin/nc -z web.whatsapp.com 443 > /dev/null; do
-      sleep 0.1
-    done
-    ${pkgs.wasistlos}/bin/wasistlos
-  '';
-  inherit (lib.meta) getExe;
-in
 {
   home.packages = with pkgs; [
     wasistlos
   ];
 
   systemd.user.services.whatsapp-autostart = {
-    Unit = {
+    Unit = rec {
       Description = "WhatsApp Autostart Service";
-      After = [ config.wayland.systemd.target ];
+      Requires = [ "tray.target" ];
+      After = Requires;
       PartOf = [ config.wayland.systemd.target ];
+      Requisite = PartOf;
     };
     Service = {
-      ExecStart = "${getExe script}";
+      ExecStart = pkgs.writeShellScript "whatsapp-autostart-wrapper" ''
+        until ${pkgs.netcat}/bin/nc -z web.whatsapp.com 443 > /dev/null; do
+          sleep 0.1
+        done
+        ${pkgs.wasistlos}/bin/wasistlos
+      '';
     };
     Install.WantedBy = [ config.wayland.systemd.target ];
   };

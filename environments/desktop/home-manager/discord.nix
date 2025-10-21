@@ -15,7 +15,8 @@
       Description = "Discord autostart service";
       PartOf = [ config.wayland.systemd.target ];
       Requisite = PartOf;
-      After = [ "tray.target" ];
+      Requires = [ "tray.target" ];
+      After = Requires;
     };
     Service = {
       ExecStart = pkgs.writeShellScript "discord-autostart-wrapper" ''
@@ -25,7 +26,7 @@
         ${pkgs.vesktop}/bin/vesktop "$@"
       '';
     };
-    Install.WantedBy = [ "tray.target" ];
+    Install.WantedBy = [ config.wayland.systemd.target ];
   };
 
   dconf.settings."org/gnome/shell".favorite-apps = [
