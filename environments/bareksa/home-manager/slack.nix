@@ -21,9 +21,9 @@
   systemd.user.services.slack = {
     Unit = rec {
       Description = "Slack autostart service";
-      After = [ config.wayland.systemd.target ];
-      PartOf = After;
-      Requisite = After;
+      After = [ "tray.target" ];
+      PartOf = [ config.wayland.systemd.target ];
+      Requisite = PartOf;
     };
     Service = {
       ExecStart = pkgs.writeShellScript "slack-autostart" ''
@@ -32,6 +32,7 @@
         done
         ${pkgs.slack}/bin/slack --enable-features=UseOzonePlatform --ozone-platform=wayland
       '';
+      Restart = "on-failure";
       RemainAfterExit = true; # So the timer above doesn't auto-restart this.
     };
   };
