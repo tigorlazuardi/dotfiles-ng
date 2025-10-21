@@ -53,6 +53,16 @@
             silent = true,
             expr = true,
           })
+          vim.keymap.set("i", "<m-l>", function()
+            if require("copilot.suggestion").is_visible() then
+              return require("copilot.suggestion").accept()
+            end
+            return "<m-l>"
+          end, {
+            silent = true,
+            expr = true,
+            desc = "Accept Copilot Suggestion",
+          })
         '';
       };
     };
