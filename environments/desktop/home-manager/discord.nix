@@ -16,7 +16,7 @@
       After = [ "tray.target" ];
       PartOf = [ config.wayland.systemd.target ];
       Requisite = PartOf;
-      Requires = [ "tray.target" ];
+      Requires = After;
     };
     Service = {
       ExecStart = pkgs.writeShellScript "discord-autostart-wrapper" ''

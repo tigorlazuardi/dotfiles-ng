@@ -11,19 +11,20 @@
   systemd.user.timers.slack = {
     Unit = {
       Description = "Timer to start Slack during office hours";
+      PartOf = [ config.wayland.systemd.target ];
+      After = [ "tray.target" ];
+      Requires = [ "tray.target" ];
     };
     Timer = {
       OnCalendar = "Mon..Fri *-*-* 08..18:*:*"; # Every day at 8 AM to 6 PM.
     };
-    Install.WantedBy = [ "timers.target" ];
+    Install.WantedBy = [ config.wayland.systemd.target ];
   };
 
   systemd.user.services.slack = {
-    Unit = rec {
+    Unit = {
       Description = "Slack autostart service";
       PartOf = [ config.wayland.systemd.target ];
-      Requisite = PartOf;
-      After = [ "tray.target" ];
     };
     Service = {
       ExecStart = pkgs.writeShellScript "slack-autostart" ''

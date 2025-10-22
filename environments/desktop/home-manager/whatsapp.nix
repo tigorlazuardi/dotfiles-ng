@@ -14,6 +14,7 @@
       PartOf = [ config.wayland.systemd.target ];
       After = [ "tray.target" ];
       Requisite = PartOf;
+      Requires = After;
     };
     Service = {
       ExecStart = pkgs.writeShellScript "whatsapp-autostart-wrapper" ''
