@@ -36,6 +36,58 @@
       closeOnClick = false;
       showResultsImmediately = true;
       maxEntries = null;
+      keybinds = [
+        {
+          ctrl = true;
+          key = "J";
+          action = "down";
+        }
+        {
+          ctrl = true;
+          key = "N";
+          action = "down";
+        }
+        {
+          key = "Down";
+          action = "down";
+        }
+        # {
+        #   key = "Tab";
+        #   action = "down";
+        # }
+        {
+          ctrl = true;
+          key = "K";
+          action = "up";
+        }
+        {
+          ctrl = true;
+          key = "P";
+          action = "up";
+        }
+        {
+          key = "Up";
+          action = "up";
+        }
+        # {
+        #   key = "ISO_Left_Tab";
+        #   action = "up";
+        #   shift = true;
+        # }
+        {
+          key = "Escape";
+          action = "close";
+        }
+        {
+          key = "Return";
+          action = "select";
+        }
+        {
+          ctrl = true;
+          key = "Y";
+          action = "select";
+        }
+      ];
 
       plugins = [
         "${pkgs.anyrun}/lib/libniri_focus.so"

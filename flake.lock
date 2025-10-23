@@ -8,11 +8,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1758874004,
-        "narHash": "sha256-+RUCBtT01Z595NpGc6Tvms+dJ/C/cn1zdjT9+gE6dbU=",
+        "lastModified": 1760996210,
+        "narHash": "sha256-SfdiJqxGVOlFw29START445DlujG+HTIwqs297vTRLA=",
         "owner": "anyrun-org",
         "repo": "anyrun",
-        "rev": "3c571bc1514c4211d1d6c011a1d482f97efd9c5f",
+        "rev": "c21e7f64af9c04858223a77c71e3936fc936afaa",
         "type": "github"
       },
       "original": {
