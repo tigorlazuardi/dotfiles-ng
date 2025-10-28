@@ -42,6 +42,7 @@
         };
         storage = {
           path = "/var/lib/private/tempo/generator/wal";
+          wal.wal_compression = "snappy";
           remote_write =
             let
               inherit (config.services.mimir.configuration.server) http_listen_address http_listen_port;
@@ -105,5 +106,9 @@
   services.homepage-dashboard.groups.Monitoring.services.Tempo.settings = {
     description = "Tracing spans store and querier";
     href = "https://grafana.com/oss/tempo";
+  };
+  systemd.services.tempo.serviceConfig = {
+    MemoryHigh = "2G";
+    MemoryMax = "4G";
   };
 }
