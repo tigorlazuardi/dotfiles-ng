@@ -90,10 +90,40 @@ in
     icon = "syncthing.svg";
   };
   systemd.services.syncthing.serviceConfig.ExecStartPre = [
-    (pkgs.writeShellScriptBin "syncthing-ownership" ''
+    (pkgs.writeShellScript "syncthing-ownership" ''
       chown -R syncthing:syncthing /nas/Syncthing/Sync
+      chmod -R 777 /nas/Syncthing/Sync
     '')
   ];
+  # services.anubis.instances.public.settings.TARGET = "http://127.0.0.1:19091";
+  services.nginx.virtualHosts = {
+    # "public.lan" = {
+    #   listen = [
+    #     {
+    #       addr = "127.0.0.1";
+    #       port = 19091;
+    #     }
+    #   ];
+    #   locations."/" = {
+    #     root = "/nas/Syncthing/Sync/Public";
+    #     extraConfig = # nginx
+    #       ''
+    #         autoindex on;
+    #       '';
+    #   };
+    # };
+    "public.tigor.web.id" = {
+      forceSSL = true;
+      locations."/" = {
+        root = "/nas/Syncthing/Sync/Public";
+        extraConfig = # nginx
+          ''
+            autoindex on;
+          '';
+      };
+      # proxyPass = "http://unix:${config.services.anubis.instances.public.settings.BIND}";
+    };
+  };
   users.users.${user.name}.extraGroups = [ "syncthing" ];
   networking.firewall.allowedTCPPorts = [ 22000 ];
   networking.firewall.allowedUDPPorts = [ 22000 ];
