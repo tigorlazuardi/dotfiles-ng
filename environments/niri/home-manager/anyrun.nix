@@ -198,6 +198,14 @@
               Custom(
                 name: "Home Manager Options",
                 url: "home-manager-options.extranix.com/?query={}&release=master"
+              ),
+              Custom(
+                name: "Nix Functions (noogle.dev)",
+                url: "noogle.dev/q?term={}"
+              ),
+              Custom(
+                name: "Go To URL",
+                url: "{}"
               )
             ]
           )
