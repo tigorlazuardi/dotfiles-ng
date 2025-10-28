@@ -20,6 +20,10 @@ let
           </g>
         </svg>
       '';
+  spawnNeovide = pkgs.writeShellScript "spawn-neovide" ''
+    ${pkgs.direnv}/bin/direnv reload || true
+    ${config.programs.neovide.package}/bin/neovide --no-fork "$@"
+  '';
 in
 {
   imports = [
@@ -100,13 +104,7 @@ in
           // Use Neovide with the specified path
           spawnSync(
             "systemd-run",
-            [
-              "--user",
-              "--working-directory",
-              path,
-              "${config.programs.neovide.package}/bin/neovide",
-              "--no-fork",
-            ],
+            ["--user", "--working-directory", path, "${spawnNeovide}"],
             { stdio: "inherit" },
           );
           break;
