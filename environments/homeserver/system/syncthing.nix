@@ -1,4 +1,9 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 let
   domain = "syncthing.tigor.web.id";
 in
@@ -61,6 +66,16 @@ in
             "oppo-find-x8"
           ];
         };
+        "General" = {
+          id = "General";
+          label = "General";
+          path = "/nas/Syncthing/Sync/General";
+          devices = [
+            "castle"
+            "work-laptop"
+            "oppo-find-x8"
+          ];
+        };
       };
     };
   };
@@ -74,6 +89,12 @@ in
     href = "https://${domain}";
     icon = "syncthing.svg";
   };
+  systemd.services.syncthing.serviceConfig.ExecStartPre = [
+    (pkgs.writeShellScriptBin "syncthing-ownership" ''
+      chown -R syncthing:syncthing /nas/Syncthing/Sync
+    '')
+  ];
+  users.users.${user.name}.extraGroups = [ "syncthing" ];
   networking.firewall.allowedTCPPorts = [ 22000 ];
   networking.firewall.allowedUDPPorts = [ 22000 ];
 }
