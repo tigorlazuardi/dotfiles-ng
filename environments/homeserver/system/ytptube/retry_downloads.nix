@@ -18,7 +18,19 @@ in
         const historyResponse = await fetch(`''${baseUrl}/api/history`);
         const { history } = await historyResponse.json();
 
-        const failedDownloads = history.filter((item) => item.error !== null);
+        const now = Date.now();
+        const filter = (item) => {
+          let erred = item.error !== null;
+          if (erred) return erred;
+          if (item.is_archived) return false;
+          if (item.status === "not_live") {
+            const liveTime = new Date(item.live_in).getTime();
+            return liveTime - now < 0; // live stream has started, but ytptube has not attempted download it yet.
+          }
+          return false;
+        };
+
+        const failedDownloads = history.filter(filter);
         if (failedDownloads.length === 0) {
           console.info("No failed downloads to retry.");
           process.exit(0);

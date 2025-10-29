@@ -21,6 +21,7 @@ in
   imports = [
     ./ntfy.nix
     ./retry_downloads.nix
+    ./clear_url_downloaded_error.nix
   ];
   sops.secrets."apprise/discord/ytptube" = {
     sopsFile = ../../../../secrets/apprise.yaml;
