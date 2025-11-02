@@ -12,7 +12,9 @@ let
     "--continue"
     "--live-from-start"
     "--no-write-auto-subs"
-    "--no-write-comments "
+    "--no-write-comments"
+    "--extractor-args"
+    "youtube:player_js_version=actual" # to fix youtube dl error
   ];
   inherit (config.virtualisation.oci-containers.containers.ytptube) ip httpPort;
   proxyPass = "http://${ip}:${toString httpPort}";
