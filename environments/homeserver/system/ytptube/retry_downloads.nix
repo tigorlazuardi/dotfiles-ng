@@ -54,11 +54,6 @@ in
           cli: item.cli,
           auto_start: item.auto_start,
         }));
-        body = body.filter((item) => !item.error.includes("HTTP Error 403: Forbidden")); // Filter out 403 errors. They will never succeed.
-        if (body.length === 0) {
-          console.error("No downloads to retry after filtering out 403 errors.");
-          process.exit(0);
-        }
         console.info("Retrying downloads...");
         console.table(body, ["url", "preset", "folder", "template", "cli"]);
         const response = await fetch(`''${baseUrl}/api/history`, {
