@@ -56,6 +56,16 @@ in
             "work-laptop"
           ];
         };
+        "General" = {
+          id = "General";
+          label = "General";
+          path = "/nas/Syncthing/Sync/General";
+          devices = [
+            "castle"
+            "work-laptop"
+            "oppo-find-x8"
+          ];
+        };
         "Music" = {
           id = "Music";
           label = "Music";

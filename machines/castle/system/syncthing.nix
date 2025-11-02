@@ -45,6 +45,11 @@
           devices = [ "homeserver" ];
           path = "/home/${user.name}/sync/Music";
         };
+        General = {
+          id = "General";
+          devices = [ "homeserver" ];
+          path = "/home/${user.name}/sync/General";
+        };
       };
     };
   };
