@@ -48,9 +48,14 @@
     enable = true;
     brscan4.enable = true;
     extraBackends = with pkgs; [ sane-airscan ];
+    disabledDefaultBackends = [ "escl" ];
   };
   services.avahi.enable = true;
   services.avahi.nssmdns4 = true;
+  services.avahi.openFirewall = true;
+  environment.systemPackages = with pkgs; [
+    simple-scan
+  ];
   users.users.${user.name}.extraGroups = [
     "scanner" # For sane scanner access
     "lp" # For printer access

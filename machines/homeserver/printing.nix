@@ -39,10 +39,18 @@
     enable = true;
     brscan4.enable = true; # Brother Scanner
     extraBackends = with pkgs; [ sane-airscan ];
+    netDevices = {
+      home = {
+        model = "DCP-L2540DW";
+        host = "192.168.100.240";
+      };
+    };
   };
   users.users.${user.name}.extraGroups = [
     "scanner" # For sane scanner access
     "lp" # For printer access
   ];
+  services.udev.packages = [ pkgs.sane-airscan ];
+  services.ipp-usb.enable = true;
   services.nginx.virtualHosts."cups.lan".locations."/".proxyPass = "http://localhost:631";
 }
