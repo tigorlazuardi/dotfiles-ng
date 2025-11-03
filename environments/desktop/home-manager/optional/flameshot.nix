@@ -12,7 +12,7 @@
         saveAsFileExtension = ".png";
         savePath = "${config.home.homeDirectory}/Pictures/Screenshots";
         useGrimAdapter = true;
-        filenamePattern = "=%d-%m-%Y_%T";
+        filenamePattern = "%F_%T";
         showStartupLaunchMessage = false;
       };
     };
