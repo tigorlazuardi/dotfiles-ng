@@ -70,7 +70,7 @@ in
   };
   virtualisation.oci-containers.containers.immich-valkey = {
     autoStart = false;
-    image = "docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177";
+    image = "docker.io/valkey/valkey:8-bookworm";
     podman.sdnotify = "healthy"; # Only notifies 'ready' to systemd when service healthcheck passes.
     ip = "10.88.4.3";
     volumes = [
