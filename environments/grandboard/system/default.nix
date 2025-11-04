@@ -9,6 +9,7 @@
     ./nginx.nix
     ./penpot.nix
     ./tinyauth.nix
+    ./umbrella.nix
     ./volumes.nix
   ];
   users = {
