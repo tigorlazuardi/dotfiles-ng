@@ -76,16 +76,6 @@ in
             "oppo-find-x8"
           ];
         };
-        "General" = {
-          id = "General";
-          label = "General";
-          path = "/nas/Syncthing/Sync/General";
-          devices = [
-            "castle"
-            "work-laptop"
-            "oppo-find-x8"
-          ];
-        };
       };
     };
   };
