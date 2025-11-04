@@ -34,6 +34,7 @@
     ./suwayomi.nix
     ./syncthing.nix
     ./tiny_auth.nix
+    ./webhook.nix
     ./whatsapp.nix
     ./wireguard.nix
 
