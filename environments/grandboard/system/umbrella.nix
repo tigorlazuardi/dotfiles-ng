@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   namespace = "grandboard";
   name = "${namespace}-umbrella-docs";
@@ -47,5 +47,25 @@ in
           return 302 https://tinyauth.grandboard.web.id/login?redirect_uri=$scheme://$http_host$request_uri;
         '';
     };
+  };
+  systemd.services."podman-${name}-update" = {
+    description = "update umbrella docs container";
+    script = ''
+      set -e
+      ${pkgs.podman}/bin/podman pull ${image}
+      systemctl restart podman-${name}.service
+    '';
+    unitConfig = {
+      StartLimitIntervalSec = "30s";
+      StartLimitBurst = "3";
+    };
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "2s";
+    };
+  };
+  services.webhook.hooks.deploy-umbrella-docs = {
+    execute-command = "${pkgs.writeShellScript "deploy-umbrella.docs.sh" "${pkgs.systemd}/bin/systemctl restart podman-${name}-update.service"}";
+    response-message = "Umbrella docs deployment triggered";
   };
 }
