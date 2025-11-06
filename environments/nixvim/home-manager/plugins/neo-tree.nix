@@ -29,7 +29,7 @@
     '';
     plugins.neo-tree = {
       enable = false;
-      extraOptions = {
+      settings = {
         filesystem = {
           filtered_items = {
             visible = true;

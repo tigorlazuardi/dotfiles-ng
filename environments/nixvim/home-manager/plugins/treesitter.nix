@@ -169,7 +169,7 @@
     };
     treesitter-textobjects = {
       enable = true;
-      move = {
+      settings.move = {
         enable = true;
         gotoNextStart = {
           "]f" = "@function.outer";
@@ -192,7 +192,7 @@
           "[A" = "@parameter.inner";
         };
       };
-      select = {
+      settings.select = {
         enable = true;
         lookahead = true;
         keymaps = {
