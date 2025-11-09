@@ -15,8 +15,11 @@
     owner = config.services.nginx.user;
   };
 
-  services.nginx.virtualHosts."webhook.tigor.web.id".locations."/" = {
-    proxyPass = "http://${config.services.webhook.ip}:${toString config.services.webhook.port}";
-    basicAuthFile = config.sops.secrets."nginx/webhook".path;
+  services.nginx.virtualHosts."webhook.tigor.web.id" = {
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://${config.services.webhook.ip}:${toString config.services.webhook.port}";
+      basicAuthFile = config.sops.secrets."nginx/webhook".path;
+    };
   };
 }
