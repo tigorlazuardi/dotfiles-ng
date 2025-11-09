@@ -2,6 +2,7 @@
   imports = [
     ./dex.nix
     ./docker.nix
+    ./faraday.nix
     ./homepage-dashboard.nix
     ./huly.nix
     ./kafka.nix
