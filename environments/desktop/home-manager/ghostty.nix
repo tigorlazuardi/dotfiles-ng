@@ -80,6 +80,7 @@ in
         "ctrl+a>9=goto_tab:9"
         "ctrl+a>0=goto_tab:10"
       ];
+      shell-integration-features = "ssh-terminfo,ssh-env";
     };
   };
   dconf.settings = {

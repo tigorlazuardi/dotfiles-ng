@@ -14,7 +14,7 @@
     openssl
     libcap
     fd
-    du-dust
+    dust
     ripgrep
     eza
   ];

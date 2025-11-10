@@ -23,7 +23,7 @@
     enableSystemMonitoring = true;
     enableVPN = true;
     enableBrightnessControl = true;
-    enableNightMode = true;
+    # enableNightMode = true;
     enableAudioWavelength = true;
     enableCalendarEvents = true;
     enableDynamicTheming = true;

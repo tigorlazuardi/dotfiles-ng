@@ -29,7 +29,7 @@
       ../../environments/game-development/home-manager
       # ../../environments/gnome/home-manager
 
-      ../../environments/desktop/home-manager/optional/feishin.nix
+      ../../environments/desktop/home-manager/optional/supersonic.nix
       ../../environments/desktop/home-manager/optional/flameshot.nix
       ../../environments/desktop/home-manager/optional/ntfy_client.nix
 
