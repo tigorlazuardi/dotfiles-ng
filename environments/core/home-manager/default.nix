@@ -18,6 +18,7 @@
     ./nix_index.nix
     ./podman.nix
     ./sops.nix
+    ./yazi.nix
     ./zoxide.nix
   ];
 

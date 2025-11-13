@@ -89,7 +89,7 @@
       };
     };
     settings = {
-      manager = {
+      mgr = {
         # 1/8 width for parent, 4/8 width for current, 3/8 width for preview
         ratio = [
           1
