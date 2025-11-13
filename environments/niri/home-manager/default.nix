@@ -15,7 +15,7 @@
     ./audio.nix
     ./cursor.nix
     ./dankMaterialShell.nix
-    ./foot.nix
+    ./ghostty.nix
     ./input.nix
     ./layout.nix
     ./nemo.nix

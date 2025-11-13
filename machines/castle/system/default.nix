@@ -53,6 +53,7 @@
   services.avahi.enable = true;
   services.avahi.nssmdns4 = true;
   services.avahi.openFirewall = true;
+  networking.firewall.allowedTCPPorts = [ 5173 ]; # Vite Dev Server
   environment.systemPackages = with pkgs; [
     simple-scan
   ];
