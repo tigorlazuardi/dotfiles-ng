@@ -10,6 +10,7 @@
     ../../window-manager/home-manager/kdeconnect.nix
     # ../../window-manager/home-manager/hypridle.nix
     ../../window-manager/home-manager/network_manager.nix
+    ../../window-manager/home-manager/foot.nix
 
     ./anyrun.nix
     ./audio.nix

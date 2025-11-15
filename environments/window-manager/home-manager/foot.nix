@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     libsixel # For displaying images in foot terminal
+    foot
   ];
   programs.foot = {
     enable = true;
