@@ -5,7 +5,7 @@
   ];
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
       init.defaultBranch = "main";
       diff = {
         algorithm = "histogram";
@@ -32,9 +32,9 @@
       diff.submodule = "log";
       fetch.recurseSubmodules = "on-demand";
       submodule.recurse = true;
+      user.email = "tigor.hutasuhut@gmail.com";
+      user.name = "Tigor Hutasuhut";
     };
-    userEmail = "tigor.hutasuhut@gmail.com";
-    userName = "Tigor Hutasuhut";
   };
 
   programs.lazygit = {
