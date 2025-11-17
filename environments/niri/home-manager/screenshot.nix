@@ -19,7 +19,7 @@
         action = spawn "flameshot" "launcher";
         hotkey-overlay.title = "Open Screenshot Launcher";
       };
-      "Alt+Print" = {
+      "Ctrl+Print" = {
         action = spawn "claude-screenshot";
         hotkey-overlay.title = "Take Claude Screenshot";
       };
