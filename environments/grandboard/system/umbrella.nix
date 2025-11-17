@@ -1,10 +1,10 @@
 { config, pkgs, ... }:
 let
   namespace = "grandboard";
-  name = "${namespace}-umbrella-docs";
+  name = "${namespace}-umbrella-docs-internal";
   inherit (config.virtualisation.oci-containers.containers."${name}") ip httpPort;
-  image = "ghcr.io/antartix-indonesia/docs:main";
-  domain = "umbrella.${namespace}.web.id";
+  image = "ghcr.io/grand-board/umbrella/docs-internal:main";
+  domain = "internal.${namespace}.web.id";
   tinyauth = {
     inherit (config.virtualisation.oci-containers.containers."${namespace}-tinyauth") ip httpPort;
   };
@@ -64,7 +64,7 @@ in
       RestartSec = "2s";
     };
   };
-  services.webhook.hooks.deploy-umbrella-docs = {
+  services.webhook.hooks.deploy-internal-umbrella-docs = {
     execute-command = "${pkgs.writeShellScript "deploy-umbrella.docs.sh" "${pkgs.systemd}/bin/systemctl restart podman-${name}-update.service"}";
     response-message = "Umbrella docs deployment triggered";
   };
