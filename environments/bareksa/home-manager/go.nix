@@ -1,3 +1,6 @@
 {
-  programs.go.env.GOPRIVATE = [ "gitlab.bareksa.com" ];
+  programs.go.env = {
+    GOPRIVATE = [ "gitlab.bareksa.com" ];
+    CGO_ENABLED = "0";
+  };
 }
