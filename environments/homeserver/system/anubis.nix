@@ -11,6 +11,29 @@ let
   inherit (lib) optional;
 in
 {
+  options.services.anubis.instances =
+    let
+      inherit (lib)
+        mkOption
+        types
+        mkEnableOption
+        mkDefault
+        optional
+        ;
+    in
+    mkOption {
+      type = types.attrsOf (
+        types.submodule (
+          { config, name, ... }:
+          {
+            config.settings = {
+              BIND = mkDefault "/run/anubis/anubis-${name}/service.sock";
+              METRICS_BIND = mkDefault "/run/anubis/anubis-${name}/metrics.sock";
+            };
+          }
+        )
+      );
+    };
   config = {
     # Allow nginx to access anubis sockets.
     users.users.nginx.extraGroups = optional hasInstances config.users.groups.anubis.name;
