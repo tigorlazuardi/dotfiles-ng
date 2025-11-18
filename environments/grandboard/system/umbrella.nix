@@ -30,7 +30,13 @@ in
         error_page 401 = @tinyauth_login;
       '';
     locations = {
-      "/".proxyPass = "http://${ip}:${toString httpPort}";
+      "/" = {
+        proxyPass = "http://${ip}:${toString httpPort}";
+        extraConfig = /* nginx */ ''
+          proxy_hide_header Cache-Control; # remove cache headers from upstream
+          add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"; # add no-cache headers so browsers don't cache
+        '';
+      };
       "/tinyauth" = {
         proxyPass = "http://${tinyauth.ip}:${toString tinyauth.httpPort}/api/auth/nginx";
         extraConfig =
