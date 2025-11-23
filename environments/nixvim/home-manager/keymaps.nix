@@ -186,25 +186,29 @@
             local buf = args.buf
             vim.keymap.set("n", "]]", function()
                 local severityError = { severity = vim.diagnostic.severity.ERROR }
-                if vim.diagnostic.get_next_pos(severityError) then
-                  vim.diagnostic.goto_next(severityError) 
+                local errorDianostic = vim.diagnostic.get_next(severityError)
+                if errorDiagnostic then
+                  vim.diagnostic.jump({ diagnostic = errorDiagnostic })
                   return
                 end
                 local severityWarning = { severity = vim.diagnostic.severity.WARNING } 
-                if vim.diagnostic.get_next_pos(severityWarning) then
-                  vim.diagnostic.goto_next(severityWarning) 
+                local warningDiagnostic = vim.diagnostic.get_next(severityWarning)
+                if warningDiagnostic then
+                  vim.diagnostic.jump({ diagnostic = warningDiagnostic })
                   return
                 end
             end, { buffer = buf, desc = "Next Diagnostic (Error/Warning)" })
             vim.keymap.set("n", "[[", function()
                 local severityError = { severity = vim.diagnostic.severity.ERROR }
-                if vim.diagnostic.get_prev_pos(severityError) then
-                  vim.diagnostic.goto_prev(severityError) 
+                local errorDianostic = vim.diagnostic.get_prev(severityError)
+                if errorDiagnostic then
+                  vim.diagnostic.jump({ diagnostic = errorDiagnostic })
                   return
                 end
                 local severityWarning = { severity = vim.diagnostic.severity.WARNING } 
-                if vim.diagnostic.get_prev_pos(severityWarning) then
-                  vim.diagnostic.goto_prev(severityWarning) 
+                local warningDiagnostic = vim.diagnostic.get_prev(severityWarning)
+                if warningDiagnostic then
+                  vim.diagnostic.jump({ diagnostic = warningDiagnostic })
                   return
                 end
             end, { buffer = buf, desc = "Previous Diagnostic (Error/Warning)" })
