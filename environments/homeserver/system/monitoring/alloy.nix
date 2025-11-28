@@ -52,19 +52,25 @@ in
           }
 
           output {
-              metrics = [otelcol.processor.batch.default.input]
-              logs    = [otelcol.processor.batch.default.input]
-              traces  = [otelcol.processor.batch.default.input]
+              metrics = [otelcol.exporter.otlphttp.open_observe.input]
+              logs    = [otelcol.exporter.otlphttp.open_observe.input]
+              traces  = [otelcol.exporter.otlphttp.open_observe.input]
           }
+
+          // output {
+          //     metrics = [otelcol.processor.batch.open_observe.input]
+          //     logs    = [otelcol.processor.batch.open_observe.input]
+          //     traces  = [otelcol.processor.batch.open_observe.input]
+          // }
       }
 
-      otelcol.processor.batch "default" {
-          output {
-              logs    = [otelcol.processor.attributes.loki.input]
-              metrics = [otelcol.exporter.otlphttp.mimir.input]
-              traces  = [otelcol.exporter.otlp.tempo.input]
-          }
-      }
+      // otelcol.processor.batch "default" {
+      //     output {
+      //         logs    = [otelcol.processor.attributes.loki.input]
+      //         metrics = [otelcol.exporter.otlphttp.mimir.input]
+      //         traces  = [otelcol.exporter.otlp.tempo.input]
+      //     }
+      // }
     '';
   services.homepage-dashboard.groups.Monitoring.services.Alloy.settings = {
     description = "Metrics, Logs, and Traces collector for monitoring homeserver";

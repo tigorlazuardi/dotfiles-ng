@@ -330,7 +330,7 @@
                 format = "2006-01-02T15:04:05Z07:00"
               }
 
-              forward_to = [loki.write.default.receiver]
+              forward_to = [otelcol.receiver.loki.open_observe.receiver]
             }
           '';
       services.homepage-dashboard.groups.Networking.services.NGINX.settings = {

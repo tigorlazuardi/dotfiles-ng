@@ -49,7 +49,7 @@ in
         prometheus.scrape "jellyfin" {
           targets = [{__address__ = "0.0.0.0:8096"}]
           job_name = "jellyfin"
-          forward_to = [prometheus.remote_write.mimir.receiver]
+          forward_to = [otelcol.receiver.prometheus.open_observe.receiver]
         }
       '';
 }
